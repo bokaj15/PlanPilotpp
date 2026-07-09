@@ -4,22 +4,21 @@
     package3 package1 - package
     truck1 - truck
     plane1 - airplane
-    city6-1 city1-1 city6-2 city4-2 city1-2 - location
+    city6-1 city1-1 city6-2 city4-2 city1-2 city6-3 - location
 )
     
   (:init
-    (at plane1 city1-1)
+    (at plane1 city4-2)
     (at truck1 city1-1)
     (at package3 city1-1)
     (at package1 city4-2)
 
-    (airport city1-1)
     (airport city6-1)
     (airport city4-2)
 
-    (road city1-1 city1-2)
-    (road city1-2 city4-2)
-    (road city4-2 city6-2)
+    (road city1-1 city4-2)
+    (road city4-2 city1-2)
+    (road city1-2 city6-2)
     (road city6-2 city6-1)
     )
 
