@@ -4,7 +4,7 @@
     package3 package1 - package
     truck1 - truck
     plane1 - airplane
-    city6-1 city1-1 city6-2 city4-2 city1-2 city6-3 - location
+    city6-1 city1-1 city6-2 city4-2 city1-2 - location
 )
     
   (:init
