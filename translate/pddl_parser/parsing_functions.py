@@ -519,6 +519,7 @@ def parse_action(context, alist, type_dict, predicate_dict):
                 if not isinstance(effect_list, list):
                     context.expected_list_error("Effect", effect_list, syntax=SYNTAX_ACTION)
                 eff = []
+                cost = None
                 if effect_list:
                     cost = parse_effects(
                         context, effect_list, eff, type_dict, predicate_dict)
@@ -526,11 +527,10 @@ def parse_action(context, alist, type_dict, predicate_dict):
             context.error(f"Missing fields. Expecting {SYNTAX_ACTION}.")
         for _ in iterator:
             context.error(f"Too many fields. Expecting {SYNTAX_ACTION}")
-    if eff:
-        return pddl.Action(name, parameters, len(parameters),
-                           precondition, eff, cost)
-    else:
-        return None
+    # Modified to always return the action, even when it has no effects. 
+    # Necessary for domain-repair candidate generation.
+    return pddl.Action(name, parameters, len(parameters),
+                       precondition, eff, cost)
 
 
 def parse_axiom(context, alist, type_dict, predicate_dict):
