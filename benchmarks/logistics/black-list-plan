@@ -1,5 +1,2 @@
-(drive-truck truck1 city1-1 city1-2)
-(drive-truck truck1 city1-2 city4-2)
-(drive-truck truck1 city4-2 city6-2)
-(drive-truck truck1 city6-2 city6-1)
-(load-truck package1 truck1 city6-1)
+(drive-truck truck1 city-1 city-2)
+(load-truck package1 truck1 city-2)

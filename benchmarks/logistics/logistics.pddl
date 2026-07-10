@@ -12,10 +12,9 @@
     (at ?obj - locatable ?loc - location)
     (in ?obj - package ?veh - vehicle)
     (road ?loc-from - location ?loc-to - location)
-    (airport ?loc - location)
+    (airport-in ?loc - location)
   )
-; enabled(add_effect("load-truck",("in",par1,par2),true))
-
+  
   (:action LOAD-TRUCK
     :parameters (?obj - package ?truck - truck ?loc - location)
     :precondition (and (at ?truck ?loc) 
@@ -30,10 +29,10 @@
     :parameters (?obj - package ?airplane - airplane ?loc - location)
     :precondition (and (at ?obj ?loc) 
                        (at ?airplane ?loc)
-                       (airport ?loc)
+                       (airport-in ?loc)
                   )
     :effect (and (not (at ?obj ?loc)) 
-                 (in ?obj ?airplane)
+                 (in ?obj ?airplane)  
             )
   )
 
@@ -51,10 +50,10 @@
     :parameters (?obj - package ?airplane - airplane ?loc - location)
     :precondition (and (in ?obj ?airplane) 
                        (at ?airplane ?loc)
-                       (airport ?loc)
+                       (airport-in ?loc)
                   )
     :effect (and (not (in ?obj ?airplane)) 
-                 (at ?obj ?loc)
+                 (at ?obj ?loc)  
             )
   )
 
@@ -72,11 +71,11 @@
   (:action FLY-AIRPLANE
     :parameters (?airplane - airplane ?loc-from ?loc-to - location)
     :precondition (and (at ?airplane ?loc-from)
-                       (airport ?loc-from)
-                       (airport ?loc-to)
+                       (airport-in ?loc-from)
+                       (airport-in ?loc-to)
         )
     :effect (and (not (at ?airplane ?loc-from)) 
-                 (at ?airplane ?loc-to)
+                 (at ?airplane ?loc-to) 
             )
   )
 )
