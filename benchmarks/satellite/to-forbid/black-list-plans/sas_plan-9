@@ -1,0 +1,2 @@
+(switch_on instrument3 satellite3)
+(take_image satellite3 phenomenon3 instrument3 spectrograph0)

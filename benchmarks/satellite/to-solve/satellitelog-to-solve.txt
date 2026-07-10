@@ -1,0 +1,125 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_effect: switch_on(power_on ?i)
+
+Problem 2
+add_effect: take_image(have_image ?d ?m)
+
+Problem 3
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 4
+add_effect: switch_on(power_on ?i)
+
+Problem 5
+add_effect: take_image(have_image ?d ?m)
+
+Problem 6
+add_effect: switch_on(power_on ?i)
+
+Problem 7
+del_prec: turn_to(pointing ?s ?d_new)
+
+Problem 8
+del_prec: switch_on(power_on ?i)
+
+Problem 9
+del_prec: switch_on(calibrated ?i)
+
+Problem 10
+del_prec: switch_off(calibrated ?i)
+
+-----REMOVING 2 EFFECTS
+
+Problem 1
+add_effect: calibrate(calibrated ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 2
+add_effect: turn_to(pointing ?s ?d_new)
+add_effect: calibrate(calibrated ?i)
+
+Problem 3
+add_effect: take_image(have_image ?d ?m)
+del_prec: switch_on(calibrated ?i)
+
+Problem 4
+del_prec: switch_off(calibrated ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 5
+add_effect: switch_on(power_on ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 6
+add_effect: calibrate(calibrated ?i)
+add_effect: take_image(have_image ?d ?m)
+
+Problem 7
+del_prec: take_image(have_image ?d ?m)
+del_prec: turn_to(pointing ?s ?d_new)
+
+Problem 8
+del_prec: switch_on(power_on ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 9
+add_effect: calibrate(calibrated ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 10
+add_effect: switch_on(power_on ?i)
+add_effect: calibrate(calibrated ?i)
+
+-----REMOVING 3 EFFECTS
+
+Problem 1
+del_prec: take_image(have_image ?d ?m)
+add_effect: turn_to(pointing ?s ?d_new)
+del_prec: switch_on(power_on ?i)
+
+Problem 2
+add_effect: calibrate(calibrated ?i)
+add_effect: switch_on(power_on ?i)
+add_effect: take_image(have_image ?d ?m)
+
+Problem 3
+add_effect: calibrate(calibrated ?i)
+del_prec: turn_to(pointing ?s ?d_new)
+add_effect: switch_on(power_on ?i)
+
+Problem 4
+del_prec: turn_to(pointing ?s ?d_new)
+del_prec: take_image(have_image ?d ?m)
+del_prec: calibrate(calibrated ?i)
+
+Problem 5
+add_effect: calibrate(calibrated ?i)
+add_effect: take_image(have_image ?d ?m)
+add_effect: switch_on(power_on ?i)
+
+Problem 6
+add_effect: switch_on(power_on ?i)
+add_effect: turn_to(pointing ?s ?d_new)
+del_prec: take_image(have_image ?d ?m)
+
+Problem 7
+del_prec: switch_on(power_on ?i)
+add_effect: take_image(have_image ?d ?m)
+add_effect: turn_to(pointing ?s ?d_new)
+
+Problem 8
+del_prec: turn_to(pointing ?s ?d_new)
+add_effect: calibrate(calibrated ?i)
+del_prec: switch_on(calibrated ?i)
+
+Problem 9
+add_effect: turn_to(pointing ?s ?d_new)
+add_effect: take_image(have_image ?d ?m)
+add_effect: switch_on(power_on ?i)
+
+Problem 10
+add_effect: switch_on(power_on ?i)
+del_prec: take_image(have_image ?d ?m)
+add_effect: turn_to(pointing ?s ?d_new)
