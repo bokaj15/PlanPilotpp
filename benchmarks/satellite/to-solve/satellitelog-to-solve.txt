@@ -30,7 +30,7 @@ del_prec: switch_on(calibrated ?i)
 Problem 10
 del_prec: switch_off(calibrated ?i)
 
------REMOVING 2 EFFECTS
+-----MAX-REPAIRS 2
 
 Problem 1
 add_effect: calibrate(calibrated ?i)
@@ -72,7 +72,7 @@ Problem 10
 add_effect: switch_on(power_on ?i)
 add_effect: calibrate(calibrated ?i)
 
------REMOVING 3 EFFECTS
+-----MAX-REPAIRS 3
 
 Problem 1
 del_prec: take_image(have_image ?d ?m)

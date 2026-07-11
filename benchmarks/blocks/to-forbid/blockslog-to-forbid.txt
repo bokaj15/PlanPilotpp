@@ -1,0 +1,31 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_prec: stack(holding ?x)
+
+Problem 2
+add_prec: pick-up(clear ?x)
+
+Problem 3
+add_prec: pick-up(handempty)
+
+Problem 4
+add_prec: pick-up(handempty)
+
+Problem 5
+add_prec: unstack(clear ?x)
+
+Problem 6
+add_prec: pick-up(handempty)
+
+Problem 7
+add_prec: pick-up(handempty)
+
+Problem 8
+add_prec: unstack(handempty)
+
+Problem 9
+add_prec: stack(clear ?y)
+
+Problem 10
+add_prec: stack(clear ?y)
