@@ -1,0 +1,126 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_effect: communicate_rock_data(communicated_rock_data ?p)
+
+Problem 2
+add_effect: calibrate(calibrated ?i ?r)
+
+Problem 3
+add_effect: communicate_image_data(communicated_image_data ?o ?m)
+
+Problem 4
+del_prec: take_image(communicated_image_data ?o ?m)
+
+Problem 5
+add_effect: sample_soil(full ?s)
+
+Problem 6
+del_prec: sample_rock(communicated_rock_data ?p)
+
+Problem 7
+del_prec: sample_soil(have_soil_analysis ?x ?p)
+
+Problem 8
+add_effect: navigate(at ?x ?z)
+
+Problem 9
+add_effect: calibrate(calibrated ?i ?r)
+
+Problem 10
+del_prec: calibrate(calibrated ?i ?r)
+
+-----MAX-REPAIRS 2
+
+Problem 1
+add_effect: take_image(have_image ?r ?o ?m)
+add_effect: calibrate(calibrated ?i ?r)
+
+Problem 2
+del_prec: take_image(have_image ?r ?o ?m)
+add_effect: sample_rock(have_rock_analysis ?x ?p)
+
+Problem 3
+del_prec: sample_rock(communicated_soil_data ?p)
+del_prec: take_image(communicated_image_data ?o ?m)
+
+Problem 4
+add_effect: sample_soil(have_soil_analysis ?x ?p)
+add_effect: communicate_image_data(communicated_image_data ?o ?m)
+
+Problem 5
+add_effect: communicate_soil_data(communicated_soil_data ?p)
+add_effect: take_image(have_image ?r ?o ?m)
+
+Problem 6
+add_effect: drop(empty ?y)
+del_prec: sample_rock(have_rock_analysis ?x ?p) 
+
+Problem 7
+add_effect: sample_rock(full ?s)
+del_prec: calibrate(calibrated ?i ?r)
+
+Problem 8
+add_effect: take_image(have_image ?r ?o ?m)
+add_effect: calibrate(calibrated ?i ?r)
+
+Problem 9
+add_effect: navigate(at ?x ?z)
+del_prec: take_image(communicated_soil_data ?p)
+
+Problem 10
+add_effect: take_image(have_image ?r ?o ?m)
+del_prec: take_image(have_image ?r ?o ?m)
+
+-----MAX-REPAIRS 3
+
+Problem 1
+add_effect: drop(empty ?y)
+del_prec: calibrate(calibrated ?i ?r)
+add_effect: sample_soil(full ?s)
+
+Problem 2
+add_effect: sample_soil(have_soil_analysis ?x ?p)
+add_effect: communicate_soil_data(communicated_soil_data ?p)
+del_prec: sample_rock(full ?s)
+
+Problem 3
+del_prec: sample_soil(communicated_soil_data ?p)
+del_prec: calibrate(calibrated ?i ?r)
+add_effect: take_image(have_image ?r ?o ?m)
+
+Problem 4
+add_effect: sample_soil(have_soil_analysis ?x ?p)
+add_effect: communicate_soil_data(communicated_soil_data ?p)
+add_effect: calibrate(calibrated ?i ?r)
+
+Problem 5
+del_prec: sample_rock(have_rock_analysis ?x ?p)
+add_effect: sample_rock(have_rock_analysis ?x ?p)
+add_effect: take_image(have_image ?r ?o ?m)
+
+Problem 6
+add_effect: drop(empty ?y)
+del_prec: sample_rock(full ?s)
+add_effect: navigate(at ?x ?z)
+
+Problem 7
+add_effect: sample_rock(have_rock_analysis ?x ?p)
+add_effect: sample_rock(full ?s)
+add_effect: sample_soil(full ?s)
+
+Problem 8
+del_prec: sample_rock(full ?s)
+add_effect: navigate(at ?x ?z)
+add_effect: sample_rock(have_rock_analysis ?x ?p)
+
+Problem 9
+add_effect: sample_soil(have_soil_analysis ?x ?p)
+del_prec: sample_soil(have_soil_analysis ?x ?p)
+add_effect: take_image(have_image ?r ?o ?m)
+
+Problem 10
+del_prec: sample_soil(communicated_soil_data ?p)
+add_effect: sample_soil(have_soil_analysis ?x ?p)
+add_effect: calibrate(calibrated ?i ?r)
+
