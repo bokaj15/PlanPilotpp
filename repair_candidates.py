@@ -191,12 +191,6 @@ def _fluent_var(predicate, slots):
     return f'variable(("{predicate}"{args}))'
 
 
-def _ground_variable(predicate, args):
-    """Render a ground ``variable(("at", constant("truck1"), ...))`` term."""
-    rendered = "".join(f', constant("{a}")' for a in args)
-    return f'variable(("{predicate}"{rendered}))'
-
-
 def _ground_action(operator, args):
     """Render a ground ``action(("load-truck", constant("package1"), ...))`` term."""
     rendered = "".join(f', constant("{a}")' for a in args)
@@ -494,132 +488,72 @@ def _parse_plan_file(path):
     return plan
 
 
-def _condition_holds(condition, subst, state):
-    """True iff a STRIPS ``condition`` holds in ``state`` under ``subst``."""
-    for (pred, cargs, negated) in _collect_literals(condition):
-        key = (pred, tuple(subst.get(a, a).lower() for a in cargs))
-        present = key in state
-        if negated and present:
-            return False
-        if not negated and not present:
-            return False
-    return True
-
-
-def _replay_prefix(task, prefix):
-    """Return the set of true fluents reached by applying ``prefix`` from init.
-
-    ``prefix`` is a list of ground ``(operator, [args])`` actions. Effects are
-    applied under the domain as given (unrepaired), which is exactly the state
-    the buggy plan reaches. Deletes are applied before adds so a fluent that is
-    both deleted and added in one action ends up true (PDDL add-after-delete).
-    """
-    schemas = {a.name.lower(): a for a in task.actions}
-    state = set()
-    for atom in task.init:
-        predicate = getattr(atom, "predicate", None)
-        if predicate is None or predicate == "=":
-            continue  # skip function assignments and injected equality
-        state.add((predicate.lower(), tuple(str(x).lower() for x in atom.args)))
-
-    for (op, args) in prefix:
-        schema = schemas.get(op)
-        if schema is None:
-            raise ValueError(f"blacklist plan uses unknown action '{op}'")
-        if len(args) != len(schema.parameters):
-            raise ValueError(
-                f"blacklist action '{op}' expects {len(schema.parameters)} "
-                f"arguments, got {len(args)}"
-            )
-        subst = {p.name: a for p, a in zip(schema.parameters, args)}
-        adds, dels = [], []
-        for eff in schema.effects:
-            if eff.parameters:
-                print(
-                    "warning: skipping universally quantified effect during "
-                    f"blacklist replay of '{op}'",
-                    file=sys.stderr,
-                )
-                continue
-            if not _condition_holds(eff.condition, subst, state):
-                continue
-            lit = eff.literal
-            key = (lit.predicate.lower(), tuple(subst.get(a, a).lower() for a in lit.args))
-            (dels if lit.negated else adds).append(key)
-        for key in dels:
-            state.discard(key)
-        for key in adds:
-            state.add(key)
-    return state
-
-
 def generate_blacklist_program(domain, instance, blacklist_file):
-    """Return ASP lines forbidding the blacklist plan's last action.
+    """Return ASP lines that turn the blacklist plan into a non-solution.
 
-    The last line of ``blacklist_file`` is the forbidden action; the preceding
-    lines establish the state in which it must not be applicable. The emitted
-    program declares ``forbidden_action/1``, the reached-state truth of every
-    fluent over that action's arguments as ``observed_state/2`` (both polarities
-    listed explicitly, so "absent" never leaks in), and the integrity constraint
-    that forbids repairs under which all of the action's applied preconditions
-    hold in that state.
+    The last line of ``blacklist_file`` is the *forbidden* action; the preceding
+    lines are its *prefix*. The prefix is pinned into the trace (the same
+    integrity-constraint form used for a partial plan), so the solver replays it
+    under the *repaired* domain and materialises the reached state as
+    ``holds(., |prefix|)``. The emitted constraint then forbids any repair under
+    which the forbidden action's applied preconditions all hold in that state --
+    i.e. it forces the forbidden action to be inapplicable there.
 
-    Requires the repair-variant encoding (it references ``applied_precondition``).
+    Because the whole prefix is pinned, every prefix action must remain
+    applicable under the repair, so the forbidden action is guaranteed to be the
+    *first* inapplicable action (cf. Lin, Grastien, and Bercher 2023). Reading
+    the applicability off ``holds`` (instead of a precomputed snapshot) is what
+    lets effect repairs -- e.g. ``delete_effect`` -- affect the outcome.
+
+    ``blacklist_active`` is emitted to switch off the goal constraint in the
+    repair encoding: a negative example only requires the prefix to run and the
+    last action to be blocked, not the goal to be reached. Runs should therefore
+    use ``horizon = |prefix|``.
+
+    Requires the repair-variant encoding (it references ``applied_precondition``
+    and ``holds``).
     """
     task = pddl_file.open(domain_filename=domain, task_filename=instance)
-    supers = _build_supertype_map(task)
-    predicates_by_name = {
-        p.name.lower(): p for p in task.predicates if p.name.lower() != "="
-    }
+    schemas = {a.name.lower(): a for a in task.actions}
 
     plan = _parse_plan_file(blacklist_file)
     if not plan:
         raise ValueError(f"blacklist plan '{blacklist_file}' is empty")
     prefix, (fop, fargs) = plan[:-1], plan[-1]
 
-    schemas = {a.name.lower(): a for a in task.actions}
-    fschema = schemas.get(fop)
-    if fschema is None:
-        raise ValueError(f"blacklist plan uses unknown action '{fop}'")
-    if len(fargs) != len(fschema.parameters):
-        raise ValueError(
-            f"forbidden action '{fop}' expects {len(fschema.parameters)} "
-            f"arguments, got {len(fargs)}"
-        )
+    def check(op, args, what):
+        schema = schemas.get(op)
+        if schema is None:
+            raise ValueError(f"blacklist plan uses unknown action '{op}'")
+        if len(args) != len(schema.parameters):
+            raise ValueError(
+                f"{what} '{op}' expects {len(schema.parameters)} "
+                f"arguments, got {len(args)}"
+            )
 
-    state = _replay_prefix(task, prefix)
-
-    _name_to_slot, slot_types = _param_slots(fschema)
-    slot_arg = {i: fargs[i - 1] for i in range(1, len(fargs) + 1)}
+    check(fop, fargs, "forbidden action")
+    forbidden = _ground_action(fop, fargs)
 
     lines = [
-        "% blacklist: forbidden action and the state it must not be applicable in",
-        f"forbidden_action({_ground_action(fop, fargs)}).",
-        "",
+        "% blacklist: enforce the prefix and forbid the last action from being",
+        "% applicable in the state the prefix reaches. The goal is dropped for a",
+        "% blacklist run (block only) via blacklist_active. Run with horizon = |prefix|.\n",
+        "blacklist_active.",
     ]
 
-    # Every type-valid ground fluent over the forbidden action's arguments is a
-    # fluent that could appear as one of its applied preconditions (original or
-    # repair-added). List each with its actual reached-state truth value so the
-    # constraint reasons over a complete, closed picture.
-    seen = set()
-    for pred_name, predicate in sorted(predicates_by_name.items()):
-        for slots in _type_valid_assignments(
-            predicate, slot_types, supers, allow_repeated_slots=True
-        ):
-            gargs = tuple(slot_arg[s] for s in slots)
-            key = (pred_name, gargs)
-            if key in seen:
-                continue
-            seen.add(key)
-            truth = "true" if key in state else "false"
-            var = _ground_variable(pred_name, gargs)
-            lines.append(f"observed_state({var}, value({var}, {truth})).")
+    # Pin every prefix action to its step, exactly like a partial plan. Under the
+    # repaired domain these must stay applicable, which makes the forbidden
+    # action the first inapplicable one.
+    for step, (op, args) in enumerate(prefix, start=1):
+        check(op, args, "blacklist action")
+        lines.append(f":- not occurs({_ground_action(op, args)}, {step}).")
 
-    lines.append("")
+    # Inconsistent if all the forbidden action's applied preconditions hold in
+    # the reached state at step |prefix|; the only way out is a repair that makes
+    # one of them fail there.
     lines.append(
-        ":- forbidden_action(Action), "
-        "observed_state(Variable, Value) : applied_precondition(Action, Variable, Value)."
+        f":- holds(Variable, Value, {len(prefix)}) : "
+        f"applied_precondition({forbidden}, Variable, Value)."
     )
     return lines
 
@@ -632,13 +566,14 @@ def render_blacklist_program(domain, instance, blacklist_file):
 def blacklist_candidates(domain, instance, candidates=None, union_with_relaxing=False):
     """Return the candidate set to generate for a blacklist run.
 
-    A blacklist can only be satisfied by *tightening* the forbidden action --
-    adding a precondition that is false in the replayed state. (Effects do not
-    affect applicability, so delete-effect / add-effect repairs are useless to a
-    blacklist and are left out.) So the constraining candidates are:
-    ``add_pos_pre`` always, plus ``add_neg_pre`` when the domain has negative
-    preconditions (so the forced precondition may be negative). Injecting
-    negation into a purely positive domain is avoided.
+    With the prefix pinned into the trace, the forbidden action's applicability
+    is read off the reached state ``holds(., |prefix|)``, so a blacklist can be
+    satisfied two ways: adding a precondition that is false in that state
+    (Case 2), or deleting an upstream positive effect so an existing
+    precondition loses its support (Case 3). The constraining candidates are
+    therefore ``add_pos_pre`` and ``del_pos_eff`` always, plus ``add_neg_pre``
+    when the domain has negative preconditions (so the forced precondition may
+    be negative).
 
     Two modes:
       * ``union_with_relaxing=False`` (blacklist alone): emit *only* the
@@ -656,7 +591,7 @@ def blacklist_candidates(domain, instance, candidates=None, union_with_relaxing=
     task = pddl_file.open(domain_filename=domain, task_filename=instance)
     has_neg = _has_negative_preconditions(task)
 
-    constraining = {"add_pos_pre"}
+    constraining = {"add_pos_pre", "del_pos_eff"}
     if has_neg:
         constraining.add("add_neg_pre")
 

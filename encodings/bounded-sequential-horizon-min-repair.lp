@@ -79,7 +79,9 @@ holds(variable(V), Value, T) :- holds(variable(V), Value, T - 1), not modified(v
 % Verify that goal is met
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- goal(Variable, Value), not holds(Variable, Value, horizon).
+% (--black-list-plan disables this via blacklist_active: a negative example
+% only needs the prefix to run and the last action blocked, not the goal.)
+:- goal(Variable, Value), not holds(Variable, Value, horizon), not blacklist_active.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Repair
