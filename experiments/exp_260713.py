@@ -145,8 +145,8 @@ REPAIR_TYPE_SHORTHAND = {
 
 GROUND_TRUTH_VARIANTS = {
     "MAX-REPAIRS 1": "max-repairs-1",
-    "REMOVING 2 EFFECTS": "max-repairs-2",
-    "REMOVING 3 EFFECTS": "max-repairs-3",
+    "MAX-REPAIRS 2": "max-repairs-2",
+    "MAX-REPAIRS 3": "max-repairs-3",
 }
 
 
