@@ -32,8 +32,12 @@ Stage: run
 
 %post
     apt-get update
-    apt-get -y install --no-install-recommends python3.12 libc6
+    apt-get -y install --no-install-recommends python3.12 python3.12-venv libc6
     rm -rf /var/lib/apt/lists/*
+
+    # clingo (needed for --max-repairs min)
+    python3.12 -m venv /tools/venv
+    /tools/venv/bin/pip install --no-cache-dir clingo
 
 %environment
     export PATH=/tools/:$PATH
@@ -43,4 +47,4 @@ Stage: run
 
     set -euo pipefail
 
-    python3.12 /tools/planpilot.py "$@"
+    /tools/venv/bin/python3 /tools/planpilot.py "$@"

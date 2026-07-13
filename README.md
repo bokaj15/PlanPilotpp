@@ -3,6 +3,11 @@
 This project builds on PlanPilot (https://github.com/abcorrea/planpilot), adding a **domain-repair** mode to fix a domain that is _broken_ (missing precondition, missing effect, ...).
 
 ---
+## Build
+
+```bash
+apptainer build planpilot.sif Apptainer.planpilot
+```
 
 ## Flags
 
@@ -26,9 +31,13 @@ and, if the domain contains negative preconditions, additionally:
 - **add negative effects** (`add_neg_eff`)
 
 
-#### `--max-repairs <N>`
+#### `--max-repairs <N|min>`
 
-Upper bound on how many repairs may be enabled at once. Default: `1`. 
+Upper bound on how many repairs may be enabled at once. Default: `1`.
+
+Pass `min` instead of a number to minimize the total repair cost (default cost 
+is `1` for each repair type). This solves directly with `clingo` instead of `fasb`, and
+enumerates up to 10 optimal models.
 
 #### `--partial-plan <file>`
 

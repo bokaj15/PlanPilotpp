@@ -39,6 +39,18 @@ def find_domain_filename(task_filename):
             return domain_filename
 
 
+def max_repairs_type(value):
+    """Parse ``--max-repairs``: either a non-negative int bound, or 'min'."""
+    if value == "min":
+        return "min"
+    try:
+        return int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            f"--max-repairs must be an integer or 'min', got '{value}'"
+        )
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Wrapper to pipeline plasp and fasb.")
     parser.add_argument(
@@ -125,10 +137,11 @@ def parse_arguments():
     )
     parser.add_argument(
         "--max-repairs",
-        type=int,
+        type=max_repairs_type,
         default=1,
         help="Maximum number of repairs that may be enabled at once in domain "
-        "repair mode (upper bound of the repair choice rule).",
+        "repair mode (upper bound of the repair choice rule), or 'min' to "
+        "instead minimize the total repair cost.",
     )
     parser.add_argument(
         "--black-list-plan",

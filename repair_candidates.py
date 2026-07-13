@@ -84,6 +84,17 @@ DEFAULT_NEGATIVE_CANDIDATES = (
     "add_neg_eff",
 )
 
+# Maps each candidate key to the repair type used by its repair(...) facts.
+REPAIR_TYPES = {
+    "add_pos_pre": "add_precondition",
+    "add_neg_pre": "add_precondition",
+    "del_pos_pre": "delete_precondition",
+    "del_neg_pre": "delete_precondition",
+    "add_pos_eff": "add_effect",
+    "add_neg_eff": "add_effect",
+    "del_pos_eff": "delete_effect",
+    "del_neg_eff": "delete_effect",
+}
 
 def _build_supertype_map(task):
     """Map each type name to its immediate base type name."""
@@ -154,6 +165,14 @@ def _render_fluent(predicate, slots):
 def _repair_fact(candidate, operator, predicate, slots, polarity):
     fluent = _render_fluent(predicate, slots)
     return f'repair({candidate}("{operator}", {fluent}, {polarity})).'
+
+
+def _repair_cost_rule(repair_type, cost=1):
+    """Cost of each rule covering every repair fact of ``repair_type``."""
+    return (
+        f"repair_cost({repair_type}(Action, Variable, Value), {cost}) :- "
+        f"repair({repair_type}(Action, Variable, Value))."
+    )
 
 
 def _action_term(operator, arity):
@@ -241,7 +260,7 @@ def _has_negative_preconditions(task):
     return False
 
 
-def generate_repair_candidates(domain, instance, candidates=None):
+def generate_repair_candidates(domain, instance, candidates=None, add_repair_cost=False):
     """Return a list of ASP ``repair(...)`` fact lines for the given domain.
 
     ``candidates`` is an iterable of candidate keys (see ``CANDIDATES``). When
@@ -249,6 +268,10 @@ def generate_repair_candidates(domain, instance, candidates=None):
     candidates (``DEFAULT_POSITIVE_CANDIDATES``) always, plus the negative-side
     candidates (``DEFAULT_NEGATIVE_CANDIDATES``) when the domain has negative
     preconditions.
+
+    ``add_repair_cost`` emits one cost rule per enabled repair
+    type (for ``--max-repairs min``, where repairs are chosen by minimizing
+    total cost instead of a fixed cardinality bound).
     """
     explicit = candidates is not None
     if explicit:
@@ -301,6 +324,15 @@ def generate_repair_candidates(domain, instance, candidates=None):
     add_neg_eff_pool = neg_pre_preds | neg_goal_preds
 
     lines = []
+
+    if add_repair_cost:
+        # One cost rule per enabled repair type.
+        enabled_repair_types = sorted({REPAIR_TYPES[c] for c in enabled})
+        if enabled_repair_types:
+            lines.append("% unit cost for each enabled repair type")
+            lines.extend(_repair_cost_rule(rt) for rt in enabled_repair_types)
+            lines.append("")
+
     for action in task.actions:
         operator = action.name.lower()
         name_to_slot, slot_types = _param_slots(action)
@@ -401,16 +433,18 @@ def generate_repair_candidates(domain, instance, candidates=None):
     return lines
 
 
-def render_repair_program(domain, instance, candidates=None):
+def render_repair_program(domain, instance, candidates=None, add_repair_cost=False):
     """Return the text of the generated repair candidate facts.
 
     Contains the domain-specific ``repair(...)`` candidate facts together with
-    their bridge rules (one per candidate). The static part of the repair layer
-    -- the ``applied_*`` indirection and the ``{enabled(R) : repair(R)}`` choice
-    plus the ``#show`` directive -- lives in the repair-variant horizon encoding
-    (``encodings/*-sequential-horizon-repair.lp``) written before these facts.
+    their bridge rules (one per candidate), plus one generic unit-cost rule per
+    enabled repair type when ``add_repair_cost`` is set. The static part of the
+    repair layer -- the ``applied_*`` indirection and the ``{enabled(R) :
+    repair(R)}`` choice plus the ``#show`` directive -- lives in the
+    repair-variant horizon encoding (``encodings/*-sequential-horizon-repair.lp``)
+    written before these facts.
     """
-    lines = generate_repair_candidates(domain, instance, candidates)
+    lines = generate_repair_candidates(domain, instance, candidates, add_repair_cost)
     return "\n".join(lines) + "\n"
 
 

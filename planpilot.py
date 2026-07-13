@@ -4,7 +4,7 @@ import os
 import select
 import sys
 import utils
-
+import clingo
 import repair_candidates
 
 from subprocess import Popen, PIPE
@@ -64,8 +64,16 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         # (with no repairs enabled they collapse to the plasp facts exactly).
         if args.domain_repair:
             encoding = fix_path("encodings/exact-sequential-horizon-repair.lp")
+            if args.max_repairs == "min":
+                encoding = fix_path(
+                    "encodings/exact-sequential-horizon-min-repair.lp"
+                )
             if args.encoding == "bounded":
                 encoding = fix_path("encodings/bounded-sequential-horizon-repair.lp")
+                if args.max_repairs == "min":
+                    encoding = fix_path(
+                        "encodings/bounded-sequential-horizon-min-repair.lp"
+                    )
         else:
             encoding = fix_path("encodings/exact-sequential-horizon.lp")
             if args.encoding == "bounded":
@@ -137,7 +145,7 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
                     union_with_relaxing=bool(args.repair_candidates),
                 )
             repair_program = repair_candidates.render_repair_program(
-                domain, instance, candidates
+                domain, instance, candidates, add_repair_cost=args.max_repairs == "min"
             )
             lp_file.write("\n" + repair_program)
 
@@ -266,6 +274,44 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
     logger.info(f"fasb return code: {process.returncode}")
 
 
+def run_clingo(lp, horizon):
+    """Solve the generated program directly with clingo instead of fasb.
+
+    Used for ``--max-repairs min``: repairs are chosen by minimizing total
+    repair cost.
+    ``--opt-mode=optN`` first proves the optimum, then enumerates up to 10 of
+    the (possibly tied) optimal models instead of stopping at the first one.
+    """
+
+    with open(lp) as f:
+        program = f.read()
+
+    time = utils.get_elapsed_time()
+
+    ctl = clingo.Control(["-c", f"horizon={horizon}", "-n", "10", "--opt-mode=optN"])
+    ctl.add("base", [], program)
+    ctl.ground([("base", [])])
+
+    optimal_models, best_cost = [], None
+
+    def on_model(model):
+        nonlocal best_cost
+        if model.optimality_proven:
+            optimal_models.append(model.symbols(shown=True))
+        if model.cost:
+            best_cost = model.cost[0]
+
+    result = ctl.solve(on_model=on_model)
+
+    logging.info(f"clingo time: {utils.get_elapsed_time() - time:.2f}s")
+    logger.info(f"clingo result: {result}")
+
+    for i, model in enumerate(optimal_models, start=1):
+        print(f"Answer {i}: " + " ".join(str(sym) for sym in model))
+    if best_cost is not None:
+        print(f"repair_cost={best_cost}")
+
+
 def remove_lp_files():
     current_directory = os.getcwd()
 
@@ -368,9 +414,13 @@ if __name__ == "__main__":
         logger.info("Running plasp...")
         run_plasp("", args.instance, args.lp_name, args.encoding, args.dump_output, False)
 
-    logger.info("Running fasb...")
-    max_repairs = args.max_repairs if args.domain_repair else None
-    run_fasb(args.lp_name, args.horizon, args.script, max_repairs)
+    if args.domain_repair and args.max_repairs == "min":
+        logger.info("Running clingo (minimizing total repair cost)...")
+        run_clingo(args.lp_name, args.horizon)
+    else:
+        logger.info("Running fasb...")
+        max_repairs = args.max_repairs if args.domain_repair else None
+        run_fasb(args.lp_name, args.horizon, args.script, max_repairs)
 
     if args.cleanup:
         remove_lp_files()
