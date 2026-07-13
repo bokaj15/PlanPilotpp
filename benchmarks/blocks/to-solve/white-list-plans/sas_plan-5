@@ -1,0 +1,8 @@
+unstack b2 b3 (1)
+put-down b2 (1)
+unstack b3 b1 (1)
+put-down b3 (1)
+unstack b1 b4 (1)
+stack b1 b3 (1)
+pick-up b4 (1)
+stack b4 b2 (1)

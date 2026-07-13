@@ -1,0 +1,33 @@
+
+-----HORIZON
+
+Problem 1
+horizon: 4
+
+Problem 2
+horizon: 3
+
+Problem 3
+horizon: 10
+
+Problem 4
+horizon: 6
+
+Problem 5
+horizon: 11
+
+Problem 6
+horizon: 12
+
+Problem 7
+horizon: 20
+
+Problem 8
+horizon: 20
+
+Problem 9
+horizon: 29
+
+Problem 10
+horizon: 19
+

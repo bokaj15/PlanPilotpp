@@ -1,0 +1,127 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_effect: stack(on ?x ?y)
+
+Problem 2
+add_effect: put-down(ontable ?x)
+
+Problem 3
+del_prec: stack(on ?x ?y)
+
+Problem 4
+del_prec: put-down(handempty)
+
+Problem 5
+del_prec: pick-up(holding ?x)
+
+Problem 6
+add_effect: unstack(clear ?y)
+
+Problem 7
+add_effect: unstack(holding ?x)
+
+Problem 8
+del_prec: unstack(holding ?x)
+
+Problem 9
+del_prec: stack(ontable ?x)
+
+Problem 10
+del_prec: unstack(ontable ?x)
+
+-----MAX-REPAIRS 2
+
+Problem 1
+add_effect: stack(on ?x ?y)
+add_effect: pick-up(holding ?x)
+
+Problem 2
+add_effect: put-down(handempty)
+del_prec: unstack(holding ?x)
+
+Problem 3
+del_prec: pick-up(holding ?x)
+del_prec: put-down(handempty)
+
+Problem 4
+add_effect: put-down(handempty)
+add_effect: pick-up(holding ?x)
+
+Problem 5
+del_prec: stack(ontable ?x)
+add_effect: put-down(handempty)
+
+Problem 6
+add_effect: unstack(clear ?y)
+add_effect: stack(handempty)
+
+Problem 7
+del_prec: stack(on ?x ?y)
+del_prec: unstack(holding ?x)
+
+Problem 8
+add_effect: stack(on ?x ?y)
+del_prec: unstack(ontable ?x)
+
+Problem 9
+add_effect: unstack(clear ?y)
+add_effect: stack(handempty)
+
+Problem 10
+add_effect: pick-up(holding ?x)
+del_prec: stack(handempty)
+
+
+-----MAX-REPAIRS 3
+
+Problem 1
+add_effect: pick-up(holding ?x)
+add_effect: stack(on ?x ?y)
+add_effect: unstack(holding ?x)
+
+Problem 2
+add_effect: put-down(clear ?x)
+del_prec: stack(on ?x ?y)
+del_prec: stack(clear ?x)
+
+Problem 3
+add_effect: stack(handempty)
+add_effect: put-down(clear ?x)
+del_prec: stack(on ?x ?y)
+
+Problem 4
+add_effect: put-down(clear ?x)
+add_effect: put-down(handempty)
+add_effect: unstack(clear ?y)
+
+Problem 5
+del_prec: stack(handempty)
+del_prec: unstack(ontable ?x)
+add_effect: put-down(handempty)
+
+Problem 6
+del_prec: put-down(handempty)
+del_prec: stack(handempty)
+add_effect: pick-up(holding ?x)
+
+Problem 7
+add_effect: unstack(holding ?x)
+add_effect: stack(on ?x ?y)
+add_effect: put-down(clear ?x)
+
+Problem 8
+del_prec: unstack(ontable ?x)
+add_effect: pick-up(holding ?x)
+add_effect: stack(on ?x ?y)
+
+Problem 9
+del_prec: unstack(holding ?x)
+del_prec: put-down(ontable ?x)
+add_effect: stack(handempty)
+
+Problem 10
+add_effect: stack(on ?x ?y)
+add_effect: put-down(handempty)
+del_prec: put-down(handempty)
+

@@ -1,0 +1,125 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_effect: pick-up(in ?p ?v)
+
+Problem 2
+add_effect: drive(at ?v ?l2)
+
+Problem 3
+del_prec: pick-up(in ?p ?v)
+
+Problem 4
+del_prec: drive(at ?v ?l2)
+
+Problem 5
+add_effect: drop(at ?p ?l)
+
+Problem 6
+add_effect: pick-up(in ?p ?v)
+
+Problem 7
+add_effect: drop(capacity ?v ?s2)
+
+Problem 8
+add_effect: pick-up(capacity ?v ?s1)
+
+Problem 9
+del_prec: pick-up(capacity ?v ?s1)
+
+Problem 10
+del_prec: drop(at ?p ?l)
+
+-----MAX-REPAIRS 2
+
+Problem 1
+add_effect: drive(at ?v ?l2)
+add_effect: pick-up(in ?p ?v)
+
+Problem 2
+add_effect: drive(at ?v ?l2)
+del_prec: pick-up(in ?p ?v)
+
+Problem 3
+add_effect: pick-up(in ?p ?v)
+del_prec: drop(at ?p ?l)
+
+Problem 4
+add_effect: drive(at ?v ?l2)
+add_effect: drop(at ?p ?l)
+
+Problem 5
+add_effect: drop(at ?p ?l)
+del_prec: drop(at ?p ?l)
+
+Problem 6
+add_effect: drop(at ?p ?l)
+add_effect: pick-up(capacity ?v ?s1)
+
+Problem 7
+add_effect: drive(at ?v ?l2)
+del_prec: pick-up(in ?p ?v)
+
+Problem 8
+add_effect: drive(at ?v ?l2)
+add_effect: drop(at ?p ?l)
+
+Problem 9
+add_effect: drive(at ?v ?l2)
+del_prec: pick-up(capacity ?v ?s1)
+
+Problem 10
+add_effect: pick-up(in ?p ?v)
+del_prec: pick-up(in ?p ?v)
+
+-----MAX-REPAIRS 3
+
+Problem 1
+add_effect: pick-up(capacity ?v ?s1)
+add_effect: drive(at ?v ?l2)
+add_effect: drop(at ?p ?l)
+
+Problem 2
+add_effect: pick-up(in ?p ?v)
+del_prec: pick-up(in ?p ?v)
+add_effect: drop(at ?p ?l)
+
+Problem 3
+add_effect: pick-up(capacity ?v ?s1)
+add_effect: drop(at ?p ?l)
+add_effect: drive(at ?v ?l2)
+
+Problem 4
+add_effect: drop(at ?p ?l)
+del_prec: drop(at ?p ?l)
+add_effect: pick-up(in ?p ?v)
+
+Problem 5
+add_effect: drive(at ?v ?l2)
+add_effect: pick-up(in ?p ?v)
+add_effect: pick-up(capacity ?v ?s1)
+
+Problem 6
+del_prec: pick-up(in ?p ?v)
+add_effect: pick-up(in ?p ?v)
+del_prec: drop(at ?p ?l)
+
+Problem 7
+add_effect: drop(capacity ?v ?s2)
+add_effect: drive(at ?v ?l2)
+add_effect: pick-up(in ?p ?v)
+
+Problem 8
+add_effect: drive(at ?v ?l2)
+add_effect: drop(at ?p ?l)
+add_effect: drop(capacity ?v ?s2)
+
+Problem 9
+del_prec: pick-up(in ?p ?v)
+add_effect: drop(at ?p ?l)
+del_prec: drop(at ?p ?l)
+
+Problem 10
+add_effect: pick-up(in ?p ?v)
+add_effect: drop(capacity ?v ?s2)
+del_prec: drive(at ?v ?l2)
