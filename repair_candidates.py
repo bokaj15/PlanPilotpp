@@ -35,8 +35,12 @@ The candidate *sources* are:
   * del  negative effect       -> the operator's current negative effects
 
 Add candidates are filtered by a no-op guard: a candidate whose fluent the
-operator already has at *either* polarity is skipped (same sign = redundant,
-opposite sign = contradiction).
+operator already has at *either* polarity as an effect is skipped (same sign =
+redundant, opposite sign = contradiction). Add-effect candidates are further
+restricted to fluents drawn from *other* actions' preconditions (or the goal):
+a fluent that already appears in the operator's own same-polarity precondition
+is skipped, since adding it as an effect of that operator would be a no-op (it
+already holds when the action fires and is not deleted).
 """
 
 import os
@@ -214,15 +218,25 @@ def _bridge_rule(candidate, operator, predicate, slots, polarity, arity):
 def _type_valid_assignments(predicate, slot_types, supers, allow_repeated_slots=False):
     """Yield slot-index tuples assigning parameters to a predicate's arguments.
 
-    A parameter may fill an argument iff its type is (a subtype of) the
-    argument's declared type. By default, assignments that map two distinct
-    predicate arguments to the same parameter (repeated slots, e.g.
-    ``("in", par1, par1)``) are skipped, since they are almost always vacuous.
+    A parameter may fill an argument iff their types are compatible, i.e. one is
+    a subtype of the other (equivalently, their object sets can overlap). This
+    covers both a parameter that is more specific than the argument (e.g. a
+    ``truck`` parameter filling a ``vehicle`` argument) and one that is more
+    general (e.g. a ``vehicle`` parameter filling a ``truck`` argument, which is
+    meaningful for the ground instances where the vehicle happens to be a
+    truck). Parameters whose type is disjoint from the argument's are excluded.
+    By default, assignments that map two distinct predicate arguments to the
+    same parameter (repeated slots, e.g. ``("in", par1, par1)``) are skipped,
+    since they are almost always vacuous.
     """
     choices = []
     for arg in predicate.arguments:
         arg_type = arg.type_name.lower()
-        opts = [slot for (slot, ptype) in slot_types if _is_subtype(ptype, arg_type, supers)]
+        opts = [
+            slot
+            for (slot, ptype) in slot_types
+            if _is_subtype(ptype, arg_type, supers) or _is_subtype(arg_type, ptype, supers)
+        ]
         if not opts:
             return  # this predicate cannot be instantiated over the parameters
         choices.append(opts)
@@ -327,8 +341,9 @@ def generate_repair_candidates(domain, instance, candidates=None):
         # polarity: same sign would be a no-op, opposite sign would be a clash
         # (an inversion that both kills the action via the uniqueness constraint
         # and duplicates what the delete candidate already offers).
-        have_pre = {(p, slots_of(a)) for (p, a) in pos_pre}
-        have_pre |= {(p, slots_of(a)) for (p, a) in neg_pre}
+        have_pos_pre = {(p, slots_of(a)) for (p, a) in pos_pre}
+        have_neg_pre = {(p, slots_of(a)) for (p, a) in neg_pre}
+        have_pre = have_pos_pre | have_neg_pre
         have_eff = {(p, slots_of(a)) for (p, a) in pos_eff}
         have_eff |= {(p, slots_of(a)) for (p, a) in neg_eff}
 
@@ -372,6 +387,8 @@ def generate_repair_candidates(domain, instance, candidates=None):
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
                     if (pred_name, slots) in have_eff:
                         continue  # no-op or clash with an existing effect
+                    if (pred_name, slots) in have_pos_pre:
+                        continue  # already a positive precondition of this action -> no-op
                     emit("add_effect", pred_name, slots, "true")
 
         # --- ADD negative effect: predicates from negative preconditions ---
@@ -383,6 +400,8 @@ def generate_repair_candidates(domain, instance, candidates=None):
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
                     if (pred_name, slots) in have_eff:
                         continue  # no-op or clash with an existing effect
+                    if (pred_name, slots) in have_neg_pre:
+                        continue  # already a negative precondition of this action -> no-op
                     emit("add_effect", pred_name, slots, "false")
 
         # --- DELETE effect: the operator's current effects ---
