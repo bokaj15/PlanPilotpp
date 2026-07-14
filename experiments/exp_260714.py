@@ -17,6 +17,9 @@ PLANPILOT_SIF = REPO_ROOT / "planpilot.sif"
 BENCHMARKS_DIR = REPO_ROOT / "benchmarks"
 DOMAINS = [
     "satellite",
+    "transport",
+    "blocks",
+    "rovers",
 ]
 
 NUM_PROBLEMS = 10
@@ -32,13 +35,13 @@ else:
     ENV = LocalEnvironment(processes=4)
 
 CONFIG_TEMPLATES = [
-    (
-        "to-forbid-max-repairs-1",
-        "to-forbid/broken-domains/max-repairs-1",
-        "to-forbid/black-list-plans",
-        "--black-list-plan",
-        "min",
-    ),
+    # (
+    #     "to-forbid-max-repairs-1",
+    #     "to-forbid/broken-domains/max-repairs-1",
+    #     "to-forbid/black-list-plans",
+    #     "--black-list-plan",
+    #     "min",
+    # ),
 
     (
         "to-solve-max-repairs-1",
@@ -329,7 +332,7 @@ for benchmark_domain in DOMAINS:
     horizons = load_horizons(benchmark_dir / "horizons.txt")
 
     for config_suffix, broken_domains_rel, plans_rel, plan_flag, max_repairs in CONFIG_TEMPLATES:
-        config_name = f"{benchmark_domain}-{config_suffix}"
+        config_name = config_suffix
         broken_domains_dir = benchmark_dir / broken_domains_rel
         plans_dir = benchmark_dir / plans_rel
 
