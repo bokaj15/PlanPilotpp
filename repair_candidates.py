@@ -36,11 +36,12 @@ The candidate *sources* are:
 
 Add candidates are filtered by a no-op guard: a candidate whose fluent the
 operator already has at *either* polarity as an effect is skipped (same sign =
-redundant, opposite sign = contradiction). Add-effect candidates are further
-restricted to fluents drawn from *other* actions' preconditions (or the goal):
-a fluent that already appears in the operator's own same-polarity precondition
-is skipped, since adding it as an effect of that operator would be a no-op (it
-already holds when the action fires and is not deleted).
+redundant, opposite sign = contradiction). Add-effect candidates draw their
+fluents from *other* actions' preconditions (or the goal); a fluent that is
+already a same-polarity precondition of the operator is *not* skipped, since the
+correct repair may be to delete it from the preconditions and add it as an
+effect (e.g. blocksworld put-down: drop the spurious ``handempty`` precondition
+and add the missing ``handempty`` effect).
 """
 
 import os
@@ -413,8 +414,11 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
                     if (pred_name, slots) in have_eff:
                         continue  # no-op or clash with an existing effect
-                    if (pred_name, slots) in have_pos_pre:
-                        continue  # already a positive precondition of this action -> no-op
+                    # Note: a fluent that is already a positive precondition is
+                    # NOT skipped -- the correct repair may be to delete it from
+                    # the preconditions and add it as an effect (e.g. blocks
+                    # put-down: drop the spurious handempty precondition and add
+                    # the missing handempty effect).
                     emit("add_effect", pred_name, slots, "true")
 
         # --- ADD negative effect: predicates from negative preconditions ---
@@ -426,8 +430,6 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
                     if (pred_name, slots) in have_eff:
                         continue  # no-op or clash with an existing effect
-                    if (pred_name, slots) in have_neg_pre:
-                        continue  # already a negative precondition of this action -> no-op
                     emit("add_effect", pred_name, slots, "false")
 
         # --- DELETE effect: the operator's current effects ---
