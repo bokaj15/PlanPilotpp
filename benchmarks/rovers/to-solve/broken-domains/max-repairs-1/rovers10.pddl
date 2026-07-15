@@ -132,8 +132,6 @@
 	                   (channel_free ?l)
 	                )
 	 :effect (and 
-	 				(not (available ?r))
-	 				(not (channel_free ?l))
 	 				(channel_free ?l)
 					(communicated_soil_data ?p)
 					(available ?r)
@@ -151,8 +149,6 @@
 	                   (channel_free ?l)
 	                )
 	 :effect (and 
-	 			 (not (available ?r))
-	 			 (not (channel_free ?l))
 	      		 (channel_free ?l)
 	      		 (communicated_rock_data ?p)
 	      		 (available ?r)
@@ -172,8 +168,6 @@
 		            (channel_free ?l)
 		            )
 	 :effect (and 
-	 			(not (available ?r))
-	 			(not (channel_free ?l))
 	 			(channel_free ?l)
 	      		(communicated_image_data ?o ?m)
 	      		(available ?r)

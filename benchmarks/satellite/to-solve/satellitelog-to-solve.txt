@@ -28,7 +28,7 @@ Problem 9
 del_prec: switch_on(calibrated ?i)
 
 Problem 10
-del_prec: switch_off(calibrated ?i)
+del_prec: calibrate(calibrated ?i)
 
 -----MAX-REPAIRS 2
 
@@ -45,7 +45,7 @@ add_effect: take_image(have_image ?d ?m)
 del_prec: switch_on(calibrated ?i)
 
 Problem 4
-del_prec: switch_off(calibrated ?i)
+del_prec: calibrate(calibrated ?i)
 add_effect: turn_to(pointing ?s ?d_new)
 
 Problem 5
