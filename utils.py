@@ -68,7 +68,13 @@ def parse_arguments():
         "it from the instance filename.",
     )
     parser.add_argument(
-        "--partial-plan", help="The path to the file containing partial plan."
+        "--partial-plan",
+        nargs="+",
+        help="Path(s) to one or more partial-plan (positive-example) files. "
+        "Passing more than one plan in total across --partial-plan and "
+        "--negative-example enables multiple-plans repair mode: every plan "
+        "becomes its own path and a single shared repair set must satisfy them "
+        "all.",
     )
     parser.add_argument(
         "--add-constraints", help="String containing additional contraints.", type=str
@@ -83,7 +89,17 @@ def parse_arguments():
         action="store_true",
     )
     parser.add_argument(
-        "--horizon", required=True, type=int, help="Horizon used by clingo."
+        "--horizon",
+        type=int,
+        nargs="+",
+        default=None,
+        help="Horizon(s) used by clingo. Pass a single value for normal mode. "
+        "In multiple-plans mode pass one horizon per --partial-plan file, in "
+        "the same order (--horizon h1 h2 ... --partial-plan w1 w2 ...); "
+        "negative-example plans need no horizon (it is their prefix length). "
+        "The first value is also the global horizon constant handed to "
+        "clingo/fasb. May be omitted when repairing only --negative-example "
+        "plans (their horizon is derived from the prefix length).",
     )
     parser.add_argument(
         "--lp-name",
@@ -144,13 +160,16 @@ def parse_arguments():
         "instead minimize the total repair cost.",
     )
     parser.add_argument(
-        "--black-list-plan",
-        help="(Domain-repair mode) Path to a plan file in standard PDDL plan "
-        "format (one '(action arg1 arg2)' per line; ';' comments and blank "
-        "lines ignored). The last action is the one that is applicable in the "
-        "broken domain but should not be; the preceding actions establish the "
-        "state it must not be applicable in. A repair is forced that makes it "
-        "inapplicable there.",
+        "--negative-example",
+        nargs="+",
+        help="(Domain-repair mode) Path(s) to one or more plan files in standard "
+        "PDDL plan format (one '(action arg1 arg2)' per line; ';' comments and "
+        "blank lines ignored). In each plan the last action is the one that is "
+        "applicable in the broken domain but should not be; the preceding actions "
+        "establish the state it must not be applicable in, and a repair is forced "
+        "that makes it inapplicable there. Passing more than one plan in total "
+        "across --partial-plan and --negative-example enables multiple-plans "
+        "repair mode (a single shared repair set must satisfy every plan).",
     )
 
     args = parser.parse_args()

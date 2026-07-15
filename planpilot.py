@@ -6,6 +6,7 @@ import sys
 import utils
 import clingo
 import repair_candidates
+import multi_plan
 
 from subprocess import Popen, PIPE
 
@@ -58,11 +59,20 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         command = [binary_path, "translate", domain, instance]
 
     with open(lp, "w") as lp_file:
+        # --partial-plan and --negative-example trigger multiple-plans mode when >=2 
+        # (one path per plan, one shared repair set).
+        # A single plan keeps the original behaviour untouched.
+        white_plans = args.partial_plan or []
+        black_plans = args.negative_example or []
+        multi_plan_mode = (len(white_plans) + len(black_plans)) >= 2
+
         # First, we add the corresponding sequential encoding to it.
         # In domain-repair mode we use the repair variants, which route the
         # precondition check and effect application through applied_*
         # (with no repairs enabled they collapse to the plasp facts exactly).
-        if args.domain_repair:
+        if args.domain_repair and multi_plan_mode:
+            encoding = fix_path("encodings/multiple-plans-repair.lp")
+        elif args.domain_repair:
             encoding = fix_path("encodings/exact-sequential-horizon-repair.lp")
             if args.max_repairs == "min":
                 encoding = fix_path(
@@ -81,24 +91,39 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         with open(encoding) as seq_encoding:
             lp_file.write(seq_encoding.read())
 
-        time_steps_encoding = fix_path("encodings/action-per-time-step.lp")
-        if args.abstract_time_steps:
-            time_steps_encoding = fix_path("encodings/abstract-time-steps.lp")
+        # The multiple-plans encoding pins each plan on its own timeline, so it
+        # needs no free action-choice rule.
+        if not multi_plan_mode:
+            time_steps_encoding = fix_path("encodings/action-per-time-step.lp")
+            if args.abstract_time_steps:
+                time_steps_encoding = fix_path("encodings/abstract-time-steps.lp")
 
-        with open(time_steps_encoding) as time_encoding:
-            lp_file.write(time_encoding.read())
+            with open(time_steps_encoding) as time_encoding:
+                lp_file.write(time_encoding.read())
 
-        if args.partial_plan:
-            logger.info(f"Using partial plan '{args.partial_plan}'...")
+        if multi_plan_mode:
+            logger.info(
+                f"Multiple-plans mode: {len(white_plans)} whitelist(s), "
+                f"{len(black_plans)} blacklist(s)..."
+            )
+            lp_file.write("\n%%%%%%% multiple plans encoding\n")
+            lp_file.write(
+                multi_plan.render_multi_plan_program(
+                    white_plans, black_plans, args.horizon or []
+                )
+            )
+
+        if not multi_plan_mode and white_plans:
+            logger.info(f"Using partial plan '{white_plans[0]}'...")
             constraints: str | None = translate_partial_plan_into_constraints(
-                args.partial_plan
+                white_plans[0]
             )
             lp_file.write("\n%%%%%%% partial plan encoding\n" + constraints + "\n")
 
-        if args.black_list_plan:
-            logger.info(f"Using blacklist plan '{args.black_list_plan}'...")
+        if not multi_plan_mode and black_plans:
+            logger.info(f"Using blacklist plan '{black_plans[0]}'...")
             blacklist = repair_candidates.render_blacklist_program(
-                domain, instance, args.black_list_plan
+                domain, instance, black_plans[0]
             )
             lp_file.write("\n%%%%%%% blacklist plan encoding\n" + blacklist)
 
@@ -130,19 +155,19 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
             # horizon encoding written above; here we only append the
             # domain-specific candidate facts and their bridge rules.
             candidates = args.repair_candidates
-            if args.black_list_plan:
+            if black_plans:
                 # A blacklist is satisfied only by add-precondition repairs, so
                 # by default generate just those. A partial plan (whitelist) is
                 # only a guard here, exactly like in normal PlanPilot: it
                 # constrains the solution to keep that plan runnable, but never
                 # triggers repairs of its own. Relaxing candidates are unioned
-                # in only when the user explicitly asks for them via
-                # --repair-candidates.
+                # in when the user asks for them via --repair-candidates, or in
+                # multiple-plans mode (where whitelists may need them).
                 candidates = repair_candidates.blacklist_candidates(
                     domain,
                     instance,
                     candidates,
-                    union_with_relaxing=bool(args.repair_candidates),
+                    union_with_relaxing=multi_plan_mode or bool(args.repair_candidates),
                 )
             repair_program = repair_candidates.render_repair_program(
                 domain, instance, candidates, add_repair_cost=args.max_repairs == "min"
@@ -375,6 +400,21 @@ def translate_action_to_constraint(action: str, at: int) -> str:
     return ":- not occurs(action((" + ",".join(terms) + f")),{at+1})."
 
 
+def _negative_example_prefix_horizon(negative_plans) -> int:
+    """Longest negative-example prefix length (|plan| - 1).
+
+    Used as the global horizon default when --horizon is omitted (a
+    negative-example-only repair): the run only needs enough steps to run each
+    prefix and check the forbidden last action.
+    """
+    lengths = []
+    for path in negative_plans:
+        plan = multi_plan._parse_blacklist(path)
+        if plan:
+            lengths.append(len(plan) - 1)
+    return max(lengths, default=1)
+
+
 if __name__ == "__main__":
     args = utils.parse_arguments()
 
@@ -387,10 +427,34 @@ if __name__ == "__main__":
         sys.stderr.write("Error: Instance file does not exist.\n")
         sys.exit()
 
-    if args.black_list_plan and not args.domain_repair:
+    if args.negative_example and not args.domain_repair:
         sys.stderr.write(
-            "Error: --black-list-plan requires --domain-repair "
+            "Error: --negative-example requires --domain-repair "
             "(it relies on the repair-variant encoding).\n"
+        )
+        sys.exit()
+
+    _n_plans = len(args.partial_plan or []) + len(args.negative_example or [])
+    if _n_plans >= 2:
+        if not args.domain_repair:
+            sys.stderr.write(
+                "Error: multiple input plans require --domain-repair.\n"
+            )
+            sys.exit()
+        if args.max_repairs == "min":
+            sys.stderr.write(
+                "Error: multiple input plans are not yet supported with "
+                "--max-repairs min.\n"
+            )
+            sys.exit()
+
+    if args.horizon is None and (args.partial_plan or not args.negative_example):
+        # --horizon is only optional for a negative-example-only repair, where
+        # each path's horizon is its prefix length. Positive examples and plain
+        # planning still require it.
+        sys.stderr.write(
+            "Error: --horizon is required except when repairing only "
+            "--negative-example plans (their horizon is the prefix length).\n"
         )
         sys.exit()
 
@@ -414,13 +478,22 @@ if __name__ == "__main__":
         logger.info("Running plasp...")
         run_plasp("", args.instance, args.lp_name, args.encoding, args.dump_output, False)
 
+    # --horizon is a list; the first value is the global horizon constant handed
+    # to clingo/fasb (in multiple-plans mode each path derives its own timeline
+    # from horizon/2 facts, so this global constant is only a harmless default).
+    # When omitted (negative-example-only repair) it defaults to the longest
+    # negative-example prefix length, which is the horizon such a run needs.
+    if args.horizon:
+        global_horizon = args.horizon[0]
+    else:
+        global_horizon = _negative_example_prefix_horizon(args.negative_example or [])
     if args.domain_repair and args.max_repairs == "min":
         logger.info("Running clingo (minimizing total repair cost)...")
-        run_clingo(args.lp_name, args.horizon)
+        run_clingo(args.lp_name, global_horizon)
     else:
         logger.info("Running fasb...")
         max_repairs = args.max_repairs if args.domain_repair else None
-        run_fasb(args.lp_name, args.horizon, args.script, max_repairs)
+        run_fasb(args.lp_name, global_horizon, args.script, max_repairs)
 
     if args.cleanup:
         remove_lp_files()

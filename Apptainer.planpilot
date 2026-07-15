@@ -27,6 +27,7 @@ Stage: run
     /tools/utils.py /tools/utils.py
     /tools/planpilot.py /tools/planpilot.py
     /tools/repair_candidates.py /tools/repair_candidates.py
+    /tools/multi_plan.py /tools/multi_plan.py
     /tools/scripts/ /tools/scripts/
     /tools/translate/ /tools/translate/
 
