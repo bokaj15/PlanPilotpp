@@ -578,15 +578,20 @@ def blacklist_candidates(domain, instance, candidates=None, union_with_relaxing=
     be negative).
 
     Two modes:
-      * ``union_with_relaxing=False`` (blacklist alone): emit *only* the
-        constraining add-precondition candidates. Relaxing candidates cannot
-        satisfy the blacklist, so they would just be noise.
-      * ``union_with_relaxing=True`` (blacklist together with a whitelist /
-        partial plan): union the constraining candidates with the relaxing ones,
-        because the whitelist may need them to keep its good plan runnable.
-        The relaxing base is ``candidates`` if given, else the same default
-        :func:`generate_repair_candidates` picks (positive relaxing candidates,
-        plus the negative ones when the domain has negative preconditions).
+      * ``union_with_relaxing=False`` (default, e.g. a blacklist alone or a
+        blacklist guarded by a partial plan): emit *only* the constraining
+        add-precondition / delete-effect candidates. Relaxing candidates cannot
+        satisfy the blacklist, and a partial plan is only a guard that must stay
+        runnable under the blocking repairs -- it does not trigger relaxing
+        repairs of its own -- so they would just be noise.
+      * ``union_with_relaxing=True`` (only when the user explicitly asks for
+        relaxing candidates via ``--repair-candidates``): union the constraining
+        candidates with the requested relaxing ones, so the domain can be
+        repaired to block the blacklist *and* make an otherwise-inapplicable
+        whitelist applicable. The relaxing base is ``candidates`` if given, else
+        the same default :func:`generate_repair_candidates` picks (positive
+        relaxing candidates, plus the negative ones when the domain has negative
+        preconditions).
 
     Returns a sorted list.
     """

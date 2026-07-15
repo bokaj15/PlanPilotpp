@@ -156,18 +156,21 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
             # domain-specific candidate facts and their bridge rules.
             candidates = args.repair_candidates
             if black_plans:
-                # A blacklist is satisfied only by add-precondition repairs, so
-                # by default generate just those. A partial plan (whitelist) is
-                # only a guard here, exactly like in normal PlanPilot: it
-                # constrains the solution to keep that plan runnable, but never
-                # triggers repairs of its own. Relaxing candidates are unioned
-                # in when the user asks for them via --repair-candidates, or in
-                # multiple-plans mode (where whitelists may need them).
+                # A blacklist is satisfied only by constraining repairs (add a
+                # precondition / delete an upstream effect), so by default
+                # generate just those. Any partial plan (whitelist) is only a
+                # guard here: it must stay runnable under whatever repairs block
+                # the blacklist, but it never triggers relaxing repairs of its
+                # own. To repair the domain so the blacklist is blocked *and* a
+                # whitelist that would otherwise be inapplicable becomes
+                # applicable, the user must ask for the relaxing candidates
+                # explicitly via --repair-candidates (e.g. add_pos_eff); only
+                # then are they unioned in.
                 candidates = repair_candidates.blacklist_candidates(
                     domain,
                     instance,
                     candidates,
-                    union_with_relaxing=multi_plan_mode or bool(args.repair_candidates),
+                    union_with_relaxing=bool(args.repair_candidates),
                 )
             repair_program = repair_candidates.render_repair_program(
                 domain, instance, candidates, add_repair_cost=args.max_repairs == "min"
