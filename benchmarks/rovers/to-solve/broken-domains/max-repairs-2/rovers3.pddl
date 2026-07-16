@@ -51,6 +51,7 @@
 			   		(equipped_for_soil_analysis ?x) 
 			   		(store_of ?s ?x) 
 			   		(empty ?s)
+					(communicated_soil_data ?p)
 			   		)
 	:effect (and 
 				(not (empty ?s)) 
@@ -68,7 +69,6 @@
 		           (equipped_for_rock_analysis ?x) 
 		           (store_of ?s ?x)
 		           (empty ?s)
-				   (communicated_soil_data ?p)
 		           )
 	:effect (and 
 				(not (empty ?s)) 

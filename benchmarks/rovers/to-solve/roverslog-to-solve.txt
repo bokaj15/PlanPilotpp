@@ -41,7 +41,7 @@ del_prec: take_image(have_image ?r ?o ?m)
 add_effect: sample_rock(have_rock_analysis ?x ?p)
 
 Problem 3
-del_prec: sample_rock(communicated_soil_data ?p)
+del_prec: sample_soil(communicated_soil_data ?p)
 del_prec: take_image(communicated_image_data ?o ?m)
 
 Problem 4
@@ -95,8 +95,8 @@ add_effect: communicate_soil_data(communicated_soil_data ?p)
 add_effect: calibrate(calibrated ?i ?r)
 
 Problem 5
-del_prec: sample_rock(have_rock_analysis ?x ?p)
-add_effect: sample_rock(have_rock_analysis ?x ?p)
+del_prec: sample_soil(have_soil_analysis ?x ?p)
+add_effect: sample_soil(have_soil_analysis ?x ?p)
 add_effect: take_image(have_image ?r ?o ?m)
 
 Problem 6
@@ -110,9 +110,9 @@ add_effect: sample_rock(full ?s)
 add_effect: sample_soil(full ?s)
 
 Problem 8
-del_prec: sample_rock(full ?s)
+del_prec: sample_soil(full ?s)
 add_effect: navigate(at ?x ?z)
-add_effect: sample_rock(have_rock_analysis ?x ?p)
+add_effect: calibrate(calibrated ?i ?r)
 
 Problem 9
 add_effect: sample_soil(have_soil_analysis ?x ?p)

@@ -50,6 +50,7 @@
 			   		(equipped_for_soil_analysis ?x) 
 			   		(store_of ?s ?x) 
 			   		(empty ?s)
+					(full ?s)
 			   		)
 	:effect (and 
 				(not (empty ?s)) 
@@ -67,8 +68,6 @@
 		           (equipped_for_rock_analysis ?x) 
 		           (store_of ?s ?x)
 		           (empty ?s)
-				   (have_rock_analysis ?x ?p) 
-				   (full ?s) 
 		           )
 	:effect (and 
 				(not (empty ?s)) 
@@ -99,7 +98,7 @@
 		            (visible_from ?t ?w)
 		            (on_board ?i ?r)
 		            )
-	 :effect (and (calibrated ?i ?r)
+	 :effect (and 
 	 		)
 )
 

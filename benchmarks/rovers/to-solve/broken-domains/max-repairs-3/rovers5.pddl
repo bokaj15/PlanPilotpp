@@ -51,12 +51,12 @@
 			   		(equipped_for_soil_analysis ?x) 
 			   		(store_of ?s ?x) 
 			   		(empty ?s)
+					(have_soil_analysis ?x ?p)
 			   		)
 	:effect (and 
 				(not (empty ?s)) 
 				(full ?s) 
 	     		(not (at_soil_sample ?p))
-				(have_soil_analysis ?x ?p)
 	     		)
 )
 
@@ -68,12 +68,12 @@
 		           (equipped_for_rock_analysis ?x) 
 		           (store_of ?s ?x)
 		           (empty ?s)
-				   (have_rock_analysis ?x ?p)
 		           )
 	:effect (and 
 				(not (empty ?s)) 
 				(full ?s) 				 
 	     		(not (at_rock_sample ?p))
+				(have_rock_analysis ?x ?p)
 	     	)
 )
 
