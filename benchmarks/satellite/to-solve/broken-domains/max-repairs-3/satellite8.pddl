@@ -30,6 +30,7 @@
                       )
    :effect (and (not (calibrated ?i))
                 (not (power_avail ?s))
+                (power_on ?i)
                 )
    )
 

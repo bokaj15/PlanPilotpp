@@ -41,6 +41,7 @@
     :effect (and
         (not (at ?p ?l))
         (not (capacity ?v ?s2))
+        (capacity ?v ?s1)
       )
   )
 
