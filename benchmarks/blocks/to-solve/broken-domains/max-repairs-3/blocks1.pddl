@@ -33,13 +33,12 @@
 
   (:action stack
 	     :parameters (?x - block ?y - block)
-	     :precondition (and (holding ?x) (clear ?y))
+	     :precondition (and (holding ?x) (clear ?y) (handempty))
 	     :effect
 			     (and 
 			     	(not (holding ?x))
 				   (not (clear ?y))
 				   (clear ?x)
-				   (handempty)
 				   )
 )
 

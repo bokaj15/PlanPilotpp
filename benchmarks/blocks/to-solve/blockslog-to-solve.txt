@@ -78,7 +78,7 @@ del_prec: stack(handempty)
 Problem 1
 add_effect: pick-up(holding ?x)
 add_effect: stack(on ?x ?y)
-add_effect: unstack(holding ?x)
+del_prec: stack(handempty)
 
 Problem 2
 add_effect: put-down(clear ?x)
