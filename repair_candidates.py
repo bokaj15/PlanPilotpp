@@ -371,8 +371,8 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
         have_pos_pre = {(p, slots_of(a)) for (p, a) in pos_pre}
         have_neg_pre = {(p, slots_of(a)) for (p, a) in neg_pre}
         have_pre = have_pos_pre | have_neg_pre
-        have_eff = {(p, slots_of(a)) for (p, a) in pos_eff}
-        have_eff |= {(p, slots_of(a)) for (p, a) in neg_eff}
+        have_pos_eff = {(p, slots_of(a)) for (p, a) in pos_eff}
+        have_neg_eff = {(p, slots_of(a)) for (p, a) in neg_eff}
 
         op_lines = []
 
@@ -412,8 +412,17 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
                 if predicate is None:
                     continue
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
-                    if (pred_name, slots) in have_eff:
-                        continue  # no-op or clash with an existing effect
+                    if (pred_name, slots) in have_pos_eff:
+                        continue  # already a positive effect -> no-op
+                    if (pred_name, slots) in have_neg_eff and "del_neg_eff" not in enabled:
+                        # Already a negative effect: adding the positive one is a
+                        # clash (both values at once violates the uniqueness
+                        # constraint) *unless* the negative effect can be removed.
+                        # When del_neg_eff is enabled a co-selected repair may
+                        # delete it, making the flip (delete false + add true)
+                        # reachable (e.g. satellite calibrate: drop the wrong
+                        # (not (calibrated)) effect and add (calibrated)).
+                        continue
                     # Note: a fluent that is already a positive precondition is
                     # NOT skipped -- the correct repair may be to delete it from
                     # the preconditions and add it as an effect (e.g. blocks
@@ -428,8 +437,12 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
                 if predicate is None:
                     continue
                 for slots in _type_valid_assignments(predicate, slot_types, supers):
-                    if (pred_name, slots) in have_eff:
-                        continue  # no-op or clash with an existing effect
+                    if (pred_name, slots) in have_neg_eff:
+                        continue  # already a negative effect -> no-op
+                    if (pred_name, slots) in have_pos_eff and "del_pos_eff" not in enabled:
+                        # Symmetric to the positive case: skip the clash only
+                        # when the conflicting positive effect cannot be deleted.
+                        continue
                     emit("add_effect", pred_name, slots, "false")
 
         # --- DELETE effect: the operator's current effects ---
