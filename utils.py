@@ -51,6 +51,23 @@ def max_repairs_type(value):
         )
 
 
+def repair_weight_type(value):
+    """Parse one ``--repair-weights`` item: 'repair_type=weight'."""
+    repair_type, sep, weight = value.partition("=")
+    if not sep:
+        raise argparse.ArgumentTypeError(
+            f"--repair-weights items must be 'repair_type=weight', got '{value}'"
+        )
+    try:
+        weight = int(weight)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            f"--repair-weights: weight for '{repair_type}' must be an integer, "
+            f"got '{weight}'"
+        )
+    return repair_type, weight
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Wrapper to pipeline plasp and fasb.")
     parser.add_argument(
@@ -158,6 +175,19 @@ def parse_arguments():
         help="Maximum number of repairs that may be enabled at once in domain "
         "repair mode (upper bound of the repair choice rule), or 'min' to "
         "instead minimize the total repair cost.",
+    )
+    parser.add_argument(
+        "--repair-weights",
+        nargs="+",
+        type=repair_weight_type,
+        default=None,
+        metavar="REPAIR_TYPE=WEIGHT",
+        help="Only used with --max-repairs min. Per-repair-type cost (default: "
+        "1 for every type not listed). A repair type covers both polarities, "
+        "e.g. add_precondition applies whether the added precondition is "
+        "positive or negative. Valid types: add_precondition, "
+        "delete_precondition, add_effect, delete_effect. Example: "
+        "--repair-weights add_precondition=1 delete_effect=3",
     )
     parser.add_argument(
         "--negative-example",

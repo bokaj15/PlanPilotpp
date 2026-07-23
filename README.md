@@ -39,6 +39,24 @@ Pass `min` instead of a number to minimize the total repair cost (default cost
 is `1` for each repair type). This solves directly with `clingo` instead of `fasb`, and
 enumerates up to 10 optimal models.
 
+#### `--repair-weights <TYPE=WEIGHT> [<TYPE=WEIGHT> ...]`
+
+Only valid together with `--max-repairs min`. Sets a per-repair-type cost used
+by the cost-minimizing encoding; any type not listed keeps the default cost of
+`1`. A repair type covers both polarities, e.g. `add_precondition` applies
+whether the added precondition is positive or negative. Valid types:
+
+- **`add_precondition`** — covers `add_pos_pre` and `add_neg_pre`.
+- **`delete_precondition`** — covers `del_pos_pre` and `del_neg_pre`.
+- **`add_effect`** — covers `add_pos_eff` and `add_neg_eff`.
+- **`delete_effect`** — covers `del_pos_eff` and `del_neg_eff`.
+
+Example:
+
+```bash
+--max-repairs min --repair-weights add_precondition=1 delete_effect=3
+```
+
 #### `--partial-plan <file>`
 
 Taken from PlanPilot (minimal change). Includes a plan as constraints that must

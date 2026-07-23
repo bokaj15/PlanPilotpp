@@ -72,6 +72,8 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         # (with no repairs enabled they collapse to the plasp facts exactly).
         if args.domain_repair and multi_plan_mode:
             encoding = fix_path("encodings/multiple-plans-repair.lp")
+            if args.max_repairs == "min":
+                encoding = fix_path("encodings/multiple-plans-min-repair.lp")
         elif args.domain_repair:
             encoding = fix_path("encodings/exact-sequential-horizon-repair.lp")
             if args.max_repairs == "min":
@@ -173,7 +175,11 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
                     union_with_relaxing=bool(args.repair_candidates),
                 )
             repair_program = repair_candidates.render_repair_program(
-                domain, instance, candidates, add_repair_cost=args.max_repairs == "min"
+                domain,
+                instance,
+                candidates,
+                add_repair_cost=args.max_repairs == "min",
+                repair_weights=dict(args.repair_weights) if args.repair_weights else None,
             )
             lp_file.write("\n" + repair_program)
 
@@ -438,18 +444,19 @@ if __name__ == "__main__":
         sys.exit()
 
     _n_plans = len(args.partial_plan or []) + len(args.negative_example or [])
-    if _n_plans >= 2:
-        if not args.domain_repair:
-            sys.stderr.write(
-                "Error: multiple input plans require --domain-repair.\n"
-            )
-            sys.exit()
-        if args.max_repairs == "min":
-            sys.stderr.write(
-                "Error: multiple input plans are not yet supported with "
-                "--max-repairs min.\n"
-            )
-            sys.exit()
+    if _n_plans >= 2 and not args.domain_repair:
+        sys.stderr.write(
+            "Error: multiple input plans require --domain-repair.\n"
+        )
+        sys.exit()
+
+    if args.repair_weights and not (args.domain_repair and args.max_repairs == "min"):
+        sys.stderr.write(
+            "Error: --repair-weights requires --domain-repair and "
+            "--max-repairs min (weights only affect the cost-minimizing "
+            "encoding).\n"
+        )
+        sys.exit()
 
     if args.horizon is None and (args.partial_plan or not args.negative_example):
         # --horizon is only optional for a negative-example-only repair, where

@@ -269,7 +269,9 @@ def _has_negative_preconditions(task):
     return False
 
 
-def generate_repair_candidates(domain, instance, candidates=None, add_repair_cost=False):
+def generate_repair_candidates(
+    domain, instance, candidates=None, add_repair_cost=False, repair_weights=None
+):
     """Return a list of ASP ``repair(...)`` fact lines for the given domain.
 
     ``candidates`` is an iterable of candidate keys (see ``CANDIDATES``). When
@@ -280,7 +282,9 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
 
     ``add_repair_cost`` emits one cost rule per enabled repair
     type (for ``--max-repairs min``, where repairs are chosen by minimizing
-    total cost instead of a fixed cardinality bound).
+    total cost instead of a fixed cardinality bound). ``repair_weights`` is an
+    optional ``{repair_type: cost}`` override (repair type ignores polarity);
+    types not present in it default to a cost of 1.
     """
     explicit = candidates is not None
     if explicit:
@@ -288,6 +292,11 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
         unknown = enabled - set(CANDIDATES)
         if unknown:
             raise ValueError(f"unknown repair candidates: {sorted(unknown)}")
+
+    if repair_weights:
+        unknown_types = set(repair_weights) - set(REPAIR_TYPES.values())
+        if unknown_types:
+            raise ValueError(f"unknown repair types in repair_weights: {sorted(unknown_types)}")
 
     task = pddl_file.open(domain_filename=domain, task_filename=instance)
 
@@ -338,8 +347,11 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
         # One cost rule per enabled repair type.
         enabled_repair_types = sorted({REPAIR_TYPES[c] for c in enabled})
         if enabled_repair_types:
-            lines.append("% unit cost for each enabled repair type")
-            lines.extend(_repair_cost_rule(rt) for rt in enabled_repair_types)
+            lines.append("% cost for each enabled repair type (default 1)")
+            lines.extend(
+                _repair_cost_rule(rt, (repair_weights or {}).get(rt, 1))
+                for rt in enabled_repair_types
+            )
             lines.append("")
 
     for action in task.actions:
@@ -461,18 +473,23 @@ def generate_repair_candidates(domain, instance, candidates=None, add_repair_cos
     return lines
 
 
-def render_repair_program(domain, instance, candidates=None, add_repair_cost=False):
+def render_repair_program(
+    domain, instance, candidates=None, add_repair_cost=False, repair_weights=None
+):
     """Return the text of the generated repair candidate facts.
 
     Contains the domain-specific ``repair(...)`` candidate facts together with
-    their bridge rules (one per candidate), plus one generic unit-cost rule per
-    enabled repair type when ``add_repair_cost`` is set. The static part of the
-    repair layer -- the ``applied_*`` indirection and the ``{enabled(R) :
+    their bridge rules (one per candidate), plus one generic cost rule per
+    enabled repair type when ``add_repair_cost`` is set (see
+    ``repair_weights`` on ``generate_repair_candidates``). The static part of
+    the repair layer -- the ``applied_*`` indirection and the ``{enabled(R) :
     repair(R)}`` choice plus the ``#show`` directive -- lives in the
     repair-variant horizon encoding (``encodings/*-sequential-horizon-repair.lp``)
     written before these facts.
     """
-    lines = generate_repair_candidates(domain, instance, candidates, add_repair_cost)
+    lines = generate_repair_candidates(
+        domain, instance, candidates, add_repair_cost, repair_weights
+    )
     return "\n".join(lines) + "\n"
 
 
