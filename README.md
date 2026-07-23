@@ -62,9 +62,9 @@ Example:
 Taken from PlanPilot (minimal change). Includes a plan as constraints that must
 stay applicable. The domain is repaired (with the default candidates: add
 effects, delete preconditions) so that plan becomes applicable. Its role changes
-when combined with `--black-list-plan`. See *Combinations* below.
+when combined with `--negative-example`. See *Combinations* below.
 
-#### `--black-list-plan <file>`
+#### `--negative-example <file>`
 
 A plan whose last action must become inapplicable. The preceding actions let us infer
 the state in which that last action should be forbidden. A blacklist can only be satisfied by
@@ -88,13 +88,13 @@ defaults. Each candidate is `{add,del}_{pos,neg}_{pre,eff}`:
 
 ## Combinations
 
-#### `--black-list-plan <file>` + `--partial-plan <file>`
+#### `--negative-example <file>` + `--partial-plan <file>`
 
 Repair the domain so the blacklist plan becomes inapplicable, while the partial
 plan must stay applicable. The repair focuses on forbidding
 the blacklist plan, not on making the partial plan applicable.
 
-#### `--black-list-plan <file>` + `--partial-plan <file>` + `--repair-candidates add_pos_eff del_pos_pre`
+#### `--negative-example <file>` + `--partial-plan <file>` + `--repair-candidates add_pos_eff del_pos_pre`
 
 Repair the domain so the blacklist plan becomes inapplicable and the whitelist
 plan applicable at the same time.
@@ -102,7 +102,7 @@ plan applicable at the same time.
 #### Summary
 - **`--domain-repair` alone** → add effects and delete preconditions to look for a solution.
 - **`--partial-plan` alone** → repair the domain so that plan becomes applicable.
-- **`--black-list-plan` + `--partial-plan`** → the partial plan is preserved, the domain is repaired only to make the blacklist plan inapplicable.
+- **`--negative-example` + `--partial-plan`** → the partial plan is preserved, the domain is repaired only to make the blacklist plan inapplicable.
 - To make the blacklist plan inapplicable and the whitelist applicable together,
   you must ask for it explicitly with `--repair-candidates`.
 
@@ -114,9 +114,9 @@ The domain and problem are in `benchmarks/logistics/`:
 
 - `logistics.pddl` — the domain (deliberately breakable, see below).
 - `prob01.pddl` — the problem.
-- `white-list-plan` — a positive example plan, supplied via `--partial-plan`.
-- `black-list-plan` — a plan up to the first action that should be inapplicable,
-  supplied via `--black-list-plan`.
+- `positive-plan` — a positive example plan, supplied via `--partial-plan`.
+- `negative-plan` — a plan up to the first action that should be inapplicable,
+  supplied via `--negative-example`.
 
 ### Breaking the domain
 
@@ -127,7 +127,7 @@ recovers the missing precondition. Providing the blacklist plan should be enough
 to repair it by adding the precondition back.
 
 Also, you can remove the `(in ?obj ?truck)` effect from `LOAD-TRUCK`.
-Running `--domain-repair`, or passing the `white-list-plan` file via
+Running `--domain-repair`, or passing the `positive-plan` file via
 `--partial-plan`, lets you see the repairs.
 
 ---
@@ -152,7 +152,7 @@ Running `--domain-repair`, or passing the `white-list-plan` file via
   -d benchmarks/logistics/logistics.pddl \
   --encoding bounded --horizon 8 \
   --domain-repair --max-repairs 1 \
-  --partial-plan benchmarks/logistics/white-list-plan
+  --partial-plan benchmarks/logistics/positive-plan
 ```
 
 ### 3. Repair a blacklist plan (forbid the innaplicable action)
@@ -163,7 +163,7 @@ Running `--domain-repair`, or passing the `white-list-plan` file via
   -d benchmarks/logistics/logistics.pddl \
   --encoding bounded --horizon 8 \
   --domain-repair --max-repairs 1 \
-  --black-list-plan benchmarks/logistics/black-list-plan
+  --negative-example benchmarks/logistics/negative-plan
 ```
 
 ### 4. Blacklist + whitelist (repair the blacklist, preserve whitelist)
@@ -174,8 +174,8 @@ Running `--domain-repair`, or passing the `white-list-plan` file via
   -d benchmarks/logistics/logistics.pddl \
   --encoding bounded --horizon 8 \
   --domain-repair --max-repairs 1 \
-  --partial-plan benchmarks/logistics/white-list-plan \
-  --black-list-plan benchmarks/logistics/black-list-plan
+  --partial-plan benchmarks/logistics/positive-plan \
+  --negative-example benchmarks/logistics/negative-plan
 ```
 
 ### 5. Repair blacklist and whitelist at the same time
@@ -186,7 +186,7 @@ Running `--domain-repair`, or passing the `white-list-plan` file via
   -d benchmarks/logistics/logistics.pddl \
   --encoding bounded --horizon 8 \
   --domain-repair --max-repairs 1 \
-  --partial-plan benchmarks/logistics/white-list-plan \
-  --black-list-plan benchmarks/logistics/black-list-plan \
+  --partial-plan benchmarks/logistics/positive-plan \
+  --negative-example benchmarks/logistics/negative-plan \
   --repair-candidates add_pos_eff del_pos_pre
 ```

@@ -38,7 +38,7 @@ Contains:
   - max-repairs-1/
   - max-repairs-2/
   - max-repairs-3/
-- white-list-plans/
+- positive-plans/
   - sas_plan-1
   - ...
   - sas_plan-10
@@ -47,7 +47,7 @@ Contains:
 Meaning:
 
 - max-repairs-k stores broken variants designed for a run with --max-repairs k.
-- white-list plan i corresponds to problem pi and broken domain i.
+- positive plan i corresponds to problem pi and broken domain i.
 
 ## 3) to-forbid
 
@@ -57,7 +57,7 @@ Contains:
 
 - broken-domains/
   - max-repairs-1/
-- black-list-plans/
+- negative-plans/
   - sas_plan-1
   - ...
   - sas_plan-10
@@ -65,7 +65,7 @@ Contains:
 
 Meaning:
 
-- black-list plan i corresponds to problem pi and broken domain i.
+- negative plan i corresponds to problem pi and broken domain i.
 - In these benchmarks, max-repairs-1 is typically used.
 
 ## 4) horizons

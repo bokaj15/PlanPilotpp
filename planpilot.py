@@ -93,8 +93,7 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         with open(encoding) as seq_encoding:
             lp_file.write(seq_encoding.read())
 
-        # The multiple-plans encoding pins each plan on its own timeline, so it
-        # needs no free action-choice rule.
+        # The multiple-plans encoding fixes each plan on its own timeline
         if not multi_plan_mode:
             time_steps_encoding = fix_path("encodings/action-per-time-step.lp")
             if args.abstract_time_steps:
@@ -153,21 +152,15 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         if args.domain_repair:
             logger.info("Adding generated repair candidates...")
             # The static repair layer (applied_* indirection and the
-            # {enabled(R) : repair(R)} switch) lives in the repair-variant
+            # {enabled(R) : repair(R)} switch) are in the repair-variant
             # horizon encoding written above; here we only append the
             # domain-specific candidate facts and their bridge rules.
             candidates = args.repair_candidates
             if black_plans:
-                # A blacklist is satisfied only by constraining repairs (add a
-                # precondition / delete an upstream effect), so by default
-                # generate just those. Any partial plan (whitelist) is only a
-                # guard here: it must stay runnable under whatever repairs block
-                # the blacklist, but it never triggers relaxing repairs of its
-                # own. To repair the domain so the blacklist is blocked *and* a
-                # whitelist that would otherwise be inapplicable becomes
-                # applicable, the user must ask for the relaxing candidates
-                # explicitly via --repair-candidates (e.g. add_pos_eff); only
-                # then are they unioned in.
+                # A negative example is satisfied only by constraining repairs (add a
+                # precondition / delete effect), so by default generate just those.
+                # Any partial plan (positive example) must stay runnable under
+                # whatever repairs block the negative plan.
                 candidates = repair_candidates.blacklist_candidates(
                     domain,
                     instance,
@@ -266,10 +259,7 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
                         # We must NOT use process.stdout.readline() here: it is a
                         # buffered TextIOWrapper, so a single readline pulls a
                         # whole chunk (e.g. a multi-line answer set) into Python's
-                        # internal buffer but returns only the first line. select()
-                        # then sees the OS fd as empty and blocks forever, leaving
-                        # the rest of the output (the answer set itself) stuck in
-                        # the buffer. Reading the fd directly delivers all lines.
+                        # internal buffer but returns only the first line. 
                         chunk = os.read(output_stream.fileno(), 65536)
                         if chunk:  # If there's output, print it
                             sys.stdout.write(chunk.decode(errors="replace"))
@@ -392,14 +382,12 @@ def translate_partial_plan_into_constraints(file_path: str) -> str | None:
 
 def translate_action_to_constraint(action: str, at: int) -> str:
     """
-    Translates whitespace-separated action into integrity constraint.
+    Translates positive example plan actions into integrity constraint.
 
     Example:
     `a b c` as first action will be translated into
     `:- not occurs(action(("a","b","c")),1).`
 
-    In domain-repair mode plasp grounds arguments as `constant("x")`, so each
-    argument (but not the operator name) is wrapped accordingly.
     """
     name, *arguments = action.split(" ")
     if args.domain_repair:
@@ -410,10 +398,7 @@ def translate_action_to_constraint(action: str, at: int) -> str:
 
 
 def _negative_example_prefix_horizon(negative_plans) -> int:
-    """Longest negative-example prefix length (|plan| - 1).
-
-    Used as the global horizon default when --horizon is omitted (a
-    negative-example-only repair): the run only needs enough steps to run each
+    """It only needs enough steps to run each
     prefix and check the forbidden last action.
     """
     lengths = []
@@ -490,7 +475,7 @@ if __name__ == "__main__":
 
     # --horizon is a list; the first value is the global horizon constant handed
     # to clingo/fasb (in multiple-plans mode each path derives its own timeline
-    # from horizon/2 facts, so this global constant is only a harmless default).
+    # from horizon/2.
     # When omitted (negative-example-only repair) it defaults to the longest
     # negative-example prefix length, which is the horizon such a run needs.
     if args.horizon:
