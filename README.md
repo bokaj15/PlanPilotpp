@@ -1,6 +1,6 @@
 # PlanPilot — Domain Repair
 
-This project builds on PlanPilot (https://github.com/abcorrea/planpilot), adding a **domain-repair** mode to fix a domain that is _broken_ (missing precondition, missing effect, ...).
+This project builds on PlanPilot (Gnad et al. KR 2025; [link to repo](https://github.com/abcorrea/planpilot)), adding a **domain-repair** mode to fix a domain that is _broken_ (missing precondition, missing effect, ...).
 
 ---
 ## Build
@@ -17,8 +17,9 @@ Runs the normal PlanPilot behaviour.
 
 #### `--domain-repair`
 
-Enters domain-repair mode. Skips the Fast Downward translator and runs
-`plasp` directly on the PDDL.
+Enters domain-repair mode. Skips the [Fast Downward](https://www.fast-downward.org/latest/) translator and runs
+`plasp` (Gebser et al. 2011; Dimopoulos et al. 2019; [link to
+repo](https://github.com/potassco/plasp)) directly on the PDDL.
 
 With `--domain-repair` and nothing else, the default repair set is applied:
 
@@ -36,7 +37,7 @@ and, if the domain contains negative preconditions, additionally:
 Upper bound on how many repairs may be enabled at once. Default: `1`.
 
 Pass `min` instead of a number to minimize the total repair cost (default cost 
-is `1` for each repair type). This solves directly with `clingo` instead of `fasb`, and
+is `1` for each repair type). This solves directly with `clingo` ([link to repo](https://github.com/potassco/clingo)) instead of `fasb` (Fichte et al. AAAI 2022; [link to repo](https://github.com/drwadu/fasb)), and
 enumerates up to 10 optimal models.
 
 #### `--repair-weights <TYPE=WEIGHT> [<TYPE=WEIGHT> ...]`
@@ -67,7 +68,7 @@ when combined with `--negative-example`. See *Combinations* below.
 #### `--negative-example <file>`
 
 A plan whose last action must become inapplicable. The preceding actions let us infer
-the state in which that last action should be forbidden. A blacklist can only be satisfied by
+the state in which that last action should be forbidden. A negative plan can only be satisfied by
 adding preconditions, so those are the candidates generated for it.
 
 #### `--repair-candidates <kind> [<kind> ...]`
@@ -90,20 +91,20 @@ defaults. Each candidate is `{add,del}_{pos,neg}_{pre,eff}`:
 
 #### `--negative-example <file>` + `--partial-plan <file>`
 
-Repair the domain so the blacklist plan becomes inapplicable, while the partial
+Repair the domain so the negative plan becomes inapplicable, while the partial
 plan must stay applicable. The repair focuses on forbidding
-the blacklist plan, not on making the partial plan applicable.
+the negative plan, not on making the partial plan applicable.
 
 #### `--negative-example <file>` + `--partial-plan <file>` + `--repair-candidates add_pos_eff del_pos_pre`
 
-Repair the domain so the blacklist plan becomes inapplicable and the whitelist
+Repair the domain so the negative plan becomes inapplicable and the positive
 plan applicable at the same time.
 
 #### Summary
 - **`--domain-repair` alone** → add effects and delete preconditions to look for a solution.
 - **`--partial-plan` alone** → repair the domain so that plan becomes applicable.
-- **`--negative-example` + `--partial-plan`** → the partial plan is preserved, the domain is repaired only to make the blacklist plan inapplicable.
-- To make the blacklist plan inapplicable and the whitelist applicable together,
+- **`--negative-example` + `--partial-plan`** → the partial plan is preserved, the domain is repaired only to make the negative plan inapplicable.
+- To make the negative plan inapplicable and the positive plan applicable together,
   you must ask for it explicitly with `--repair-candidates`.
 
 ---
@@ -123,7 +124,7 @@ The domain and problem are in `benchmarks/logistics/`:
 You can "break" logistics by removing the `(at ?pkg ?loc)` precondition of
 `LOAD-TRUCK`. Without it, a package can be loaded into a truck it is not
 co-located with ("remotely charging" the package). The domain-repair approach
-recovers the missing precondition. Providing the blacklist plan should be enough
+recovers the missing precondition. Providing the negative plan should be enough
 to repair it by adding the precondition back.
 
 Also, you can remove the `(in ?obj ?truck)` effect from `LOAD-TRUCK`.
@@ -144,7 +145,7 @@ Running `--domain-repair`, or passing the `positive-plan` file via
   --domain-repair --max-repairs 1
 ```
 
-### 2. Repair a whitelist plan
+### 2. Repair a positive plan
 
 ```bash
 ./planpilot.sif \
@@ -155,7 +156,7 @@ Running `--domain-repair`, or passing the `positive-plan` file via
   --partial-plan benchmarks/logistics/positive-plan
 ```
 
-### 3. Repair a blacklist plan (forbid the innaplicable action)
+### 3. Repair a negative plan (forbid the innaplicable action)
 
 ```bash
 ./planpilot.sif \
@@ -166,7 +167,7 @@ Running `--domain-repair`, or passing the `positive-plan` file via
   --negative-example benchmarks/logistics/negative-plan
 ```
 
-### 4. Blacklist + whitelist (repair the blacklist, preserve whitelist)
+### 4. Negative + positive plan (repair the negative plan, preserve positive plan)
 
 ```bash
 ./planpilot.sif \
@@ -178,7 +179,7 @@ Running `--domain-repair`, or passing the `positive-plan` file via
   --negative-example benchmarks/logistics/negative-plan
 ```
 
-### 5. Repair blacklist and whitelist at the same time
+### 5. Repair negative and positive plan at the same time
 
 ```bash
 ./planpilot.sif \

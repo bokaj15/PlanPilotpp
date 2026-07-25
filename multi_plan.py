@@ -20,14 +20,14 @@ The tag decides how the plan is constrained (all in the template):
     last action is forced inapplicable in the state the prefix reaches. That
     block-last-action constraint names a specific action, so it is emitted here.
 
-Positive example files use the partial-plan format (whitespace-separated
+Positive example files use the partial-plan format (positive-space-separated
 actions delimited by ``(1)``); negative example files use one
 ``(action arg1 arg2)`` per line. This module is independent of
 ``repair_candidates`` -- it only uses the shared ``applied_precondition``
 the encoding provides.
 """
 
-WHITELIST_DELIMITER = "(1)"
+POSITIVE_LIST_DELIMITER = "(1)"
 
 
 def _parse_positive_example(path):
@@ -35,7 +35,7 @@ def _parse_positive_example(path):
     plan = []
     with open(path) as f:
         text = f.read()
-    for chunk in text.split(WHITELIST_DELIMITER):
+    for chunk in text.split(POSITIVE_LIST_DELIMITER):
         chunk = chunk.strip()
         if not chunk:
             continue
@@ -72,11 +72,11 @@ def _positive_plan_block(pid, plan, horizon):
     """A positive plan: fix the plan, and let rest run to ``horizon``.
     """
     if not plan:
-        raise ValueError(f"whitelist plan '{pid}' is empty")
+        raise ValueError(f"positive plan '{pid}' is empty")
     length = len(plan)
     if horizon < length:
         raise ValueError(
-            f"horizon {horizon} for whitelist plan '{pid}' is smaller than its "
+            f"horizon {horizon} for positive plan '{pid}' is smaller than its "
             f"length {length}"
         )
     lines = [

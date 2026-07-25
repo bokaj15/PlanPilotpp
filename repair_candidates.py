@@ -168,6 +168,7 @@ def _render_fluent(predicate, slots):
 
 
 def _repair_fact(candidate, operator, predicate, slots, polarity):
+    """Render the repair fact for a single candidate."""
     fluent = _render_fluent(predicate, slots)
     return f'repair({candidate}("{operator}", {fluent}, {polarity})).'
 
@@ -494,7 +495,7 @@ def render_repair_program(
 
 
 # --------------------------------------------------------------------------- #
-# Blacklist plan: a plan whose last action is applicable in the (broken) domain
+# Negative plan: a plan whose last action is applicable in the (broken) domain
 # but should not be. We replay the prefix to reach the state just before that
 # action, then forbid any repair under which the action stays applicable there.
 # --------------------------------------------------------------------------- #
@@ -520,10 +521,10 @@ def _parse_plan_file(path):
     return plan
 
 
-def generate_blacklist_program(domain, instance, blacklist_file):
-    """Return ASP lines that turn the blacklist plan into a non-solution.
+def generate_negative_plan_program(domain, instance, negative_plan_file):
+    """Return ASP lines that turn the negative plan into a non-solution.
 
-    The last line of ``blacklist_file`` is the *forbidden* action; the preceding
+    The last line of ``negative_plan_file`` is the *forbidden* action; the preceding
     lines are its *prefix*. The prefix is pinned into the trace (the same
     integrity-constraint form used for a partial plan), so the solver replays it
     under the *repaired* domain and materialises the reached state as
@@ -537,7 +538,7 @@ def generate_blacklist_program(domain, instance, blacklist_file):
     the applicability off ``holds`` (instead of a precomputed snapshot) is what
     lets effect repairs -- e.g. ``delete_effect`` -- affect the outcome.
 
-    ``blacklist_active`` is emitted to switch off the goal constraint in the
+    ``negative_plan_active`` is emitted to switch off the goal constraint in the
     repair encoding: a negative example only requires the prefix to run and the
     last action to be blocked, not the goal to be reached. Runs should therefore
     use ``horizon = |prefix|``.
@@ -548,15 +549,15 @@ def generate_blacklist_program(domain, instance, blacklist_file):
     task = pddl_file.open(domain_filename=domain, task_filename=instance)
     schemas = {a.name.lower(): a for a in task.actions}
 
-    plan = _parse_plan_file(blacklist_file)
+    plan = _parse_plan_file(negative_plan_file)
     if not plan:
-        raise ValueError(f"blacklist plan '{blacklist_file}' is empty")
+        raise ValueError(f"negative plan '{negative_plan_file}' is empty")
     prefix, (fop, fargs) = plan[:-1], plan[-1]
 
     def check(op, args, what):
         schema = schemas.get(op)
         if schema is None:
-            raise ValueError(f"blacklist plan uses unknown action '{op}'")
+            raise ValueError(f"negative plan uses unknown action '{op}'")
         if len(args) != len(schema.parameters):
             raise ValueError(
                 f"{what} '{op}' expects {len(schema.parameters)} "
@@ -567,17 +568,17 @@ def generate_blacklist_program(domain, instance, blacklist_file):
     forbidden = _ground_action(fop, fargs)
 
     lines = [
-        "% blacklist: enforce the prefix and forbid the last action from being",
+        "% negative plan: enforce the prefix and forbid the last action from being",
         "% applicable in the state the prefix reaches. The goal is dropped for a",
-        "% blacklist run (block only) via blacklist_active. Run with horizon = |prefix|.\n",
-        "blacklist_active.",
+        "% negative plan run (block only) via negative_plan_active. Run with horizon = |prefix|.\n",
+        "negative_plan_active.",
     ]
 
     # Pin every prefix action to its step, exactly like a partial plan. Under the
     # repaired domain these must stay applicable, which makes the forbidden
     # action the first inapplicable one.
     for step, (op, args) in enumerate(prefix, start=1):
-        check(op, args, "blacklist action")
+        check(op, args, "negative plan action")
         lines.append(f":- not occurs({_ground_action(op, args)}, {step}).")
 
     # Inconsistent if all the forbidden action's applied preconditions hold in
@@ -590,16 +591,16 @@ def generate_blacklist_program(domain, instance, blacklist_file):
     return lines
 
 
-def render_blacklist_program(domain, instance, blacklist_file):
-    """Return the text of the generated blacklist program (see above)."""
-    return "\n".join(generate_blacklist_program(domain, instance, blacklist_file)) + "\n"
+def render_negative_plan_program(domain, instance, negative_plan_file):
+    """Return the text of the generated negative plan program (see above)."""
+    return "\n".join(generate_negative_plan_program(domain, instance, negative_plan_file)) + "\n"
 
 
-def blacklist_candidates(domain, instance, candidates=None, union_with_relaxing=False):
-    """Return the candidate set to generate for a blacklist run.
+def negative_plan_candidates(domain, instance, candidates=None, union_with_relaxing=False):
+    """Return the candidate set to generate for a negative plan run.
 
     With the prefix pinned into the trace, the forbidden action's applicability
-    is read off the reached state ``holds(., |prefix|)``, so a blacklist can be
+    is read off the reached state ``holds(., |prefix|)``, so a negative plan can be
     satisfied two ways: adding a precondition that is false in that state
     (Case 2), or deleting an upstream positive effect so an existing
     precondition loses its support (Case 3). The constraining candidates are
@@ -608,17 +609,17 @@ def blacklist_candidates(domain, instance, candidates=None, union_with_relaxing=
     be negative).
 
     Two modes:
-      * ``union_with_relaxing=False`` (default, e.g. a blacklist alone or a
-        blacklist guarded by a partial plan): emit *only* the constraining
+      * ``union_with_relaxing=False`` (default, e.g. a negative plan alone or a
+        negative plan guarded by a partial plan): emit *only* the constraining
         add-precondition / delete-effect candidates. Relaxing candidates cannot
-        satisfy the blacklist, and a partial plan is only a guard that must stay
+        satisfy the negative plan, and a partial plan is only a guard that must stay
         runnable under the blocking repairs -- it does not trigger relaxing
         repairs of its own -- so they would just be noise.
       * ``union_with_relaxing=True`` (only when the user explicitly asks for
         relaxing candidates via ``--repair-candidates``): union the constraining
         candidates with the requested relaxing ones, so the domain can be
-        repaired to block the blacklist *and* make an otherwise-inapplicable
-        whitelist applicable. The relaxing base is ``candidates`` if given, else
+        repaired to block the negative plan *and* make an otherwise-inapplicable
+        positive plan applicable. The relaxing base is ``candidates`` if given, else
         the same default :func:`generate_repair_candidates` picks (positive
         relaxing candidates, plus the negative ones when the domain has negative
         preconditions).
@@ -665,9 +666,9 @@ if __name__ == "__main__":
         help="Write the full repair program to this file instead of stdout.",
     )
     parser.add_argument(
-        "-b",
-        "--blacklist",
-        help="Instead of repair candidates, render the blacklist program for "
+        "-n",
+        "--negative_plan",
+        help="Instead of repair candidates, render the negative plan program for "
         "this plan file (last action is the forbidden one).",
     )
     cli = parser.parse_args()
@@ -679,8 +680,8 @@ if __name__ == "__main__":
         domain_path = os.path.join(base, "logistics.pddl")
         instance_path = os.path.join(base, "prob01.pddl")
 
-    if cli.blacklist:
-        program = render_blacklist_program(domain_path, instance_path, cli.blacklist)
+    if cli.negative_plan:
+        program = render_negative_plan_program(domain_path, instance_path, cli.negative_plan)
     else:
         program = render_repair_program(domain_path, instance_path, cli.candidates)
     if cli.output:

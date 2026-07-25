@@ -11,7 +11,7 @@ Each domain directory follows the same layout:
 
 - common-problems/
 - to-solve/
-- to-forbid/ (when available)
+- to-forbid/
 - horizons.txt
 
 ## 1) common-problems
@@ -83,7 +83,7 @@ Example:
 ## 5) How to Run
 
 
-### A) To-solve run (with white-list plan)
+### A) To-solve run (with positive plan)
 
 ```bash
 ./planpilot.sif \
@@ -93,7 +93,7 @@ Example:
   --horizon Y \
   --domain-repair \
   --max-repairs K \
-  --partial-plan benchmarks/<domain>/to-solve/white-list-plans/sas_plan-X
+  --partial-plan benchmarks/<domain>/to-solve/positive-plans/sas_plan-X
 ```
 
 Where:
@@ -108,7 +108,7 @@ Where:
 - Domain file names inside broken-domains usually follow: <domain><index>.pddl
   - examples: blocks5.pddl, rovers1.pddl, satellite10.pddl, transport3.pddl
 - Plans follow:
-  - white list: sas_plan-X
-  - black list: sas_plan-X
+  - positive: sas_plan-X
+  - negative: sas_plan-X
 
 

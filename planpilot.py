@@ -62,9 +62,9 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         # --partial-plan and --negative-example trigger multiple-plans mode when >=2 
         # (one path per plan, one shared repair set).
         # A single plan keeps the original behaviour untouched.
-        white_plans = args.partial_plan or []
-        black_plans = args.negative_example or []
-        multi_plan_mode = (len(white_plans) + len(black_plans)) >= 2
+        positive_plans = args.partial_plan or []
+        negative_plans = args.negative_example or []
+        multi_plan_mode = (len(positive_plans) + len(negative_plans)) >= 2
 
         # First, we add the corresponding sequential encoding to it.
         # In domain-repair mode we use the repair variants, which route the
@@ -104,29 +104,29 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
 
         if multi_plan_mode:
             logger.info(
-                f"Multiple-plans mode: {len(white_plans)} whitelist(s), "
-                f"{len(black_plans)} blacklist(s)..."
+                f"Multiple-plans mode: {len(positive_plans)} positive(s), "
+                f"{len(negative_plans)} negative(s)..."
             )
             lp_file.write("\n%%%%%%% multiple plans encoding\n")
             lp_file.write(
                 multi_plan.render_multi_plan_program(
-                    white_plans, black_plans, args.horizon or []
+                    positive_plans, negative_plans, args.horizon or []
                 )
             )
 
-        if not multi_plan_mode and white_plans:
-            logger.info(f"Using partial plan '{white_plans[0]}'...")
+        if not multi_plan_mode and positive_plans:
+            logger.info(f"Using partial plan '{positive_plans[0]}'...")
             constraints: str | None = translate_partial_plan_into_constraints(
-                white_plans[0]
+                positive_plans[0]
             )
             lp_file.write("\n%%%%%%% partial plan encoding\n" + constraints + "\n")
 
-        if not multi_plan_mode and black_plans:
-            logger.info(f"Using blacklist plan '{black_plans[0]}'...")
-            blacklist = repair_candidates.render_blacklist_program(
-                domain, instance, black_plans[0]
+        if not multi_plan_mode and negative_plans:
+            logger.info(f"Using negative plan '{negative_plans[0]}'...")
+            negative_plan_encoding = repair_candidates.render_negative_plan_program(
+                domain, instance, negative_plans[0]
             )
-            lp_file.write("\n%%%%%%% blacklist plan encoding\n" + blacklist)
+            lp_file.write("\n%%%%%%% negative plan encoding\n" + negative_plan_encoding)
 
         if args.add_constraints_file:
             logger.info(
@@ -156,12 +156,12 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
             # horizon encoding written above; here we only append the
             # domain-specific candidate facts and their bridge rules.
             candidates = args.repair_candidates
-            if black_plans:
+            if negative_plans:
                 # A negative example is satisfied only by constraining repairs (add a
                 # precondition / delete effect), so by default generate just those.
                 # Any partial plan (positive example) must stay runnable under
                 # whatever repairs block the negative plan.
-                candidates = repair_candidates.blacklist_candidates(
+                candidates = repair_candidates.negative_plan_candidates(
                     domain,
                     instance,
                     candidates,
@@ -240,7 +240,6 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
             "Starting fasb... To quit the interactive mode, use the command ':q'."
         )
 
-        # Set up the file descriptors for select
         input_stream = sys.stdin
         output_stream = process.stdout
         error_stream = process.stderr
@@ -256,10 +255,6 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
                 for stream in reads:
                     if stream == output_stream:
                         # Drain everything currently available on the raw fd.
-                        # We must NOT use process.stdout.readline() here: it is a
-                        # buffered TextIOWrapper, so a single readline pulls a
-                        # whole chunk (e.g. a multi-line answer set) into Python's
-                        # internal buffer but returns only the first line. 
                         chunk = os.read(output_stream.fileno(), 65536)
                         if chunk:  # If there's output, print it
                             sys.stdout.write(chunk.decode(errors="replace"))
@@ -276,12 +271,11 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
                         user_input = input()
                         # Send input to the subprocess
                         process.stdin.write(user_input + "\n")
-                        process.stdin.flush()  # Ensure it's sent immediately
+                        process.stdin.flush()
                         prompts = prompts + 1
 
                     elif stream == error_stream:
                         # Read from the subprocess's error stream if needed
-                        # (raw fd read for the same buffering reason as above).
                         error_chunk = os.read(error_stream.fileno(), 65536)
                         if error_chunk:
                             sys.stderr.write(error_chunk.decode(errors="replace"))
@@ -290,7 +284,7 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
         except KeyboardInterrupt:
             # Handle Ctrl+C to exit cleanly
             print("Exiting...")
-            process.stdin.write("exit()\n")  # Send exit command to the subprocess
+            process.stdin.write("exit()\n")
             process.stdin.flush()
 
     logging.info(f"fasb time: {utils.get_elapsed_time() - time:.2f}s")
@@ -403,7 +397,7 @@ def _negative_example_prefix_horizon(negative_plans) -> int:
     """
     lengths = []
     for path in negative_plans:
-        plan = multi_plan._parse_blacklist(path)
+        plan = multi_plan._parse_negative_example(path)
         if plan:
             lengths.append(len(plan) - 1)
     return max(lengths, default=1)
