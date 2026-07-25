@@ -190,6 +190,13 @@ def parse_arguments():
         "--repair-weights add_precondition=1 delete_effect=3",
     )
     parser.add_argument(
+        "--enum-opt-sols",
+        type=int,
+        default=10,
+        help="Only used with --max-repairs min. Maximum number of (possibly "
+        "tied) optimal models clingo enumerates via --opt-mode=optN.",
+    )
+    parser.add_argument(
         "--negative-example",
         nargs="+",
         help="(Domain-repair mode) Path(s) to one or more plan files in standard "

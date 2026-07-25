@@ -292,13 +292,14 @@ def run_fasb(lp, horizon, script=None, max_repairs=None):
     logger.info(f"fasb return code: {process.returncode}")
 
 
-def run_clingo(lp, horizon):
+def run_clingo(lp, horizon, enum_opt_sols=10):
     """Solve the generated program directly with clingo instead of fasb.
 
     Used for ``--max-repairs min``: repairs are chosen by minimizing total
     repair cost.
-    ``--opt-mode=optN`` first proves the optimum, then enumerates up to 10 of
-    the (possibly tied) optimal models instead of stopping at the first one.
+    ``--opt-mode=optN`` first proves the optimum, then enumerates up to
+    ``enum_opt_sols`` of the (possibly tied) optimal models instead of
+    stopping at the first one.
     """
 
     with open(lp) as f:
@@ -306,7 +307,9 @@ def run_clingo(lp, horizon):
 
     time = utils.get_elapsed_time()
 
-    ctl = clingo.Control(["-c", f"horizon={horizon}", "-n", "10", "--opt-mode=optN"])
+    ctl = clingo.Control(
+        ["-c", f"horizon={horizon}", "-n", str(enum_opt_sols), "--opt-mode=optN"]
+    )
     ctl.add("base", [], program)
     ctl.ground([("base", [])])
 
@@ -478,7 +481,7 @@ if __name__ == "__main__":
         global_horizon = _negative_example_prefix_horizon(args.negative_example or [])
     if args.domain_repair and args.max_repairs == "min":
         logger.info("Running clingo (minimizing total repair cost)...")
-        run_clingo(args.lp_name, global_horizon)
+        run_clingo(args.lp_name, global_horizon, args.enum_opt_sols)
     else:
         logger.info("Running fasb...")
         max_repairs = args.max_repairs if args.domain_repair else None

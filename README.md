@@ -38,7 +38,13 @@ Upper bound on how many repairs may be enabled at once. Default: `1`.
 
 Pass `min` instead of a number to minimize the total repair cost (default cost 
 is `1` for each repair type). This solves directly with `clingo` ([link to repo](https://github.com/potassco/clingo)) instead of `fasb` (Fichte et al. AAAI 2022; [link to repo](https://github.com/drwadu/fasb)), and
-enumerates up to 10 optimal models.
+enumerates up to `--enum-opt-sols` optimal models (default 10).
+
+#### `--enum-opt-sols <N>`
+
+Only valid together with `--max-repairs min`. Maximum number of (possibly
+tied) optimal models `clingo` enumerates. Default: `10`. Pass `0` to enumerate
+all optimal solutions with respect to repair cost.
 
 #### `--repair-weights <TYPE=WEIGHT> [<TYPE=WEIGHT> ...]`
 
