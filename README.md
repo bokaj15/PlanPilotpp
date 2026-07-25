@@ -18,7 +18,7 @@ Runs the normal PlanPilot behaviour.
 #### `--domain-repair`
 
 Enters domain-repair mode. Skips the [Fast Downward](https://www.fast-downward.org/latest/) translator and runs
-`plasp` (Gebser et al. 2011; Dimopoulos et al. 2019; [link to
+`plasp` (Gebser et al. LPNMR 2011; Dimopoulos et al. TPLP 2019; [link to
 repo](https://github.com/potassco/plasp)) directly on the PDDL.
 
 With `--domain-repair` and nothing else, the default repair set is applied:
