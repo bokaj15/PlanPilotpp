@@ -75,7 +75,7 @@ when combined with `--negative-example`. See *Combinations* below.
 
 A plan whose last action must become inapplicable. The preceding actions let us infer
 the state in which that last action should be forbidden. A negative plan can only be satisfied by
-adding preconditions, so those are the candidates generated for it.
+adding preconditions and removing effects, so those are the candidates generated for it.
 
 #### `--repair-candidates <kind> [<kind> ...]`
 
