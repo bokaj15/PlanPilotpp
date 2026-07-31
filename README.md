@@ -1,6 +1,6 @@
 # PlanPilot — Domain Repair
 
-This project builds on PlanPilot (Gnad et al. KR 2025; [link to repo](https://github.com/abcorrea/planpilot)), adding a **domain-repair** mode to fix a domain that is _broken_ (missing precondition, missing effect, ...).
+This project builds on PlanPilot (Gnad et al. 2025; [link to repo](https://github.com/abcorrea/planpilot)), adding a **domain-repair** mode to fix a domain that is _broken_ (missing precondition, missing effect, ...).
 
 ---
 ## Build
@@ -18,7 +18,7 @@ Runs the normal PlanPilot behaviour.
 #### `--domain-repair`
 
 Enters domain-repair mode. Skips the [Fast Downward](https://www.fast-downward.org/latest/) translator and runs
-`plasp` (Gebser et al. LPNMR 2011; Dimopoulos et al. TPLP 2019; [link to
+`plasp` (Dimopoulos et al. 2019; [link to
 repo](https://github.com/potassco/plasp)) directly on the PDDL.
 
 With `--domain-repair` and nothing else, the default repair set is applied:
@@ -37,7 +37,7 @@ and, if the domain contains negative preconditions, additionally:
 Upper bound on how many repairs may be enabled at once. Default: `1`.
 
 Pass `min` instead of a number to minimize the total repair cost (default cost 
-is `1` for each repair type). This solves directly with `clingo` ([link to repo](https://github.com/potassco/clingo)) instead of `fasb` (Fichte et al. AAAI 2022; [link to repo](https://github.com/drwadu/fasb)), and
+is `1` for each repair type). This solves directly with `clingo` (Gebser et al. 2012; [link to repo](https://github.com/potassco/clingo)) instead of `fasb` (Fichte et al. 2022; [link to repo](https://github.com/drwadu/fasb)), and
 enumerates up to `--enum-opt-sols` optimal models (default 10).
 
 #### `--enum-opt-sols <N>`
@@ -197,3 +197,27 @@ Running `--domain-repair`, or passing the `positive-plan` file via
   --negative-example benchmarks/logistics/negative-plan \
   --repair-candidates add_pos_eff del_pos_pre
 ```
+
+## References
+
+Dimopoulos, Y.; Gebser, M.; Lühne, P.; Romero, J.; and
+Schaub, T. 2019. plasp 3: Towards Effective ASP Planning.
+*Theory and Practice of Logic Programming*, 19(3): 477–504.
+
+Fichte, J. K.; Gaggl, S. A.; and Rusovac, D. 2022. Rushing
+and Strolling among Answer Sets - Navigation Made Easy. In
+Honavar, V.; and Spaan, M., eds., *Proceedings of the Thirty-
+Sixth AAAI Conference on Artificial Intelligence (AAAI 2022)*,
+5651–5659. AAAI Press.
+
+Gebser, M.; Kaminski, R.; Kaufmann, B.; and Schaub, T.
+2012. *Answer Set Solving in Practice*. Synthesis Lectures
+on Artificial Intelligence and Machine Learning. Morgan &
+Claypool Publishers. ISBN 978-3-031-00433-9.
+
+Gnad, D.; Hecher, M.; Gaggl, S.; Rusovac, D.; Speck, D.; and
+Fichte, J. K. 2025. Interactive Exploration of Plan Spaces. In
+Ortiz, M.; Wassermann, R.; and Schaub, T., eds., *Proceedings
+of the Twenty-Second International Conference on Principles
+of Knowledge Representation and Reasoning (KR 2025)*,
+599–609. IJCAI Organization.
