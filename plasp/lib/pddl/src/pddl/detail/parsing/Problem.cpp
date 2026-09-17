@@ -8,6 +8,7 @@
 #include <pddl/detail/parsing/Requirement.h>
 #include <pddl/detail/parsing/Unsupported.h>
 #include <pddl/detail/parsing/Utils.h>
+#include <pddl/detail/parsing/Utility.h>
 
 namespace pddl
 {
@@ -27,7 +28,9 @@ ProblemParser::ProblemParser(Context &context, ast::Domain &domain)
 	m_requirementsPosition{tokenize::InvalidStreamPosition},
 	m_objectsPosition{tokenize::InvalidStreamPosition},
 	m_initialStatePosition{tokenize::InvalidStreamPosition},
-	m_goalPosition{tokenize::InvalidStreamPosition}
+	m_goalPosition{tokenize::InvalidStreamPosition},
+	m_utilityPosition{tokenize::InvalidStreamPosition},
+	m_boundPosition{tokenize::InvalidStreamPosition}
 {
 }
 
@@ -59,17 +62,30 @@ ast::ProblemPointer ProblemParser::parse()
 		parseObjectSection(*problem);
 	}
 
+	if (m_utilityPosition != tokenize::InvalidStreamPosition)
+	{
+		tokenizer.seek(m_utilityPosition);
+		parseUtilitySection(*problem);
+	}
+
+	if (m_boundPosition != tokenize::InvalidStreamPosition)
+	{
+		tokenizer.seek(m_boundPosition);
+		parseBoundSection(*problem);
+	}
+
 	if (m_initialStatePosition == tokenize::InvalidStreamPosition)
 		throw ParserException(tokenizer.location(), "problem description does not specify an initial state");
 
 	tokenizer.seek(m_initialStatePosition);
 	parseInitialStateSection(*problem);
 
-	if (m_goalPosition == tokenize::InvalidStreamPosition)
-		throw ParserException(tokenizer.location(), "problem description does not specify a goal");
-
+	if (m_goalPosition != tokenize::InvalidStreamPosition)
+	// 	throw ParserException(tokenizer.location(), "problem description does not specify a goal");
+	{
 	tokenizer.seek(m_goalPosition);
 	parseGoalSection(*problem);
+	}
 
 	return problem;
 }
@@ -120,6 +136,10 @@ void ProblemParser::findSections(ast::Problem &problem)
 			setSectionPosition("init", m_initialStatePosition, position, true);
 		else if (tokenizer.testIdentifierAndSkip("goal"))
 			setSectionPosition("goal", m_goalPosition, position, true);
+		else if (tokenizer.testIdentifierAndSkip("utility"))
+			setSectionPosition("utility", m_utilityPosition, position, true);
+		else if (tokenizer.testIdentifierAndSkip("bound"))
+			setSectionPosition("bound", m_boundPosition, position, true);
 		else if (tokenizer.testIdentifierAndSkip("constraints")
 			|| tokenizer.testIdentifierAndSkip("metric")
 			|| tokenizer.testIdentifierAndSkip("length"))
@@ -286,6 +306,48 @@ void ProblemParser::parseGoalSection(ast::Problem &problem)
 	tokenizer.expect<std::string>(")");
 
 	skipSection(tokenizer);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ProblemParser::parseUtilitySection(ast::Problem &problem)
+{
+	auto &tokenizer = m_context.tokenizer;
+
+	tokenizer.expect<std::string>("(");
+	tokenizer.expect<std::string>(":");
+	tokenizer.expect<std::string>("utility");
+
+	ASTContext astContext(problem);
+	VariableStack variableStack;
+
+	tokenizer.skipWhiteSpace();
+
+	while (tokenizer.currentCharacter() != ')')
+		{
+			auto utility = parseUtility(m_context, astContext, variableStack);
+			problem.utilities.emplace_back(std::move(utility.value()));
+
+			tokenizer.skipWhiteSpace();
+		}
+
+	tokenizer.expect<std::string>(")");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ProblemParser::parseBoundSection(ast::Problem &problem)
+{
+	auto &tokenizer = m_context.tokenizer;
+
+	tokenizer.expect<std::string>("(");
+	tokenizer.expect<std::string>(":");
+	tokenizer.expect<std::string>("bound");
+
+	problem.bound = tokenizer.get<int32_t>();
+	
+	tokenizer.expect<std::string>(")");
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

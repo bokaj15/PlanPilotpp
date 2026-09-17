@@ -12,6 +12,7 @@
 #include <plasp/pddl/translation/DerivedPredicatePrecondition.h>
 #include <plasp/pddl/translation/Effect.h>
 #include <plasp/pddl/translation/Fact.h>
+#include <plasp/pddl/translation/Utility.h>
 #include <plasp/pddl/translation/Goal.h>
 #include <plasp/pddl/translation/Precondition.h>
 #include <plasp/pddl/translation/Predicate.h>
@@ -436,6 +437,21 @@ void TranslatorASP::translateProblem() const
 		m_outputStream << std::endl;
 		translateGoal();
 	}
+
+	// Utilities
+	if (!problem->utilities.empty())
+	{
+		m_outputStream << std::endl;
+		translateUtilities();
+	}
+
+	// Bound
+	if (problem->bound)
+	{
+		m_outputStream << std::endl;
+		translateBound();
+	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,6 +497,38 @@ void TranslatorASP::translateGoal() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TranslatorASP::translateUtilities() const
+{
+	assert(m_description.problem);
+
+	m_outputStream << colorlog::Heading2("utility");
+
+	const auto &utilities = m_description.problem.value()->utilities;
+
+	for (const auto &utility : utilities)
+		::plasp::pddl::translateUtilityFact(m_outputStream, utility);
+
+	m_outputStream << std::endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TranslatorASP::translateBound() const
+{
+	assert(m_description.problem);
+	assert(m_description.problem.value()->bound);
+
+	m_outputStream << colorlog::Heading2("bound");
+
+	m_outputStream << std::endl
+		<< colorlog::Function("bound") << "(" << colorlog::Number<int32_t>(m_description.problem.value()->bound.value()) << ")." << std::endl;
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 }
 }

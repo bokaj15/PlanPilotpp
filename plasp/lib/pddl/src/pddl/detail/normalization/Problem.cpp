@@ -4,6 +4,7 @@
 #include <pddl/NormalizedAST.h>
 #include <pddl/detail/normalization/InitialState.h>
 #include <pddl/detail/normalization/Precondition.h>
+#include <pddl/detail/normalization/Fact.h>
 
 namespace pddl
 {
@@ -23,6 +24,13 @@ normalizedAST::ProblemPointer normalize(ast::ProblemPointer &&problem, normalize
 	normalizedProblem->name = std::move(problem->name);
 	normalizedProblem->objects = std::move(problem->objects);
 	normalizedProblem->initialState = normalize(std::move(problem->initialState));
+
+	normalizedProblem->utilities.reserve(problem->utilities.size());
+
+	for (auto &utility : problem->utilities)
+		normalizedProblem->utilities.push_back({normalize(std::move(utility.fact)), utility.weight});
+
+	normalizedProblem->bound = problem->bound;
 
 	if (problem->goal)
 	{

@@ -3,7 +3,7 @@ project(tokenize)
 
 option(TOKENIZE_BUILD_TESTS "Build unit tests" OFF)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror -Wno-error=maybe-uninitialized")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 set(CMAKE_CXX_STANDARD 14)

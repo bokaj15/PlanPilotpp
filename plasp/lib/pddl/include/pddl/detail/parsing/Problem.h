@@ -30,6 +30,8 @@ class ProblemParser
 		void parseObjectSection(ast::Problem &problem);
 		void parseInitialStateSection(ast::Problem &problem);
 		void parseGoalSection(ast::Problem &problem);
+		void parseUtilitySection(ast::Problem &problem);
+		void parseBoundSection(ast::Problem &problem);
 
 		Context &m_context;
 		ast::Domain &m_domain;
@@ -39,6 +41,8 @@ class ProblemParser
 		tokenize::StreamPosition m_objectsPosition;
 		tokenize::StreamPosition m_initialStatePosition;
 		tokenize::StreamPosition m_goalPosition;
+		tokenize::StreamPosition m_utilityPosition;
+		tokenize::StreamPosition m_boundPosition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

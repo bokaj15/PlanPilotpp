@@ -12,8 +12,11 @@ set(includes
 	${PROJECT_SOURCE_DIR}/lib/colorlog/include
 	${PROJECT_SOURCE_DIR}/lib/variant/include
 	${PROJECT_SOURCE_DIR}/lib/pddl/include
-	${PROJECT_SOURCE_DIR}/lib/cxxopts/include
 	${PROJECT_SOURCE_DIR}/app/include
+)
+
+set(system_includes
+	${PROJECT_SOURCE_DIR}/lib/cxxopts/include
 )
 
 set(sources
@@ -30,5 +33,6 @@ set(libraries
 
 add_executable(${target} ${sources})
 target_include_directories(${target} PRIVATE ${includes})
+target_include_directories(${target} SYSTEM PRIVATE ${system_includes})
 target_link_libraries(${target} ${libraries})
 set_target_properties(${target} PROPERTIES OUTPUT_NAME plasp)

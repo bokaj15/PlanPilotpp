@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(colorlog)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror -Wno-error=maybe-uninitialized ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "-g ${CMAKE_CXX_FLAGS_DEBUG}")
 
 set(CMAKE_CXX_STANDARD 14)

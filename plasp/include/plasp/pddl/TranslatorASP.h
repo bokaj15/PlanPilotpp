@@ -35,6 +35,8 @@ class TranslatorASP
 		void translateProblem() const;
 		void translateInitialState() const;
 		void translateGoal() const;
+		void translateUtilities() const;
+		void translateBound() const;
 		void translateConstants(const std::string &heading, const ::pddl::ast::ConstantDeclarations &constants) const;
 
 		const ::pddl::normalizedAST::Description &m_description;
