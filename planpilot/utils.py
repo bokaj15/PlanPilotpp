@@ -71,7 +71,11 @@ def parse_arguments():
         action="store_true",
     )
     parser.add_argument(
-        "--horizon", required=True, type=int, help="Horizon used by clingo."
+        "--horizon",
+        default=None,
+        type=int,
+        help="Horizon used by clingo. Required unless --osp is given, in which case the "
+        "horizon comes from the 'bound' fact in the instance.",
     )
     parser.add_argument(
         "--lp-name",
@@ -85,6 +89,14 @@ def parse_arguments():
         type=str,
         choices=["exact", "bounded"],
         help="Type of ASP encoding.",
+    )
+    parser.add_argument(
+        "--osp",
+        nargs="?",
+        const="interactive",
+        default=None,
+        choices=["interactive", "max"],
+        help="Oversubscription Planning encoding; 'max' also maximizes total utility via clingo.",
     )
     parser.add_argument(
         "--abstract-time-steps",
@@ -110,6 +122,8 @@ def parse_arguments():
     )
 
     args = parser.parse_args()
+    if not args.osp and args.horizon is None:
+        parser.error("--horizon is required unless --osp is given.")
     args.is_pddl_instance = True
     if args.instance.endswith(".sas"):
         args.is_pddl_instance = False

@@ -4,6 +4,7 @@ import os
 import select
 import sys
 import utils
+import clingo
 
 from subprocess import Popen, PIPE
 
@@ -49,7 +50,7 @@ def run_fd_translator(domain, instance):
         exit(process.returncode)
 
 
-def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
+def run_plasp(domain, instance, lp, encoding, dump_output, osp=False, pddl_instance=True):
     binary_path = fix_path("bin/plasp")
     command = [binary_path, "translate", instance]  # SAS+ instance
     if pddl_instance:
@@ -60,6 +61,10 @@ def run_plasp(domain, instance, lp, encoding, dump_output, pddl_instance=True):
         encoding = fix_path("encodings/exact-sequential-horizon.lp")
         if args.encoding == "bounded":
             encoding = fix_path("encodings/bounded-sequential-horizon.lp")
+        if osp == "max":
+            encoding = fix_path("encodings/bounded-osp-maximize.lp")
+        elif osp:
+            encoding = fix_path("encodings/bounded-osp-interactive.lp")
         with open(encoding) as seq_encoding:
             lp_file.write(seq_encoding.read())
 
@@ -120,7 +125,10 @@ def run_fasb(lp, horizon, script=None):
         binary_path = fix_path("bin/fasb_interpreter")
         logger.info(f"Executing fasb script {script}...")
 
-    command = [binary_path, lp, "-c", f"horizon={horizon}", "0"]
+    command = [binary_path, lp]
+    if horizon is not None:
+        command += ["-c", f"horizon={horizon}"]
+    command.append("0")
 
     if script:
         full_script_path = fix_path(script)
@@ -209,6 +217,86 @@ def run_fasb(lp, horizon, script=None):
 
     logger.info(f"fasb return code: {process.returncode}")
 
+def on_model(model):
+    symbols = model.symbols(shown=True)
+    plan_length = sum(
+        1
+        for sym in symbols
+        if getattr(sym, "name", None) == "occurs" and str(sym.arguments[0]) != '"no_op"'
+    )
+
+    print("Answer set:", symbols)
+    print(f"plan_length={plan_length}")
+
+def get_nested(mapping, path):
+    """Retrieve a value from a nested dictionary using a list of keys."""
+    cur = mapping
+    for key in path:
+        if not isinstance(cur, dict) or key not in cur:
+            return None
+        cur = cur[key]
+    return cur
+
+def get_clingo_times(stats):
+    """Return clingo timing information as a dictionary with total, cpu, and solve times in seconds."""
+    times_dict = {}
+
+    paths = {
+        "total": ("summary", "times", "total"),
+        "cpu": ("summary", "times", "cpu"),
+        "solve": ("summary", "times", "solve"),
+    }
+
+    for label, path in paths.items():
+        value = get_nested(stats, path)
+        if isinstance(value, (int, float)):
+            times_dict[label] = float(value)
+
+    return times_dict
+
+def run_clingo(lp, horizon):
+    with open(lp) as lp_file:
+        plasp_program = lp_file.read()
+    solve_with_clingo(plasp_program, horizon)
+
+
+def solve_with_clingo(
+    plasp_program,
+    horizon,
+):
+
+    clingo_args = ["-c", f"horizon={horizon}"] if horizon is not None else []
+    ctl = clingo.Control(clingo_args)
+    ctl.add("base", [], plasp_program)
+
+    ctl.ground([("base", [])])
+
+    best_optimization_value = None
+    disabled_atoms = []
+
+    def on_model_with_cost(model):
+        nonlocal best_optimization_value, disabled_atoms
+        on_model(model)
+        if model.cost:
+            best_optimization_value = -int(model.cost[0])
+
+    result = ctl.solve(on_model=on_model_with_cost)
+    clingo_times = get_clingo_times(ctl.statistics)
+
+    print(
+        f"satisfiable={result.satisfiable}, unsatisfiable={result.unsatisfiable}, unknown={result.unknown}"
+    )
+    print(f"best_optimization_value={best_optimization_value}")
+    if horizon is not None:
+        print(f"horizon={horizon}")
+
+    if clingo_times:
+        if "total" in clingo_times:
+            print(f"clingo_total_time={clingo_times['total']:.6f}s")
+        if "cpu" in clingo_times:
+            print(f"clingo_cpu_time={clingo_times['cpu']:.6f}s")
+        if "solve" in clingo_times:
+            print(f"clingo_solve_time={clingo_times['solve']:.6f}s")
 
 def remove_lp_files():
     current_directory = os.getcwd()
@@ -281,22 +369,28 @@ if __name__ == "__main__":
         sys.stderr.write("Error: Instance file does not exist.\n")
         sys.exit()
 
-    if args.is_pddl_instance:
+    if args.is_pddl_instance and not args.osp:
         logger.info("Running translator...")
         run_fd_translator(args.domain, args.instance)
         args.instance = "output.sas"
-        # run_plasp(
-        #     args.domain,
-        #     args.instance,
-        #     args.lp_name,
-        #     args.encoding,
-        #     args.dump_output)
+        run_plasp(
+            args.domain,
+            args.instance,
+            args.lp_name,
+            args.encoding,
+            args.dump_output)
 
     logger.info("Running plasp...")
-    run_plasp("", args.instance, args.lp_name, args.encoding, args.dump_output, False)
+    run_plasp(
+        args.domain, args.instance, args.lp_name, args.encoding, args.dump_output, args.osp
+    )
 
-    logger.info("Running fasb...")
-    run_fasb(args.lp_name, args.horizon, args.script)
+    if args.osp == "max":
+        logger.info("Running clingo...")
+        run_clingo(args.lp_name, args.horizon)
+    else:
+        logger.info("Running fasb...")
+        run_fasb(args.lp_name, args.horizon, args.script)
 
     if args.cleanup:
         remove_lp_files()
