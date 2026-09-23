@@ -9,7 +9,7 @@
     (= (ON B A) 10) 
     (= (on c b) 2) 
  )
- (:bound 1)
+ (:bound 2)
  )
  
 
