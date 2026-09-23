@@ -41,6 +41,22 @@ To start interactive mode, use the following command: Then, navigation in the pl
 ./planpilot.sif -i benchmarks/beluga-exp-solvable/problem_46_s89_j3_r2_oc32_f3.pddl --horizon 17
 ```
 
+### Oversubscription Planning (OSP)
+
+PlanPilot can also solve oversubscription planning tasks, i.e., PDDL instances
+that specify a `:bound` and `:utility` values for soft goals. In OSP mode,
+`--horizon` is not needed, since the horizon is taken from the `:bound` of the
+instance.
+
+- `--osp`: navigate the plan space of the OSP task interactively.
+- `--osp max`: compute a plan that maximizes the total utility.
+
+```bash
+./planpilot.sif -d benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/domain.pddl -i benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/probBLOCKS-4-0.pddl --osp
+
+./planpilot.sif -d benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/domain.pddl -i benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/probBLOCKS-4-0.pddl --osp max
+```
+
 ### Other arguments:
 
 - -h, --help            show this help message and exit
@@ -55,10 +71,11 @@ To start interactive mode, use the following command: Then, navigation in the pl
 -  --add-constraints-file ADD_CONSTRAINTS_FILE
                         The path to the file containing additional constraints.
 -  --dry                 If true, facets will not be computed at startup.
--  --horizon HORIZON     Horizon used by clingo.
+-  --horizon HORIZON     Horizon used by clingo. Required unless --osp is given, in which case the horizon comes from the 'bound' fact in the instance.
 -  --lp-name LP_NAME     Name of intermediate logic program (lp) file.
 -  --encoding {exact,bounded}
                         Type of ASP encoding.
+-  --osp [max]           Oversubscription Planning.
 -  --abstract-time-steps
                         If true, it only reports that actions occur some time during the plans, but without specifying when.
 -  --script SCRIPT       The path to the fasb script; for non-interactive mode - requires fasb built in interpreter configuration.
