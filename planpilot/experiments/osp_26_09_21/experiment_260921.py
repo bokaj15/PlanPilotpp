@@ -4,6 +4,7 @@ import sys
 import platform
 import re
 import os
+import project
 from pathlib import Path
 from downward import suites
 from downward.experiment import Experiment
@@ -22,19 +23,11 @@ assert (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-BENCHMARKS_DIR = str(REPO_ROOT / "benchmarks" / "osp_benchmark_katz_et_al_2019")
+BENCHMARKS_DIR = str(REPO_ROOT / "benchmarks" / "katz-et-al-benchmarks")
 
 SIF_PLANPILOT = os.path.join(REPO_ROOT, "planpilot.sif")
 
-SUITE = [
-    "blocks-25",
-]
-
-DOMAIN_GROUPS = {
-  "blocks": ["blocks-25"],
-}
-
-assert len(SUITE) == sum([len(DOMAIN_GROUPS[key]) for key in DOMAIN_GROUPS])
+SUITE = project.SUITE_LEARNING
 
 TIME_LIMIT = 30 * 60
 MEMORY_LIMIT = 4096
@@ -49,8 +42,8 @@ DRIVER_OPTIONS = [
 ATTRIBUTES = [
     "coverage",
     "run_dir",
-    "wall_clock_time",
-    "planner_time",
+    "planner_wall_clock_time",
+    "total_time",
     "plan_length",
 ]
 
@@ -60,8 +53,8 @@ if REMOTE:
     SUITE = SUITE,
     ENV = ArrheniusEnvironment(
         email="jennifer.santos@liu.se",
-        memory_per_cpu="4150M",
         extra_options="#SBATCH -A naiss2026-5-561",
+        cpus_per_task=4,
     )
 else:
     SUITE = [
@@ -83,7 +76,7 @@ def get_parser():
     def add_best_opt(content, props):
         match = re.search(r"\bbest_optimization_value\s*=\s*(\d+)\b", content)
         if match:
-            props["best_optimization_value"] = int(match.group(1))
+            props["plan_utility"] = int(match.group(1))
 
     def add_clingo_total_time(content, props):
         match = re.search(r"\bclingo_total_time\s*=\s*([0-9]+(?:\.[0-9]+)?)s?", content)
@@ -103,12 +96,12 @@ def get_parser():
     def add_planner_time(content, props):
         match = re.search(r"Total time:\s*([0-9]+(?:\.[0-9]+)?)s?", content)
         if match:
-            props["planner_time"] = float(match.group(1))
+            props["total_time"] = float(match.group(1))
 
     def add_wall_clock_time(content, props):
         match = re.search(r"osp wall-clock time:\s*([0-9]+(?:\.[0-9]+)?)s?", content)
         if match:
-            props["wall_clock_time"] = float(match.group(1))
+            props["planner_wall_clock_time"] = float(match.group(1))
 
     def add_coverage(content, props):
         if has_bool_flag(content, "satisfiable", True):
@@ -237,14 +230,14 @@ exp.add_report(
     name="report",
 )
 
-exp.add_report(
-    AbsoluteReport(
-        attributes=ATTRIBUTES,
-        filter=[strip_unexplained_errors],
-        format="tex",
-    ),
-    name="report-tex",
-    outfile="report.tex",
-)
+# exp.add_report(
+#     AbsoluteReport(
+#         attributes=ATTRIBUTES,
+#         filter=[strip_unexplained_errors],
+#         format="tex",
+#     ),
+#     name="report-tex",
+#     outfile="report.tex",
+# )
 
 exp.run_steps()

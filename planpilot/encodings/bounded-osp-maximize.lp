@@ -68,7 +68,9 @@ holds(variable(V), Value, T) :- holds(variable(V), Value, T - 1), not modified(v
 % Maximize soft goals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-soft_goal(Variable, Value, Weight) :- utility(Variable, Value, Weight), bound(B), holds(Variable, Value, B).
+max_utility(Variable, Value, MaxWeight) :- utility(Variable, Value, _), MaxWeight = #max{ Weight : utility(Variable, Value, Weight)}.
+
+soft_goal(Variable, Value, Weight) :- max_utility(Variable, Value, Weight), bound(B), holds(Variable, Value, B).
 
 existsHardGoal :- goal(_, _).
 achievedSoftGoal :- soft_goal(_, _, _).

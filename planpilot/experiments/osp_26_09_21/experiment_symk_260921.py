@@ -3,12 +3,13 @@
 import sys
 import project
 from pathlib import Path
+from lab.parser import Parser
 
 from downward import suites
 from downward.experiment import Experiment, FastDownwardExperiment
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-BENCHMARKS_DIR = str(REPO_ROOT / "benchmarks" / "osp_benchmark_katz_et_al_2019")
+BENCHMARKS_DIR = str(REPO_ROOT / "benchmarks" / "katz-et-al-benchmarks")
 REPO = REPO_ROOT / "third-party" / "downward-projects" / "symbolic-osp"
 FAST_DOWNWARD = str(REPO / "fast-downward.py")
 
@@ -32,8 +33,8 @@ DRIVER_OPTIONS = [
 if project.REMOTE:
     ENV = project.ArrheniusEnvironment(
         email="jennifer.santos@liu.se",
-        memory_per_cpu="4150M",
         extra_options="#SBATCH -A naiss2026-5-561",
+        cpus_per_task=4,
     )
 else:
     SUITE = [
@@ -57,8 +58,13 @@ ATTRIBUTES = [
     "expansions",
     "memory",
     "planner_time",
+    "plan_utility",
 ]
 
+def get_osp_parser():
+    p = Parser()
+    p.add_pattern("plan_utility", r"Plan utility: (-?\d+)", type=int)
+    return p
 
 def add_resources(run, instance):
     run.add_resource("domain", instance.domain_file, symlink=True)
@@ -75,6 +81,8 @@ def set_properties(run, instance, config_nick, config):
 
 
 exp = Experiment(environment=ENV)
+
+exp.add_parser(get_osp_parser())
 
 for config_nick, config in CONFIGS:
     for instance in suites.build_suite(BENCHMARKS_DIR, SUITE):
