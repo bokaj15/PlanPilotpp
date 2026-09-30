@@ -52,9 +52,9 @@ instance.
 - `--osp max`: compute a plan that maximizes the total utility.
 
 ```bash
-./planpilot.sif -d benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/domain.pddl -i benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/probBLOCKS-4-0.pddl --osp
+./planpilot.sif -d benchmarks/katz-et-al-benchmarks/blocks-25/domain.pddl -i benchmarks/katz-et-al-benchmarks/blocks-25/probBLOCKS-4-0.pddl --osp
 
-./planpilot.sif -d benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/domain.pddl -i benchmarks/osp_benchmark_katz_et_al_2019/blocks-25/probBLOCKS-4-0.pddl --osp max
+./planpilot.sif -d benchmarks/katz-et-al-benchmarks/blocks-25/domain.pddl -i benchmarks/katz-et-al-benchmarks/blocks-25/probBLOCKS-4-0.pddl --osp max
 ```
 
 ### Other arguments:
