@@ -105,9 +105,9 @@ def get_parser():
 
     def add_coverage(content, props):
         if has_bool_flag(content, "satisfiable", True):
-            props["coverage"] = 1
+            props["solved"] = 1
         elif has_bool_flag(content, "satisfiable", False):
-            props["coverage"] = 0
+            props["solved"] = 0
 
     p = Parser()
     p.add_function(add_plan_length)

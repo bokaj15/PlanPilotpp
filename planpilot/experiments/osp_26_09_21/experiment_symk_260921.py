@@ -4,6 +4,7 @@ import sys
 import project
 from pathlib import Path
 from lab.parser import Parser
+from lab.reports import Attribute
 
 from downward import suites
 from downward.experiment import Experiment, FastDownwardExperiment
@@ -59,11 +60,23 @@ ATTRIBUTES = [
     "memory",
     "planner_time",
     "plan_utility",
+    Attribute("solved", absolute=True, min_wins=False),
 ]
 
 def get_osp_parser():
     p = Parser()
     p.add_pattern("plan_utility", r"Plan utility: (-?\d+)", type=int)
+    return p
+
+def add_solved(content, props):
+    """Solved: a plan was found and it has positive utility."""
+    props["solved"] = int(
+        props.get("coverage") == 1 and props.get("plan_utility", 0) > 0
+    )
+
+def get_solved_parser():
+    p = Parser()
+    p.add_function(add_solved)
     return p
 
 def add_resources(run, instance):
@@ -107,6 +120,8 @@ exp.add_parser(FastDownwardExperiment.EXITCODE_PARSER)
 exp.add_parser(FastDownwardExperiment.TRANSLATOR_PARSER)
 exp.add_parser(FastDownwardExperiment.SINGLE_SEARCH_PARSER)
 exp.add_parser(FastDownwardExperiment.PLANNER_PARSER)
+# Must come after PLANNER_PARSER, which sets coverage.
+exp.add_parser(get_solved_parser())
 
 exp.add_step("build", exp.build)
 exp.add_step("start", exp.start_runs)

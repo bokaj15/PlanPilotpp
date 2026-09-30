@@ -35,9 +35,11 @@ SCRIPT = Path(sys.argv[0]).resolve()
 # Cover both the Basel and Linköping clusters for simplicity.
 REMOTE = BaselSlurmEnvironment.is_present() or TetralithEnvironment.is_present() or ArrheniusEnvironment.is_present()
 
+TEST_LEARNING = ["blocks-25"]
+
 SUITE_LEARNING = [
 "airport-25",
-"airport-50",
+"airport-50", 
 "airport-75",
 "airport-100",
 "barman-opt11-strips-25",
