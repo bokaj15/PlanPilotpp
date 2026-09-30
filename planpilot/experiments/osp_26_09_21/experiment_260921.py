@@ -53,9 +53,10 @@ if REMOTE:
     SUITE = SUITE,
     ENV = ArrheniusEnvironment(
         email="jennifer.santos@liu.se",
-        extra_options="#SBATCH -A naiss2026-3-786",
+        extra_options="#SBATCH -A naiss2025-5-561-cpu",
         memory_per_cpu="4150M",
-        cpus_per_task=4,
+        partition="fat",
+        cpus_per_task=1,
     )
 else:
     SUITE = [
