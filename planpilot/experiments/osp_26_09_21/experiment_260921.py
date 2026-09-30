@@ -40,11 +40,16 @@ DRIVER_OPTIONS = [
 ]
 
 ATTRIBUTES = [
-    "coverage",
     "run_dir",
+    "id",
+    "domain",
+    "problem",
+    "algorithm",
     "planner_wall_clock_time",
+    "clingo_total_time",
     "total_time",
     "plan_length",
+    "plan_utility",
 ]
 
 REMOTE = ArrheniusEnvironment.is_present()
@@ -55,12 +60,10 @@ if REMOTE:
         email="jennifer.santos@liu.se",
         extra_options="#SBATCH -A naiss2025-5-561-cpu",
         memory_per_cpu="4150M",
-        partition="fat",
-        cpus_per_task=1,
     )
 else:
     SUITE = [
-        "blocks-25:probBLOCKS-4-0.pddl",
+        "blocks-25:probBLOCKS-4-1.pddl",
     ]
     ENV = LocalEnvironment(processes=2)
 

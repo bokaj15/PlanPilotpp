@@ -36,8 +36,6 @@ if project.REMOTE:
         email="jennifer.santos@liu.se",
         extra_options="#SBATCH -A naiss2025-5-561-cpu",
         memory_per_cpu="4150M",
-        partition="fat",
-        cpus_per_task=1,
     )
 else:
     SUITE = [
@@ -53,6 +51,10 @@ CONFIGS = [
 ATTRIBUTES = [
     "error",
     "run_dir",
+    "id",
+    "domain",
+    "problem",
+    "algorithm",
     "search_start_time",
     "search_start_memory",
     "total_time",
@@ -60,8 +62,10 @@ ATTRIBUTES = [
     "coverage",
     "expansions",
     "memory",
+    "planner_wall_clock_time",
     "planner_time",
     "plan_utility",
+    "plan_length",
     Attribute("solved", absolute=True, min_wins=False),
 ]
 

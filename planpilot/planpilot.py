@@ -369,20 +369,22 @@ if __name__ == "__main__":
         sys.stderr.write("Error: Instance file does not exist.\n")
         sys.exit()
 
+    pddl_instance = args.is_pddl_instance
     if args.is_pddl_instance and not args.osp:
         logger.info("Running translator...")
         run_fd_translator(args.domain, args.instance)
         args.instance = "output.sas"
-        run_plasp(
-            args.domain,
-            args.instance,
-            args.lp_name,
-            args.encoding,
-            args.dump_output)
+        pddl_instance = False
 
     logger.info("Running plasp...")
     run_plasp(
-        args.domain, args.instance, args.lp_name, args.encoding, args.dump_output, args.osp
+        args.domain,
+        args.instance,
+        args.lp_name,
+        args.encoding,
+        args.dump_output,
+        args.osp,
+        pddl_instance,
     )
 
     if args.osp == "max":
