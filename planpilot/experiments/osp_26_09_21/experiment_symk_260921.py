@@ -34,7 +34,8 @@ DRIVER_OPTIONS = [
 if project.REMOTE:
     ENV = project.ArrheniusEnvironment(
         email="jennifer.santos@liu.se",
-        extra_options="#SBATCH -A naiss2026-5-561",
+        extra_options="#SBATCH -A naiss2026-3-786",
+        memory_per_cpu="4150M",
         cpus_per_task=4,
     )
 else:
