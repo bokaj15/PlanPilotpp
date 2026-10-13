@@ -29,6 +29,8 @@ class TranslatorASP
 		void translateRequirements() const;
 		void translateInitialState() const;
 		void translateGoal() const;
+		void translateUtilities() const;
+		void translateBound() const;
 		void translateVariables() const;
 		void translateActions() const;
 		void translateMutexes() const;

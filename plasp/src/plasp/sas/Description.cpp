@@ -101,6 +101,28 @@ const Goal &Description::goal() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool Description::hasUtility() const
+{
+	return m_utility != nullptr;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const Utility &Description::utility() const
+{
+	assert(m_utility);
+	return *m_utility;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const std::experimental::optional<int32_t> &Description::bound() const
+{
+	return m_bound;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const Operators &Description::operators() const
 {
 	return m_operators;
@@ -167,6 +189,8 @@ void Description::parseContent(tokenize::Tokenizer<> &tokenizer)
 	parseMutexSection(tokenizer);
 	parseInitialStateSection(tokenizer);
 	parseGoalSection(tokenizer);
+	parseUtilitySection(tokenizer);
+	parseBoundSection(tokenizer);
 	parseOperatorSection(tokenizer);
 	parseAxiomSection(tokenizer);
 
@@ -235,6 +259,28 @@ void Description::parseInitialStateSection(tokenize::Tokenizer<> &tokenizer)
 void Description::parseGoalSection(tokenize::Tokenizer<> &tokenizer)
 {
 	m_goal = std::make_unique<Goal>(Goal::fromSAS(tokenizer, m_variables));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Description::parseUtilitySection(tokenize::Tokenizer<> &tokenizer)
+{
+	if (!tokenizer.testAndReturn<std::string>("begin_util"))
+		return;
+
+	m_utility = std::make_unique<Utility>(Utility::fromSAS(tokenizer, m_variables));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Description::parseBoundSection(tokenize::Tokenizer<> &tokenizer)
+{
+	if (!tokenizer.testAndSkip<std::string>("begin_bound"))
+		return;
+
+	m_bound = tokenizer.get<int32_t>();
+
+	tokenizer.expect<std::string>("end_bound");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,8 @@
 #define __PLASP__SAS__DESCRIPTION_H
 
 #include <experimental/filesystem>
+#include <experimental/optional>
+
 #include <iosfwd>
 #include <memory>
 #include <vector>
@@ -10,6 +12,7 @@
 
 #include <plasp/sas/AxiomRule.h>
 #include <plasp/sas/Goal.h>
+#include <plasp/sas/Utility.h>
 #include <plasp/sas/InitialState.h>
 #include <plasp/sas/MutexGroup.h>
 #include <plasp/sas/Operator.h>
@@ -39,6 +42,9 @@ class Description
 		const MutexGroups &mutexGroups() const;
 		const InitialState &initialState() const;
 		const Goal &goal() const;
+		bool hasUtility() const;
+		const Utility &utility() const;
+		const std::experimental::optional<int32_t> &bound() const;
 		const Operators &operators() const;
 		const AxiomRules &axiomRules() const;
 
@@ -58,6 +64,8 @@ class Description
 		void parseMutexSection(tokenize::Tokenizer<> &tokenizer);
 		void parseInitialStateSection(tokenize::Tokenizer<> &tokenizer);
 		void parseGoalSection(tokenize::Tokenizer<> &tokenizer);
+		void parseUtilitySection(tokenize::Tokenizer<> &tokenizer);
+		void parseBoundSection(tokenize::Tokenizer<> &tokenizer);
 		void parseOperatorSection(tokenize::Tokenizer<> &tokenizer);
 		void parseAxiomSection(tokenize::Tokenizer<> &tokenizer);
 
@@ -67,6 +75,8 @@ class Description
 		MutexGroups m_mutexGroups;
 		std::unique_ptr<InitialState> m_initialState;
 		std::unique_ptr<Goal> m_goal;
+		std::unique_ptr<Utility> m_utility;
+		std::experimental::optional<int32_t> m_bound;
 		Operators m_operators;
 		AxiomRules m_axiomRules;
 };

@@ -50,6 +50,18 @@ void TranslatorASP::translate() const
 	translateInitialState();
 	m_outputStream << std::endl;
 	translateGoal();
+
+	if (m_description.hasUtility())
+	{
+		m_outputStream << std::endl;
+		translateUtilities();
+	}
+
+	if (m_description.bound())
+	{
+		m_outputStream << std::endl;
+		translateBound();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +116,36 @@ void TranslatorASP::translateGoal() const
 			fact.value().printAsASPPredicate(m_outputStream);
 			m_outputStream << ")." << std::endl;
 		});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TranslatorASP::translateUtilities() const
+{
+	m_outputStream << colorlog::Heading2("utility") << std::endl;
+
+	const auto &utilityFacts = m_description.utility().facts();
+
+	std::for_each(utilityFacts.cbegin(), utilityFacts.cend(),
+		[&](const auto &utilityFact)
+		{
+			m_outputStream << colorlog::Function("utility") << "(";
+			utilityFact.fact.variable().printNameAsASPPredicate(m_outputStream);
+			m_outputStream << ", ";
+			utilityFact.fact.value().printAsASPPredicate(m_outputStream);
+			m_outputStream << ", " << colorlog::Number<int>(utilityFact.weight) << ")." << std::endl;
+		});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TranslatorASP::translateBound() const
+{
+	m_outputStream << colorlog::Heading2("bound") << std::endl;
+
+	m_outputStream
+		<< colorlog::Function("bound") << "("
+		<< colorlog::Number<int32_t>(m_description.bound().value()) << ")." << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

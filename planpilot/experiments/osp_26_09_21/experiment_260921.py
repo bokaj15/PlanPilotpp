@@ -109,8 +109,9 @@ def get_parser():
             props["planner_wall_clock_time"] = float(match.group(1))
 
     def add_coverage(content, props):
+        """Solved: a plan was found and it has positive utility (as for symbolic-osp)."""
         if has_bool_flag(content, "satisfiable", True):
-            props["solved"] = 1
+            props["solved"] = int(props.get("plan_utility", 0) > 0)
         elif has_bool_flag(content, "satisfiable", False):
             props["solved"] = 0
 

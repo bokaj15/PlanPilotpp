@@ -49,6 +49,27 @@ def run_fd_translator(domain, instance):
         print(error)
         exit(process.returncode)
 
+def run_symosp_translator(domain, instance):
+    binary_path = fix_path("third-party/downward-projects/symbolic-osp/src/translate/translate.py")
+    command = [
+        sys.executable,
+        binary_path,
+        "--keep-unimportant-variables",
+        domain,
+        instance]
+    time = utils.get_elapsed_time()
+    process = Popen(command, stdout=PIPE, stderr=PIPE, text=True)
+    stdout, stderr = process.communicate()
+
+    if stderr:
+        print(stderr, file=sys.stderr, end="")
+
+    logging.info(f"sym-osp translator time: {utils.get_elapsed_time() - time:.2f}s")
+    logger.info(f"sym-osp translator return code: {process.returncode}")
+
+    if process.returncode != 0:
+        print(stdout)
+        exit(process.returncode)
 
 def run_plasp(domain, instance, lp, encoding, dump_output, osp=False, pddl_instance=True):
     binary_path = fix_path("bin/plasp")
@@ -217,6 +238,10 @@ def run_fasb(lp, horizon, script=None):
 
     logger.info(f"fasb return code: {process.returncode}")
 
+def format_symbols(symbols):
+    return "[" + ", ".join(str(sym) for sym in symbols) + "]"
+
+
 def on_model(model):
     symbols = model.symbols(shown=True)
     plan_length = sum(
@@ -225,7 +250,13 @@ def on_model(model):
         if getattr(sym, "name", None) == "occurs" and str(sym.arguments[0]) != '"no_op"'
     )
 
-    print("Answer set:", symbols)
+    if args.osp:
+        actions = [sym for sym in symbols if sym.name != "softGoal"]
+        soft_goals = [sym for sym in symbols if sym.name == "softGoal"]
+        print("Answer set:", format_symbols(actions))
+        print("Achieved soft goals:", format_symbols(soft_goals))
+    else:
+        print("Answer set:", symbols)
     print(f"plan_length={plan_length}")
 
 def get_nested(mapping, path):
@@ -370,9 +401,13 @@ if __name__ == "__main__":
         sys.exit()
 
     pddl_instance = args.is_pddl_instance
-    if args.is_pddl_instance and not args.osp:
-        logger.info("Running translator...")
-        run_fd_translator(args.domain, args.instance)
+    if args.is_pddl_instance:
+        if args.osp:
+            logger.info("Running symbolic-osp translator...")
+            run_symosp_translator(args.domain, args.instance)
+        else:
+            logger.info("Running translator...")
+            run_fd_translator(args.domain, args.instance)
         args.instance = "output.sas"
         pddl_instance = False
 
