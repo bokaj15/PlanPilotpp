@@ -5,6 +5,7 @@ n0 n1 n2 n3 n4 n5 n6  - count
 )
 
 (:init
+(= (total-cost) 0)
 (next-count n0 n1) (next-count n1 n2) (next-count n2 n3) (next-count n3 n4) (next-count n4 n5) (next-count n5 n6) 
 (stacks-avail n0)
 
@@ -44,5 +45,6 @@ n0 n1 n2 n3 n4 n5 n6  - count
 (shipped o6)
 ))
 
+(:metric minimize (total-cost))
 )
 

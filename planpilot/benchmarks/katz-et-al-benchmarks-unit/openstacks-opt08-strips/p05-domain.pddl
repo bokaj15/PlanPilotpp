@@ -18,116 +18,120 @@
 )
 
 
+(:functions
+(total-cost) - number
+)
+
 (:action open-new-stack
 :parameters (?open ?new-open - count)
 :precondition (and (stacks-avail ?open)(next-count ?open ?new-open))
-:effect (and (not (stacks-avail ?open))(stacks-avail ?new-open))
+:effect (and (not (stacks-avail ?open))(stacks-avail ?new-open) (increase (total-cost) 1))
 )
 
 (:action start-order
 :parameters (?o - order ?avail ?new-avail - count)
 :precondition (and (waiting ?o)(stacks-avail ?avail)(next-count ?new-avail ?avail))
-:effect (and (not (waiting ?o))(started ?o)(not (stacks-avail ?avail))(stacks-avail ?new-avail))
+:effect (and (not (waiting ?o))(started ?o)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1))
 )
 
 (:action make-product-p1
 :parameters ()
 :precondition (and (not-made p1)(started o6))
-:effect (and (not (not-made p1)) (made p1))
+:effect (and (not (not-made p1)) (made p1) (increase (total-cost) 1))
 )
 
 (:action make-product-p2
 :parameters ()
 :precondition (and (not-made p2)(started o6))
-:effect (and (not (not-made p2)) (made p2))
+:effect (and (not (not-made p2)) (made p2) (increase (total-cost) 1))
 )
 
 (:action make-product-p3
 :parameters ()
 :precondition (and (not-made p3)(started o8))
-:effect (and (not (not-made p3)) (made p3))
+:effect (and (not (not-made p3)) (made p3) (increase (total-cost) 1))
 )
 
 (:action make-product-p4
 :parameters ()
 :precondition (and (not-made p4)(started o2)(started o3)(started o4)(started o8))
-:effect (and (not (not-made p4)) (made p4))
+:effect (and (not (not-made p4)) (made p4) (increase (total-cost) 1))
 )
 
 (:action make-product-p5
 :parameters ()
 :precondition (and (not-made p5)(started o1)(started o7)(started o9))
-:effect (and (not (not-made p5)) (made p5))
+:effect (and (not (not-made p5)) (made p5) (increase (total-cost) 1))
 )
 
 (:action make-product-p6
 :parameters ()
 :precondition (and (not-made p6)(started o3))
-:effect (and (not (not-made p6)) (made p6))
+:effect (and (not (not-made p6)) (made p6) (increase (total-cost) 1))
 )
 
 (:action make-product-p7
 :parameters ()
 :precondition (and (not-made p7)(started o5))
-:effect (and (not (not-made p7)) (made p7))
+:effect (and (not (not-made p7)) (made p7) (increase (total-cost) 1))
 )
 
 (:action make-product-p8
 :parameters ()
 :precondition (and (not-made p8)(started o2))
-:effect (and (not (not-made p8)) (made p8))
+:effect (and (not (not-made p8)) (made p8) (increase (total-cost) 1))
 )
 
 (:action make-product-p9
 :parameters ()
 :precondition (and (not-made p9)(started o6))
-:effect (and (not (not-made p9)) (made p9))
+:effect (and (not (not-made p9)) (made p9) (increase (total-cost) 1))
 )
 
 (:action ship-order-o1
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o1)(made p5)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o1))(shipped o1)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o1))(shipped o1)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o2
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o2)(made p4)(made p8)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o2))(shipped o2)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o2))(shipped o2)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o3
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o3)(made p4)(made p6)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o3))(shipped o3)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o3))(shipped o3)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o4
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o4)(made p4)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o4))(shipped o4)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o4))(shipped o4)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o5
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o5)(made p7)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o5))(shipped o5)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o5))(shipped o5)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o6
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o6)(made p1)(made p2)(made p9)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o6))(shipped o6)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o6))(shipped o6)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o7
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o7)(made p5)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o7))(shipped o7)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o7))(shipped o7)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o8
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o8)(made p3)(made p4)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o8))(shipped o8)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o8))(shipped o8)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 (:action ship-order-o9
 :parameters (?avail ?new-avail - count)
 :precondition (and (started o9)(made p5)(stacks-avail ?avail)(next-count ?avail ?new-avail))
-:effect (and (not (started o9))(shipped o9)(not (stacks-avail ?avail))(stacks-avail ?new-avail)))
+:effect (and (not (started o9))(shipped o9)(not (stacks-avail ?avail))(stacks-avail ?new-avail) (increase (total-cost) 1)))
 
 )
 
