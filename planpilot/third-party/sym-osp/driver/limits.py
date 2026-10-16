@@ -71,6 +71,13 @@ def get_memory_limit(component_limit, overall_limit):
     limits = [limit for limit in [component_limit, overall_limit] if limit is not None]
     return min(limits) if limits else None
 
+def round_time_limit(limit):
+    """
+    Return the time limit rounded down to an integer. If the limit is within 1ms
+    of an integer, we round up instead. We have to do this as the system calls
+    for setting time limits only support integer-valued limits.
+    """
+    return int(limit + 0.001)
 
 def get_time_limit(component_limit, overall_limit):
     """
@@ -85,5 +92,5 @@ def get_time_limit(component_limit, overall_limit):
         else:
             remaining_time = max(0, overall_limit - elapsed_time)
             if limit is None or remaining_time < limit:
-                limit = remaining_time
+                limit = round_time_limit(remaining_time)
     return limit
