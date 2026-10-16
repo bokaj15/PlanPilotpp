@@ -30,6 +30,9 @@ holds(derivedVariable(DerivedVariable), value(DerivedVariable, false), T) :- der
 
 0 {occurs(Action, T) : action(Action)} 1 :- time(T), T > 0.
 
+noop_occurs(T) :- time(T), T > 0, not occurs(_, T).
+:- noop_occurs(T), not noop_occurs(T+1), time(T+1).
+
 % Check preconditions
 :- occurs(Action, T), precondition(Action, Variable, Value), not holds(Variable, Value, T - 1).
 
