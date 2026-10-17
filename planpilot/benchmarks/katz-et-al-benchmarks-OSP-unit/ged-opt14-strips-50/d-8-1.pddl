@@ -42,7 +42,7 @@
     (= (splice-point-1 sub2) 1) 
     (= (s-last sub4) 5) 
  )
- (:bound 2)
+ (:bound 6)
  )
  
 

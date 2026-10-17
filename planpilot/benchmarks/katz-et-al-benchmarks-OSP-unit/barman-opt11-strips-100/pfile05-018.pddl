@@ -83,7 +83,7 @@
     (= (holding right shot2) 1) 
     (= (holding left shot5) 5) 
  )
- (:bound 239)
+ (:bound 91)
  (:use-cost-metric)
  )
  

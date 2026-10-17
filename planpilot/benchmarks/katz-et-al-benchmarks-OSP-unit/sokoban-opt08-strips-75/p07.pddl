@@ -547,7 +547,7 @@
     (= (clear pos-04-07) 5) 
     (= (clear pos-03-05) 3) 
  )
- (:bound 11)
+ (:bound 51)
  (:use-cost-metric)
  )
  

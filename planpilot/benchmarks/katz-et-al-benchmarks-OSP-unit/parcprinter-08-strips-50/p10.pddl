@@ -195,7 +195,7 @@
     (= (location sheet2 endcap_entry-blackcontainer_exit) 1) 
     (= (sideup sheet3 front) 3) 
  )
- (:bound 1245161)
+ (:bound 35)
  (:use-cost-metric)
  )
  

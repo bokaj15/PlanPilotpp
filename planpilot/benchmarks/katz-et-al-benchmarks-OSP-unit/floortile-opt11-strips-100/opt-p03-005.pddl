@@ -108,7 +108,7 @@
     (= (painted tile_0-3 white) 4) 
     (= (robot-at robot1 tile_2-2) 2) 
  )
- (:bound 58)
+ (:bound 43)
  (:use-cost-metric)
  )
  

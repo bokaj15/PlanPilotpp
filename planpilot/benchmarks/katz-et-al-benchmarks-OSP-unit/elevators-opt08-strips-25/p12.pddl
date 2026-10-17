@@ -73,7 +73,7 @@ slow0-0 slow1-0 - slow-elevator
     (= (lift-at slow1-0 n11) 1) 
     (= (boarded p1 slow0-0) 2) 
  )
- (:bound 13)
+ (:bound 4)
  (:use-cost-metric)
  )
  

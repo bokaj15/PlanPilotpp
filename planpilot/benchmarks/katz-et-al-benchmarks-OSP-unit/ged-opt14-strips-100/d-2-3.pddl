@@ -32,7 +32,7 @@
     (= (cw sub1 sub3) 5) 
     (= (normal sub2) 2) 
  )
- (:bound 3)
+ (:bound 7)
  )
  
 

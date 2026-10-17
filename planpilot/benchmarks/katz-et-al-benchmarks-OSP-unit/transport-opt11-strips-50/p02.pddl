@@ -126,7 +126,7 @@
     (= (in package-2 truck-1) 2) 
     (= (in package-2 truck-2) 3) 
  )
- (:bound 125)
+ (:bound 8)
  (:use-cost-metric)
  )
  

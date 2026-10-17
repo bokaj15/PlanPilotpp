@@ -138,7 +138,7 @@
     (= (location sheet4 htmoverblack_entry-endcap_exit) 4) 
     (= (notprintedwith sheet5 back black) 3) 
  )
- (:bound 1037340)
+ (:bound 37)
  (:use-cost-metric)
  )
  

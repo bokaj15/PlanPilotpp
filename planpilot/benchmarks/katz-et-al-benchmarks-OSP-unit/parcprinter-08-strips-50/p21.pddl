@@ -29,7 +29,7 @@
     (= (Stackedin sheet1 sys_OutputTray) 10) 
     (= (location sheet1 lc1_entryfromime-lime_exit) 5) 
  )
- (:bound 71705)
+ (:bound 4)
  (:use-cost-metric)
  )
  

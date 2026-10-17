@@ -76,7 +76,7 @@
     (= (contains shot1 ingredient3) 3) 
     (= (used shot2 ingredient3) 3) 
  )
- (:bound 205)
+ (:bound 81)
  (:use-cost-metric)
  )
  

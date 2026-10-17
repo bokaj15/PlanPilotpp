@@ -253,7 +253,7 @@ rightl0 - right_l
     (= (at_right_l rightl0 f3-3f f2-3f f1-3f) 5) 
     (= (clear f5-0f) 1) 
  )
- (:bound 23)
+ (:bound 17)
  (:use-cost-metric)
  )
  

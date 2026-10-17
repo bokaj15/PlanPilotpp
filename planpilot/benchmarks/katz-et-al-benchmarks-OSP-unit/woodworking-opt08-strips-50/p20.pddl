@@ -209,7 +209,7 @@
     (= (surface-condition p5 rough) 3) 
     (= (wood p7 mahogany) 4) 
  )
- (:bound 245)
+ (:bound 17)
  (:use-cost-metric)
  )
  

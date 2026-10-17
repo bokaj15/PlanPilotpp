@@ -169,7 +169,7 @@
     (= (surface-condition p3 rough) 3) 
     (= (colour p4 natural) 4) 
  )
- (:bound 145)
+ (:bound 10)
  (:use-cost-metric)
  )
  

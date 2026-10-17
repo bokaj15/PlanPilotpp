@@ -84,7 +84,7 @@
     (= (location sheet3 fe1_exit-im1_feedentry) 5) 
     (= (location sheet1 im1_bottomexit-lc1_entry) 1) 
  )
- (:bound 255128)
+ (:bound 8)
  (:use-cost-metric)
  )
  

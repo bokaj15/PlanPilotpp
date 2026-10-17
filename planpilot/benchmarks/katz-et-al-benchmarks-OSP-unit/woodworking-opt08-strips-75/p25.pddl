@@ -140,7 +140,7 @@
     (= (colour p3 blue) 5) 
     (= (colour p0 natural) 2) 
  )
- (:bound 285)
+ (:bound 18)
  (:use-cost-metric)
  )
  

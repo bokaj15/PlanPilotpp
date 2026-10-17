@@ -76,7 +76,7 @@
     (= (shaker-level shaker1 l0) 1) 
     (= (contains shot1 ingredient1) 4) 
  )
- (:bound 159)
+ (:bound 60)
  (:use-cost-metric)
  )
  

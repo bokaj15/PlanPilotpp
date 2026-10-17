@@ -128,7 +128,7 @@
     (= (treatment p5 varnished) 4) 
     (= (colour p2 blue) 5) 
  )
- (:bound 61)
+ (:bound 3)
  (:use-cost-metric)
  )
  

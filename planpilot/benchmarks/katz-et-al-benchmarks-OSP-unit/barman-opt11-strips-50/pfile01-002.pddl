@@ -50,7 +50,7 @@
     (= (used shot1 ingredient3) 1) 
     (= (clean shot3) 2) 
  )
- (:bound 45)
+ (:bound 18)
  (:use-cost-metric)
  )
  

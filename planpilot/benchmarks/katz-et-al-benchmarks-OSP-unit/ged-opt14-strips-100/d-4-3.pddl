@@ -42,7 +42,7 @@
     (= (cw sub6 sub3) 3) 
     (= (cw sub1 sub5) 1) 
  )
- (:bound 5)
+ (:bound 14)
  )
  
 

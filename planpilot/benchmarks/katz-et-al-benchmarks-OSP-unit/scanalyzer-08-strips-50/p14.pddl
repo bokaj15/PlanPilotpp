@@ -142,7 +142,7 @@
     (= (on car-out-1 seg-in-3) 5) 
     (= (on car-out-7 seg-out-3) 4) 
  )
- (:bound 33)
+ (:bound 18)
  (:use-cost-metric)
  )
  

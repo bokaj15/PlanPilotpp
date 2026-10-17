@@ -140,7 +140,7 @@
     (= (colour p0 red) 1) 
     (= (treatment p2 untreated) 5) 
  )
- (:bound 285)
+ (:bound 18)
  (:use-cost-metric)
  )
  

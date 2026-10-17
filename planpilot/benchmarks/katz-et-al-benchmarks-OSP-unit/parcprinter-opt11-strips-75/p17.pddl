@@ -104,7 +104,7 @@
     (= (stackedin sheet2 sys_outputtray) 3) 
     (= (location sheet3 om_returnexit-rh2_entry) 2) 
  )
- (:bound 1271630)
+ (:bound 36)
  (:use-cost-metric)
  )
  

@@ -159,7 +159,7 @@
     (= (capacity truck-2 capacity-4) 2) 
     (= (capacity truck-1 capacity-1) 1) 
  )
- (:bound 137)
+ (:bound 5)
  (:use-cost-metric)
  )
  

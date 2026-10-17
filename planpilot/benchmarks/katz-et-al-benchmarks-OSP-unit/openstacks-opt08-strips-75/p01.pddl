@@ -40,7 +40,7 @@ n0 n1 n2 n3 n4 n5  - count
     (= (shipped o5) 10) 
     (= (not-made p5) 5) 
  )
- (:bound 1)
+ (:bound 12)
  (:use-cost-metric)
  )
  

@@ -66,7 +66,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10  - count
     (= (started o3) 1) 
     (= (stacks-avail n2) 5) 
  )
- (:bound 1)
+ (:bound 16)
  (:use-cost-metric)
  )
  

@@ -64,7 +64,7 @@
     (= (location sheet2 hw1_toprightentry-uc1_exit) 2) 
     (= (hasimage sheet2 back image-3) 3) 
  )
- (:bound 389424)
+ (:bound 16)
  (:use-cost-metric)
  )
  

@@ -141,7 +141,7 @@
     (= (treatment p2 varnished) 1) 
     (= (colour p0 natural) 5) 
  )
- (:bound 202)
+ (:bound 12)
  (:use-cost-metric)
  )
  

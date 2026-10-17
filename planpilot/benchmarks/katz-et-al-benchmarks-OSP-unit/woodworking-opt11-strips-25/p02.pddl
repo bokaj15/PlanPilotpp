@@ -104,7 +104,7 @@
     (= (surface-condition b1 rough) 2) 
     (= (wood b1 pine) 1) 
  )
- (:bound 56)
+ (:bound 2)
  (:use-cost-metric)
  )
  

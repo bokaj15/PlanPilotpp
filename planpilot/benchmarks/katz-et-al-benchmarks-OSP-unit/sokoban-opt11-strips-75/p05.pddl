@@ -540,7 +540,7 @@
     (= (clear pos-02-10) 3) 
     (= (at player-01 pos-09-05) 5) 
  )
- (:bound 37)
+ (:bound 109)
  (:use-cost-metric)
  )
  

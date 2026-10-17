@@ -143,7 +143,7 @@ rightl0 - right_l
     (= (at_right_l rightl0 f3-2f f3-1f f2-1f) 4) 
     (= (at_square square1 f0-2f) 4) 
  )
- (:bound 4)
+ (:bound 2)
  (:use-cost-metric)
  )
  

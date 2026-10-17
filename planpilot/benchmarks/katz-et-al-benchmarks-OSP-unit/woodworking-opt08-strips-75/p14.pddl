@@ -120,7 +120,7 @@
     (= (surface-condition p2 rough) 2) 
     (= (boardsize b0 s1) 3) 
  )
- (:bound 168)
+ (:bound 9)
  (:use-cost-metric)
  )
  

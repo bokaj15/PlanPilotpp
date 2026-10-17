@@ -50,7 +50,7 @@
     (= (contains shaker1 cocktail2) 1) 
     (= (contains shot1 ingredient2) 5) 
  )
- (:bound 67)
+ (:bound 27)
  (:use-cost-metric)
  )
  

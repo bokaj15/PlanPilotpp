@@ -155,7 +155,7 @@
     (= (colour p4 black) 4) 
     (= (treatment p2 colourfragments) 3) 
  )
- (:bound 315)
+ (:bound 17)
  (:use-cost-metric)
  )
  

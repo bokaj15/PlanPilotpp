@@ -81,7 +81,7 @@
     (= (notprintedwith sheet4 front black) 3) 
     (= (location sheet3 fe1_exit-hw1_leftentry) 5) 
  )
- (:bound 751642)
+ (:bound 29)
  (:use-cost-metric)
  )
  

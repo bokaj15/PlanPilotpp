@@ -91,7 +91,7 @@
     (= (clear tile_1-1) 3) 
     (= (clear tile_0-1) 2) 
  )
- (:bound 31)
+ (:bound 18)
  (:use-cost-metric)
  )
  

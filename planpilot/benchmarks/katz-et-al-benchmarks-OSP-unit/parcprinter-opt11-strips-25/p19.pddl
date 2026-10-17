@@ -139,7 +139,7 @@
     (= (available fe1-rsrc) 2) 
     (= (notprintedwith sheet7 front black) 3) 
  )
- (:bound 428394)
+ (:bound 14)
  (:use-cost-metric)
  )
  

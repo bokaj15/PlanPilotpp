@@ -97,7 +97,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13 n14 n15 n16 n17 n18 n19 n20  - cou
     (= (stacks-avail n19) 4) 
     (= (made p7) 1) 
  )
- (:bound 6)
+ (:bound 76)
  (:use-cost-metric)
  )
  

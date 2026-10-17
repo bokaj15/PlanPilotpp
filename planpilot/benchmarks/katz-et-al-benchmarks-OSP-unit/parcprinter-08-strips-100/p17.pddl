@@ -139,7 +139,7 @@
     (= (location sheet1 im1_bottomexit-lc1_entry) 1) 
     (= (hasimage sheet3 back image-5) 4) 
  )
- (:bound 1713576)
+ (:bound 57)
  (:use-cost-metric)
  )
  

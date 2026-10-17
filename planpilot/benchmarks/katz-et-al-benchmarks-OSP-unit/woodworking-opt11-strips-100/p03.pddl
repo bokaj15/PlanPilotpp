@@ -109,7 +109,7 @@
     (= (unused p0) 2) 
     (= (colour p0 natural) 1) 
  )
- (:bound 215)
+ (:bound 12)
  (:use-cost-metric)
  )
  

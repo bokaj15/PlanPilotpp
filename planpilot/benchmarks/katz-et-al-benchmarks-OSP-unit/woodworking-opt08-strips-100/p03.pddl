@@ -109,7 +109,7 @@
     (= (colour p4 black) 1) 
     (= (wood p2 oak) 2) 
  )
- (:bound 275)
+ (:bound 17)
  (:use-cost-metric)
  )
  

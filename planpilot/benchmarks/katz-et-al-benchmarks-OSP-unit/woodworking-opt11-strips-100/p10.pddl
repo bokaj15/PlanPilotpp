@@ -141,7 +141,7 @@
     (= (colour p5 red) 3) 
     (= (in-highspeed-saw b2 highspeed-saw0) 1) 
  )
- (:bound 270)
+ (:bound 17)
  (:use-cost-metric)
  )
  

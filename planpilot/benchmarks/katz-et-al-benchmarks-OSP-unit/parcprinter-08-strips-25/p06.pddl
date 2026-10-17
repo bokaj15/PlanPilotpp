@@ -120,7 +120,7 @@
     (= (location sheet3 blackcontainer_entry-blackfeeder_exit) 3) 
     (= (stackedin sheet2 finisher1_tray) 5) 
  )
- (:bound 378549)
+ (:bound 10)
  (:use-cost-metric)
  )
  

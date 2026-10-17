@@ -37,7 +37,7 @@
     (= (cw sub3 sub1) 2) 
     (= (cut-point-1 sub1) 4) 
  )
- (:bound 1)
+ (:bound 2)
  )
  
 

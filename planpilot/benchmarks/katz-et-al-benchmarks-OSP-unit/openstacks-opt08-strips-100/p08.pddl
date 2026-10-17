@@ -77,7 +77,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12  - count
     (= (waiting o7) 4) 
     (= (stacks-avail n8) 2) 
  )
- (:bound 5)
+ (:bound 41)
  (:use-cost-metric)
  )
  

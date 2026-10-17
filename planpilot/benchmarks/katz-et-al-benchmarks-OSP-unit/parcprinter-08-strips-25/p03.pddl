@@ -64,7 +64,7 @@
     (= (location sheet3 finisher2_exit) 2) 
     (= (available colorprinter-rsrc) 1) 
  )
- (:bound 201778)
+ (:bound 5)
  (:use-cost-metric)
  )
  

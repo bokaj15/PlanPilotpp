@@ -233,7 +233,7 @@
     (= (occupied pos-6-2) 4) 
     (= (last-visited pos-2-1) 2) 
  )
- (:bound 3)
+ (:bound 14)
  (:use-cost-metric)
  )
  

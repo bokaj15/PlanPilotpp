@@ -48,7 +48,7 @@
     (= (location sheet1 lbe_entry-lc1_offramp) 1) 
     (= (hasimage sheet1 back image-2) 4) 
  )
- (:bound 255128)
+ (:bound 8)
  (:use-cost-metric)
  )
  

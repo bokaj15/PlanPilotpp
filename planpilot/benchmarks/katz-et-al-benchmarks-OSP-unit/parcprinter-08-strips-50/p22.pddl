@@ -46,7 +46,7 @@
     (= (location sheet1 lc1_entryfromime-lime_exit) 5) 
     (= (location sheet1 some_finisher_tray) 4) 
  )
- (:bound 187910)
+ (:bound 7)
  (:use-cost-metric)
  )
  

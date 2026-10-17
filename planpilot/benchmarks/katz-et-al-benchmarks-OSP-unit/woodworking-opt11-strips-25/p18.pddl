@@ -171,7 +171,7 @@
     (= (colour p1 red) 1) 
     (= (treatment p9 colourfragments) 1) 
  )
- (:bound 113)
+ (:bound 7)
  (:use-cost-metric)
  )
  

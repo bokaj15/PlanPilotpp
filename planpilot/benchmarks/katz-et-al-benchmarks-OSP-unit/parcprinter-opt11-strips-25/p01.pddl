@@ -46,7 +46,7 @@
     (= (uninitialized) 5) 
     (= (location sheet1 lime_entry-lc1_exittoime) 2) 
  )
- (:bound 93955)
+ (:bound 3)
  (:use-cost-metric)
  )
  

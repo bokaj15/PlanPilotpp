@@ -30,7 +30,7 @@
     (= (location sheet1 ure_exit-uc2_onramp) 3) 
     (= (location sheet1 lc2_onramp-lre_exit) 2) 
  )
- (:bound 137106)
+ (:bound 6)
  (:use-cost-metric)
  )
  

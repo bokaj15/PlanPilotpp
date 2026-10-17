@@ -37,7 +37,7 @@
     (= (cw sub1 g40) 1) 
     (= (cw sub2 sub2) 2) 
  )
- (:bound 3)
+ (:bound 6)
  )
  
 

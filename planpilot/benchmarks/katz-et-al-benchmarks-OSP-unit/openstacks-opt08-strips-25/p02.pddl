@@ -45,7 +45,7 @@ n0 n1 n2 n3 n4 n5 n6  - count
     (= (shipped o6) 10) 
     (= (started o3) 2) 
  )
- (:bound 1)
+ (:bound 5)
  (:use-cost-metric)
  )
  

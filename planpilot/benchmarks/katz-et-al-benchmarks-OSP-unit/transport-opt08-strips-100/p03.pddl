@@ -126,7 +126,7 @@
     (= (at truck-1 city-loc-4) 3) 
     (= (at truck-1 city-loc-2) 1) 
  )
- (:bound 250)
+ (:bound 17)
  (:use-cost-metric)
  )
  

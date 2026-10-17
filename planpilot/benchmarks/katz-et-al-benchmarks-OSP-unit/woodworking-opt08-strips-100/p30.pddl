@@ -209,7 +209,7 @@
     (= (colour p7 blue) 5) 
     (= (boardsize b4 s3) 2) 
  )
- (:bound 650)
+ (:bound 37)
  (:use-cost-metric)
  )
  

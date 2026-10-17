@@ -106,7 +106,7 @@
     (= (unused p0) 1) 
     (= (treatment p1 colourfragments) 4) 
  )
- (:bound 195)
+ (:bound 12)
  (:use-cost-metric)
  )
  

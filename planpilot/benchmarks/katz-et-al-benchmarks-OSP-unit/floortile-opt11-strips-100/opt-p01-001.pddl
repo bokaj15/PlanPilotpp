@@ -73,7 +73,7 @@
     (= (clear tile_1-2) 4) 
     (= (painted tile_3-2 white) 3) 
  )
- (:bound 38)
+ (:bound 23)
  (:use-cost-metric)
  )
  

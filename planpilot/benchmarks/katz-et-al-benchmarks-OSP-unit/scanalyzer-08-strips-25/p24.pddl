@@ -29,7 +29,7 @@
     (= (on car-out-1a seg-in-1b) 10) 
     (= (on car-out-1b seg-out-1a) 10) 
  )
- (:bound 3)
+ (:bound 1)
  (:use-cost-metric)
  )
  

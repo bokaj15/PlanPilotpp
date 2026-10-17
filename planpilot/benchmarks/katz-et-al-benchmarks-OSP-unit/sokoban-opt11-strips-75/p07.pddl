@@ -414,7 +414,7 @@
     (= (clear pos-04-03) 1) 
     (= (clear pos-06-03) 1) 
  )
- (:bound 22)
+ (:bound 71)
  (:use-cost-metric)
  )
  

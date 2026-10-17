@@ -189,7 +189,7 @@
     (= (boardsize b2 s0) 5) 
     (= (in-highspeed-saw b1 highspeed-saw0) 3) 
  )
- (:bound 136)
+ (:bound 7)
  (:use-cost-metric)
  )
  

@@ -151,7 +151,7 @@
     (= (colour p6 blue) 4) 
     (= (surface-condition p2 verysmooth) 2) 
  )
- (:bound 180)
+ (:bound 12)
  (:use-cost-metric)
  )
  

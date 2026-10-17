@@ -176,7 +176,7 @@
     (= (hasimage sheet2 back image-7) 1) 
     (= (location sheet3 down_bottomentry-colorfeeder_exit) 1) 
  )
- (:bound 1590941)
+ (:bound 48)
  (:use-cost-metric)
  )
  

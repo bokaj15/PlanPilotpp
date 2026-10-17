@@ -52,7 +52,7 @@
     (= (s-next sub6 sub7) 2) 
     (= (cw sub6 sub8) 2) 
  )
- (:bound 5)
+ (:bound 14)
  )
  
 

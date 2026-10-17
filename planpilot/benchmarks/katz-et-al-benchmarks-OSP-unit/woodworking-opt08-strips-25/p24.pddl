@@ -128,7 +128,7 @@
     (= (boardsize b0 s1) 2) 
     (= (colour p1 black) 5) 
  )
- (:bound 61)
+ (:bound 3)
  (:use-cost-metric)
  )
  

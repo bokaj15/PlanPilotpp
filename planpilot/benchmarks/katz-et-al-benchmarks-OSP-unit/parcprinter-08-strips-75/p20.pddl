@@ -199,7 +199,7 @@
     (= (location sheet4 some_feeder_tray) 4) 
     (= (hasimage sheet6 front image-10) 3) 
  )
- (:bound 2065640)
+ (:bound 66)
  (:use-cost-metric)
  )
  

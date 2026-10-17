@@ -158,7 +158,7 @@
     (= (sideup sheet5 back) 5) 
     (= (location sheet2 om_returnexit-rh2_entry) 3) 
  )
- (:bound 1165152)
+ (:bound 32)
  (:use-cost-metric)
  )
  

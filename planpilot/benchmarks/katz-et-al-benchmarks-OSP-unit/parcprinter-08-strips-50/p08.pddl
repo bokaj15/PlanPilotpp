@@ -157,7 +157,7 @@
     (= (hasimage sheet4 front image-8) 4) 
     (= (location sheet5 colorcontainer_entry-down_bottomexit) 1) 
  )
- (:bound 926108)
+ (:bound 28)
  (:use-cost-metric)
  )
  

@@ -57,7 +57,7 @@
     (= (contains shot2 ingredient1) 2) 
     (= (contains shot4 cocktail2) 4) 
  )
- (:bound 90)
+ (:bound 36)
  (:use-cost-metric)
  )
  

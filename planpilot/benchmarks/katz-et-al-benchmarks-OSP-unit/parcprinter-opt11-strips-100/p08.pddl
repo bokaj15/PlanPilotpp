@@ -81,7 +81,7 @@
     (= (available uime-rsrc) 5) 
     (= (hasimage sheet1 back image-2) 4) 
  )
- (:bound 751642)
+ (:bound 29)
  (:use-cost-metric)
  )
  

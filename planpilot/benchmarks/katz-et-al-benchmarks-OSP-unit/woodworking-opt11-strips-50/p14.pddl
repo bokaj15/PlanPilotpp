@@ -160,7 +160,7 @@
     (= (colour p8 white) 3) 
     (= (surface-condition p2 verysmooth) 1) 
  )
- (:bound 175)
+ (:bound 11)
  (:use-cost-metric)
  )
  

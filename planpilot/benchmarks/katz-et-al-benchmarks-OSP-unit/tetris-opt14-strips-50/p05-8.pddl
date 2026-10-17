@@ -238,7 +238,7 @@ rightl0 rightl1 rightl2 rightl3 - right_l
     (= (at_right_l rightl2 f4-0f f5-0f f4-0f) 2) 
     (= (at_right_l rightl2 f3-3f f2-3f f3-3f) 4) 
  )
- (:bound 30)
+ (:bound 16)
  (:use-cost-metric)
  )
  

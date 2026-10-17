@@ -261,7 +261,7 @@
     (= (capacity truck-1 capacity-2) 5) 
     (= (at truck-2 city-loc-6) 2) 
  )
- (:bound 249)
+ (:bound 20)
  (:use-cost-metric)
  )
  

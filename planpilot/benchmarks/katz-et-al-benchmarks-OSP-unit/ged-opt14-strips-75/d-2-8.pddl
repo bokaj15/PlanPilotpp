@@ -52,7 +52,7 @@
     (= (cut-point-2 sub2) 5) 
     (= (cw sub1 sub5) 5) 
  )
- (:bound 3)
+ (:bound 10)
  )
  
 

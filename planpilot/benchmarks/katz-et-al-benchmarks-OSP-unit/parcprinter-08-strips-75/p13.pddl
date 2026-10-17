@@ -65,7 +65,7 @@
     (= (location sheet2 uc2_exit-om_topentry) 5) 
     (= (location sheet3 ure_entry-uc2_offramp) 1) 
  )
- (:bound 519798)
+ (:bound 18)
  (:use-cost-metric)
  )
  

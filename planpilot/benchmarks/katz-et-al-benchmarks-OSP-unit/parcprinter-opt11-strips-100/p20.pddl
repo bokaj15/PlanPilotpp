@@ -136,7 +136,7 @@
     (= (location sheet1 fe1_exit-hw1_leftentry) 2) 
     (= (available hw1-rsrc) 4) 
  )
- (:bound 1270874)
+ (:bound 50)
  (:use-cost-metric)
  )
  

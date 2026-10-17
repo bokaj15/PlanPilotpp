@@ -147,7 +147,7 @@ rightl0 - right_l
     (= (at_square square1 f3-0f) 3) 
     (= (at_two straight1 f0-1f f1-1f) 1) 
  )
- (:bound 7)
+ (:bound 4)
  (:use-cost-metric)
  )
  

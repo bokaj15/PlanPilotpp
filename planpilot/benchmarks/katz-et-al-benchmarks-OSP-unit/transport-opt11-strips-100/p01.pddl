@@ -103,7 +103,7 @@
     (= (capacity truck-2 capacity-2) 2) 
     (= (at package-2 city-2-loc-1) 3) 
  )
- (:bound 630)
+ (:bound 17)
  (:use-cost-metric)
  )
  

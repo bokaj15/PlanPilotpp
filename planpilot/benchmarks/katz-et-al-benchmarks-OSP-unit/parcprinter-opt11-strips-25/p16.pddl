@@ -195,7 +195,7 @@
     (= (notprintedwith sheet1 back black) 1) 
     (= (location sheet4 some_feeder_tray) 3) 
  )
- (:bound 622580)
+ (:bound 17)
  (:use-cost-metric)
  )
  

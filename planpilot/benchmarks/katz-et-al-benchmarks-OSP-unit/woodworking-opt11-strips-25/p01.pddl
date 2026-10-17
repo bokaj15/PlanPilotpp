@@ -106,7 +106,7 @@
     (= (colour p1 natural) 4) 
     (= (colour p2 natural) 2) 
  )
- (:bound 48)
+ (:bound 3)
  (:use-cost-metric)
  )
  

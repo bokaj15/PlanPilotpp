@@ -545,7 +545,7 @@
     (= (at truck-1 city-3-loc-4) 5) 
     (= (at package-4 city-2-loc-6) 3) 
  )
- (:bound 478)
+ (:bound 8)
  (:use-cost-metric)
  )
  

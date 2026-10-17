@@ -101,7 +101,7 @@
     (= (location sheet5 finisher1_entry-up_topexit) 3) 
     (= (hasimage sheet4 front image-4) 1) 
  )
- (:bound 572566)
+ (:bound 18)
  (:use-cost-metric)
  )
  

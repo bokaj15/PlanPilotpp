@@ -529,7 +529,7 @@
     (= (at package-5 city-2-loc-6) 4) 
     (= (at package-4 city-1-loc-12) 3) 
  )
- (:bound 436)
+ (:bound 15)
  (:use-cost-metric)
  )
  

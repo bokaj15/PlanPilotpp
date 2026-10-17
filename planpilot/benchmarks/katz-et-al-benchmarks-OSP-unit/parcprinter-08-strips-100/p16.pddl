@@ -120,7 +120,7 @@
     (= (location sheet3 uc1_entry-im1_topexit) 1) 
     (= (location sheet2 om_returnexit-rh2_entry) 3) 
  )
- (:bound 1675408)
+ (:bound 49)
  (:use-cost-metric)
  )
  

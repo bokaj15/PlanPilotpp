@@ -142,7 +142,7 @@
     (= (colour p3 black) 4) 
     (= (available b1) 5) 
  )
- (:bound 202)
+ (:bound 12)
  (:use-cost-metric)
  )
  

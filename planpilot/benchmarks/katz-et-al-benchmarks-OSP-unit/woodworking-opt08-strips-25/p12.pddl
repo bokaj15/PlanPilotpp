@@ -104,7 +104,7 @@
     (= (surface-condition p3 rough) 2) 
     (= (surface-condition p3 smooth) 5) 
  )
- (:bound 56)
+ (:bound 2)
  (:use-cost-metric)
  )
  

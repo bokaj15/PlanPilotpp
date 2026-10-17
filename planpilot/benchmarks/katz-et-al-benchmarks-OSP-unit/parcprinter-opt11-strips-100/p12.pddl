@@ -84,7 +84,7 @@
     (= (location sheet2 rh1_entry-rh2_exit) 5) 
     (= (location sheet1 im1_bottomexit-lc1_entry) 4) 
  )
- (:bound 1020512)
+ (:bound 33)
  (:use-cost-metric)
  )
  

@@ -42,7 +42,7 @@
     (= (cw sub4 sub6) 5) 
     (= (inverted sub5) 1) 
  )
- (:bound 1)
+ (:bound 3)
  )
  
 

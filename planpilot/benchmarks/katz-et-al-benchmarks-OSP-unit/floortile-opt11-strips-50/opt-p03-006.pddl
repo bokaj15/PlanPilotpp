@@ -108,7 +108,7 @@
     (= (robot-at robot2 tile_5-3) 4) 
     (= (clear tile_4-3) 1) 
  )
- (:bound 30)
+ (:bound 21)
  (:use-cost-metric)
  )
  

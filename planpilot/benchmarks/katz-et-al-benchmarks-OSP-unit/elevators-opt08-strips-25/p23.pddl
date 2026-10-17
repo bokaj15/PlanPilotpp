@@ -81,7 +81,7 @@ slow0-0 slow1-0 slow2-0 - slow-elevator
     (= (passengers slow1-0 n1) 1) 
     (= (lift-at slow1-0 n4) 2) 
  )
- (:bound 17)
+ (:bound 5)
  (:use-cost-metric)
  )
  

@@ -199,7 +199,7 @@
     (= (at package-3 city-loc-13) 4) 
     (= (capacity truck-1 capacity-1) 5) 
  )
- (:bound 141)
+ (:bound 13)
  (:use-cost-metric)
  )
  

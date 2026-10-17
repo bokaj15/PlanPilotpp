@@ -172,7 +172,7 @@
     (= (wood b1 mahogany) 4) 
     (= (treatment p0 colourfragments) 3) 
  )
- (:bound 416)
+ (:bound 18)
  (:use-cost-metric)
  )
  

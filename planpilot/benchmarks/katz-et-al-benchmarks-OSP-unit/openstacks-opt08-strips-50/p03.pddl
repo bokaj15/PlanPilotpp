@@ -50,7 +50,7 @@ n0 n1 n2 n3 n4 n5 n6 n7  - count
     (= (shipped o7) 10) 
     (= (stacks-avail n4) 3) 
  )
- (:bound 1)
+ (:bound 11)
  (:use-cost-metric)
  )
  

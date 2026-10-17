@@ -304,7 +304,7 @@ rightl0 rightl1 rightl2 rightl3 - right_l
     (= (at_right_l rightl1 f4-2f f3-2f f3-1f) 5) 
     (= (at_square square0 f1-2f) 1) 
  )
- (:bound 57)
+ (:bound 25)
  (:use-cost-metric)
  )
  

@@ -178,7 +178,7 @@
     (= (location sheet2 hw1_toprightentry-uc1_exit) 2) 
     (= (location sheet2 uc1_exittoime-uime_entry) 5) 
  )
- (:bound 1188632)
+ (:bound 36)
  (:use-cost-metric)
  )
  

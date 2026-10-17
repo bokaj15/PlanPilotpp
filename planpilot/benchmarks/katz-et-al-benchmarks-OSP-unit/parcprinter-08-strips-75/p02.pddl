@@ -47,7 +47,7 @@
     (= (location sheet1 finisher2_exit) 5) 
     (= (location sheet1 down_bottomentry-colorfeeder_exit) 3) 
  )
- (:bound 328535)
+ (:bound 11)
  (:use-cost-metric)
  )
  

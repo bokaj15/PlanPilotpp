@@ -213,7 +213,7 @@
     (= (surface-condition p6 smooth) 2) 
     (= (wood p0 oak) 2) 
  )
- (:bound 136)
+ (:bound 8)
  (:use-cost-metric)
  )
  

@@ -56,7 +56,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8  - count
     (= (stacks-avail n3) 1) 
     (= (not-made p1) 4) 
  )
- (:bound 1)
+ (:bound 6)
  (:use-cost-metric)
  )
  

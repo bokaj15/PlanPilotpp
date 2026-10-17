@@ -89,7 +89,7 @@
     (= (treatment p0 untreated) 5) 
     (= (surface-condition p0 rough) 2) 
  )
- (:bound 97)
+ (:bound 5)
  (:use-cost-metric)
  )
  

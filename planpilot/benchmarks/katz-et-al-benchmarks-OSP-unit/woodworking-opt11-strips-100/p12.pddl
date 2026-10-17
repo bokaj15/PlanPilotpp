@@ -155,7 +155,7 @@
     (= (surface-condition p4 verysmooth) 2) 
     (= (treatment p7 colourfragments) 3) 
  )
- (:bound 315)
+ (:bound 17)
  (:use-cost-metric)
  )
  

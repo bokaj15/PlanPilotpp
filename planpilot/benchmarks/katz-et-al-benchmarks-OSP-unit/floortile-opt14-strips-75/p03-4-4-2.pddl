@@ -119,7 +119,7 @@
     (= (painted tile_0-1 white) 3) 
     (= (robot-has robot2 black) 2) 
  )
- (:bound 54)
+ (:bound 36)
  (:use-cost-metric)
  )
  

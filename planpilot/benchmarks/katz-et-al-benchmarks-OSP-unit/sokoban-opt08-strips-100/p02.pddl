@@ -203,7 +203,7 @@
     (= (at stone-02 pos-2-4) 4) 
     (= (at stone-01 pos-4-3) 3) 
  )
- (:bound 9)
+ (:bound 35)
  (:use-cost-metric)
  )
  

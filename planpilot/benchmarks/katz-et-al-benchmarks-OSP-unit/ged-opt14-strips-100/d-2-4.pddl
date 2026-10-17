@@ -27,7 +27,7 @@
     (= (splice-point-1 sub3) 2) 
     (= (cw sub1 sub3) 5) 
  )
- (:bound 2)
+ (:bound 6)
  )
  
 

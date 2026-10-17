@@ -138,7 +138,7 @@
     (= (location sheet6 htmoverblack_exit-down_topentry) 3) 
     (= (stackedin sheet5 finisher2_tray) 2) 
  )
- (:bound 691560)
+ (:bound 25)
  (:use-cost-metric)
  )
  

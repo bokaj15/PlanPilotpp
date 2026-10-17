@@ -153,7 +153,7 @@
     (= (colour p4 natural) 5) 
     (= (boardsize b2 s1) 4) 
  )
- (:bound 107)
+ (:bound 5)
  (:use-cost-metric)
  )
  

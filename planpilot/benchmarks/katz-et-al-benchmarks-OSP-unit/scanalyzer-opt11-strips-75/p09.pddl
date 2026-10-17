@@ -184,7 +184,7 @@
     (= (on car-out-6 seg-in-7) 4) 
     (= (on car-out-2 seg-out-3) 3) 
  )
- (:bound 31)
+ (:bound 10)
  (:use-cost-metric)
  )
  

@@ -316,7 +316,7 @@
     (= (clear pos-6-6) 5) 
     (= (at stone-01 pos-3-3) 1) 
  )
- (:bound 2)
+ (:bound 12)
  (:use-cost-metric)
  )
  

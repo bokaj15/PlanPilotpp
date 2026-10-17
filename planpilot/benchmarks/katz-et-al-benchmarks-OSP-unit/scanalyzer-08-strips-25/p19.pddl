@@ -274,7 +274,7 @@
     (= (on car-in-8 seg-out-4) 1) 
     (= (on car-out-9 seg-in-1) 3) 
  )
- (:bound 13)
+ (:bound 4)
  (:use-cost-metric)
  )
  

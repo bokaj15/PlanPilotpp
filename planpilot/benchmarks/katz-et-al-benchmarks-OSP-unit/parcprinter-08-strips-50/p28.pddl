@@ -154,7 +154,7 @@
     (= (hasimage sheet1 front image-6) 1) 
     (= (sideup sheet5 back) 3) 
  )
- (:bound 840641)
+ (:bound 28)
  (:use-cost-metric)
  )
  

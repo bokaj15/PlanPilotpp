@@ -30,7 +30,7 @@
     (= (available finisher2-rsrc) 3) 
     (= (location sheet1 down_bottomentry-colorfeeder_exit) 4) 
  )
- (:bound 126756)
+ (:bound 6)
  (:use-cost-metric)
  )
  

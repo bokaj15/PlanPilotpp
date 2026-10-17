@@ -195,7 +195,7 @@
     (= (boardsize b3 s1) 1) 
     (= (surface-condition p2 verysmooth) 4) 
  )
- (:bound 430)
+ (:bound 22)
  (:use-cost-metric)
  )
  

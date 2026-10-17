@@ -157,7 +157,7 @@
     (= (notprintedwith sheet7 back black) 4) 
     (= (available up-rsrc) 4) 
  )
- (:bound 1852217)
+ (:bound 57)
  (:use-cost-metric)
  )
  

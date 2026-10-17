@@ -109,7 +109,7 @@
     (= (empty highspeed-saw0) 5) 
     (= (surface-condition p1 smooth) 1) 
  )
- (:bound 206)
+ (:bound 12)
  (:use-cost-metric)
  )
  

@@ -166,7 +166,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13 n14 n15 n16 n17 n18 n19 n20 n21 n2
     (= (waiting o21) 3) 
     (= (started o13) 4) 
  )
- (:bound 1)
+ (:bound 24)
  (:use-cost-metric)
  )
  

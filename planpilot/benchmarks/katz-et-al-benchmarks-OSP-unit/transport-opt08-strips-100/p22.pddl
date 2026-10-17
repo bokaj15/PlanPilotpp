@@ -72,7 +72,7 @@
     (= (in package-1 truck-1) 4) 
     (= (capacity truck-1 capacity-3) 2) 
  )
- (:bound 632)
+ (:bound 12)
  (:use-cost-metric)
  )
  

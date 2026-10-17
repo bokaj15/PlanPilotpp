@@ -65,7 +65,7 @@
     (= (hasimage sheet3 front image-2) 2) 
     (= (notprintedwith sheet2 back black) 5) 
  )
- (:bound 173266)
+ (:bound 6)
  (:use-cost-metric)
  )
  

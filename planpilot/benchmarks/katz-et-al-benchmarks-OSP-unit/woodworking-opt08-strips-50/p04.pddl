@@ -131,7 +131,7 @@
     (= (treatment p0 colourfragments) 4) 
     (= (treatment p2 glazed) 1) 
  )
- (:bound 140)
+ (:bound 7)
  (:use-cost-metric)
  )
  

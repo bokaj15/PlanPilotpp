@@ -353,7 +353,7 @@
     (= (at stone-04 pos-07-04) 5) 
     (= (at player-01 pos-06-06) 2) 
  )
- (:bound 35)
+ (:bound 123)
  (:use-cost-metric)
  )
  

@@ -173,7 +173,7 @@
     (= (wood b1 pine) 5) 
     (= (unused p5) 1) 
  )
- (:bound 200)
+ (:bound 12)
  (:use-cost-metric)
  )
  

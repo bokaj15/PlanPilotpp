@@ -131,7 +131,7 @@
     (= (surface-condition b2 rough) 2) 
     (= (colour p3 natural) 3) 
  )
- (:bound 140)
+ (:bound 7)
  (:use-cost-metric)
  )
  

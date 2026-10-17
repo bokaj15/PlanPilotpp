@@ -120,7 +120,7 @@
     (= (boardsize b1 s2) 4) 
     (= (unused p5) 5) 
  )
- (:bound 168)
+ (:bound 9)
  (:use-cost-metric)
  )
  

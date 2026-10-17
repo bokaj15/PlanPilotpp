@@ -71,7 +71,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11  - count
     (= (started o11) 1) 
     (= (made p10) 4) 
  )
- (:bound 1)
+ (:bound 9)
  (:use-cost-metric)
  )
  

@@ -210,7 +210,7 @@
     (= (wood p3 oak) 2) 
     (= (wood p9 oak) 4) 
  )
- (:bound 222)
+ (:bound 13)
  (:use-cost-metric)
  )
  

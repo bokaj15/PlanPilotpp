@@ -299,7 +299,7 @@
     (= (at player-01 pos-8-2) 3) 
     (= (at player-01 pos-3-4) 2) 
  )
- (:bound 21)
+ (:bound 62)
  (:use-cost-metric)
  )
  

@@ -261,7 +261,7 @@
     (= (at truck-1 city-loc-12) 3) 
     (= (at package-1 city-loc-6) 1) 
  )
- (:bound 166)
+ (:bound 13)
  (:use-cost-metric)
  )
  

@@ -153,7 +153,7 @@
     (= (surface-condition p0 rough) 5) 
     (= (wood b0 cherry) 1) 
  )
- (:bound 322)
+ (:bound 16)
  (:use-cost-metric)
  )
  

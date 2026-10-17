@@ -108,7 +108,7 @@
     (= (painted tile_3-3 black) 2) 
     (= (painted tile_0-1 black) 4) 
  )
- (:bound 65)
+ (:bound 42)
  (:use-cost-metric)
  )
  

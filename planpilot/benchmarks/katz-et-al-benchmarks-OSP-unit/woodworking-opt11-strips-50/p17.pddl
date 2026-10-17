@@ -172,7 +172,7 @@
     (= (wood p4 mahogany) 3) 
     (= (boardsize b3 s0) 4) 
  )
- (:bound 277)
+ (:bound 12)
  (:use-cost-metric)
  )
  

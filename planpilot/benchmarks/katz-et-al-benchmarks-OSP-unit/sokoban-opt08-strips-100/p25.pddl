@@ -350,7 +350,7 @@
     (= (at stone-02 pos-09-04) 3) 
     (= (at player-01 pos-03-05) 2) 
  )
- (:bound 39)
+ (:bound 155)
  (:use-cost-metric)
  )
  

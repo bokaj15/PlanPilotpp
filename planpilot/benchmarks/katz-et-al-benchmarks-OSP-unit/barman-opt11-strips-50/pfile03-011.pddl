@@ -64,7 +64,7 @@
     (= (contains shot3 ingredient1) 4) 
     (= (holding left shot2) 3) 
  )
- (:bound 84)
+ (:bound 31)
  (:use-cost-metric)
  )
  

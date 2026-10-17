@@ -88,7 +88,7 @@
     (= (wood p2 beech) 10) 
     (= (available b1) 2) 
  )
- (:bound 42)
+ (:bound 2)
  (:use-cost-metric)
  )
  

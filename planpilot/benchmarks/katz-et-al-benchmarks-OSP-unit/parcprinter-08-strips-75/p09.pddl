@@ -176,7 +176,7 @@
     (= (hasimage sheet7 front image-1) 3) 
     (= (hasimage sheet7 front image-9) 3) 
  )
- (:bound 1590941)
+ (:bound 48)
  (:use-cost-metric)
  )
  

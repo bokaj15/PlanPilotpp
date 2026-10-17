@@ -54,7 +54,7 @@
     (= (on car-in-2b seg-in-1b) 1) 
     (= (on car-out-1a seg-out-1b) 5) 
  )
- (:bound 25)
+ (:bound 13)
  (:use-cost-metric)
  )
  

@@ -47,7 +47,7 @@
     (= (location sheet2 endcap_entry-blackcontainer_exit) 3) 
     (= (location sheet2 blackcontainer_exittoime-blackprinter_entry) 1) 
  )
- (:bound 328535)
+ (:bound 11)
  (:use-cost-metric)
  )
  

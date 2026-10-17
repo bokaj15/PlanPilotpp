@@ -160,7 +160,7 @@
     (= (colour p8 green) 4) 
     (= (colour p3 white) 3) 
  )
- (:bound 350)
+ (:bound 22)
  (:use-cost-metric)
  )
  

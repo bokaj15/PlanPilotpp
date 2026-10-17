@@ -83,7 +83,7 @@
     (= (location sheet3 down_topexit-htmovercolor_entry) 1) 
     (= (location sheet4 htmoverblack_entry-endcap_exit) 2) 
  )
- (:bound 219023)
+ (:bound 7)
  (:use-cost-metric)
  )
  

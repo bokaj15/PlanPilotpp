@@ -108,7 +108,7 @@
     (= (surface-condition p0 verysmooth) 3) 
     (= (colour p1 white) 4) 
  )
- (:bound 92)
+ (:bound 4)
  (:use-cost-metric)
  )
  

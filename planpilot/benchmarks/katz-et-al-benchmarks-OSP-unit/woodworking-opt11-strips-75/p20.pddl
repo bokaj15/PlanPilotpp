@@ -189,7 +189,7 @@
     (= (boardsize b1 s0) 4) 
     (= (boardsize b0 s1) 4) 
  )
- (:bound 408)
+ (:bound 22)
  (:use-cost-metric)
  )
  

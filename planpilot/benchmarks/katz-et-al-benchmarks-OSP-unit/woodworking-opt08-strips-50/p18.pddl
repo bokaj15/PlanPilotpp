@@ -171,7 +171,7 @@
     (= (wood p7 walnut) 2) 
     (= (boardsize b0 s2) 3) 
  )
- (:bound 227)
+ (:bound 14)
  (:use-cost-metric)
  )
  

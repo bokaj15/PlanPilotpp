@@ -120,7 +120,7 @@
     (= (hasimage sheet5 back image-5) 2) 
     (= (hasimage sheet3 back image-2) 3) 
  )
- (:bound 1675408)
+ (:bound 49)
  (:use-cost-metric)
  )
  

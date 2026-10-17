@@ -111,7 +111,7 @@
     (= (on car-out-2 seg-in-2) 4) 
     (= (on car-in-4 seg-out-3) 2) 
  )
- (:bound 15)
+ (:bound 5)
  (:use-cost-metric)
  )
  

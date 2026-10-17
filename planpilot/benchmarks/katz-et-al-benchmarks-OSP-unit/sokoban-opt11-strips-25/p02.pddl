@@ -537,7 +537,7 @@
     (= (at player-01 pos-06-06) 1) 
     (= (clear pos-02-08) 4) 
  )
- (:bound 9)
+ (:bound 23)
  (:use-cost-metric)
  )
  

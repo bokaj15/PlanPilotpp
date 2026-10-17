@@ -184,7 +184,7 @@
     (= (treatment p2 untreated) 5) 
     (= (colour p8 natural) 2) 
  )
- (:bound 103)
+ (:bound 6)
  (:use-cost-metric)
  )
  

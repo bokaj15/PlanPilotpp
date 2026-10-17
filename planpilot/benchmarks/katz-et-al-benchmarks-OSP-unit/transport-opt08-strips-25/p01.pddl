@@ -46,7 +46,7 @@
     (= (at package-2 city-loc-2) 10) 
     (= (capacity truck-2 capacity-1) 5) 
  )
- (:bound 13)
+ (:bound 1)
  (:use-cost-metric)
  )
  

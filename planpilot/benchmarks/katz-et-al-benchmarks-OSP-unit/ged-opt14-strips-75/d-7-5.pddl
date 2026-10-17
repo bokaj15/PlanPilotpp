@@ -41,7 +41,7 @@
     (= (s-next g90 sub2) 4) 
     (= (cw sub5 sub1) 5) 
  )
- (:bound 3)
+ (:bound 9)
  )
  
 

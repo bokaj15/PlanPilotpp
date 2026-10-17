@@ -82,7 +82,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13  - count
     (= (made p10) 2) 
     (= (made p8) 5) 
  )
- (:bound 1)
+ (:bound 10)
  (:use-cost-metric)
  )
  

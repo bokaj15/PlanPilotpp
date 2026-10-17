@@ -800,7 +800,7 @@
     (= (capacity truck-3 capacity-0) 2) 
     (= (at package-5 city-1-loc-9) 4) 
  )
- (:bound 2138)
+ (:bound 47)
  (:use-cost-metric)
  )
  

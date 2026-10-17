@@ -102,7 +102,7 @@
     (= (notprintedwith sheet2 front black) 5) 
     (= (notprintedwith sheet3 front color) 1) 
  )
- (:bound 303959)
+ (:bound 10)
  (:use-cost-metric)
  )
  

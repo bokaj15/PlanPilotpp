@@ -48,7 +48,7 @@
     (= (location sheet2 im1_bottomexit-lc1_entry) 1) 
     (= (available ube-rsrc) 4) 
  )
- (:bound 510256)
+ (:bound 17)
  (:use-cost-metric)
  )
  

@@ -84,7 +84,7 @@
     (= (treatment p2 varnished) 10) 
     (= (available b0) 4) 
  )
- (:bound 23)
+ (:bound 1)
  (:use-cost-metric)
  )
  

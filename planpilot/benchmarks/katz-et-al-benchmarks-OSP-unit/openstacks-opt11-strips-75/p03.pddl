@@ -77,7 +77,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12  - count
     (= (started o3) 1) 
     (= (started o10) 3) 
  )
- (:bound 3)
+ (:bound 30)
  (:use-cost-metric)
  )
  

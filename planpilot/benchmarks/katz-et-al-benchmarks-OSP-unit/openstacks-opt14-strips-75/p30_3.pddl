@@ -139,7 +139,7 @@ n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13 n14 n15 n16 n17 n18 n19 n20 n21 n2
     (= (waiting o4) 1) 
     (= (stacks-avail n29) 4) 
  )
- (:bound 10)
+ (:bound 84)
  (:use-cost-metric)
  )
  

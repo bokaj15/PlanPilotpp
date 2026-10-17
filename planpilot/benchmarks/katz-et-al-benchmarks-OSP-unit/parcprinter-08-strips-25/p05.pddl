@@ -101,7 +101,7 @@
     (= (location sheet1 colorcontainer_entry-down_bottomexit) 3) 
     (= (location sheet3 down_topexit-htmovercolor_entry) 3) 
  )
- (:bound 286283)
+ (:bound 9)
  (:use-cost-metric)
  )
  

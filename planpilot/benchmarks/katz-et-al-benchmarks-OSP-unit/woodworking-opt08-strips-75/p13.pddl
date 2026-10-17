@@ -109,7 +109,7 @@
     (= (wood p2 mahogany) 5) 
     (= (treatment p2 untreated) 2) 
  )
- (:bound 161)
+ (:bound 9)
  (:use-cost-metric)
  )
  

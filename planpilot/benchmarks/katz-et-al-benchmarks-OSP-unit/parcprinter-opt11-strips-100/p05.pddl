@@ -64,7 +64,7 @@
     (= (sideup sheet2 back) 2) 
     (= (location sheet3 fe1_exit-hw1_leftentry) 1) 
  )
- (:bound 519232)
+ (:bound 22)
  (:use-cost-metric)
  )
  

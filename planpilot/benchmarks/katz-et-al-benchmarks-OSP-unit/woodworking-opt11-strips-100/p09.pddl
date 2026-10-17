@@ -142,7 +142,7 @@
     (= (colour p1 green) 3) 
     (= (unused p1) 5) 
  )
- (:bound 270)
+ (:bound 16)
  (:use-cost-metric)
  )
  

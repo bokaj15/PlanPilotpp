@@ -210,7 +210,7 @@ rightl0 rightl1 - right_l
     (= (at_right_l rightl0 f5-2f f5-1f f6-1f) 2) 
     (= (at_right_l rightl1 f1-2f f0-2f f1-2f) 4) 
  )
- (:bound 19)
+ (:bound 10)
  (:use-cost-metric)
  )
  

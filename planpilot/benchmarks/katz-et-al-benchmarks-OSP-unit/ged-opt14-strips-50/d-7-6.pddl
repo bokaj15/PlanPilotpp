@@ -36,7 +36,7 @@
     (= (splice-next sub3) 2) 
     (= (splice-next sub5) 1) 
  )
- (:bound 2)
+ (:bound 6)
  )
  
 
