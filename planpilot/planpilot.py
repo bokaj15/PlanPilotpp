@@ -50,7 +50,7 @@ def run_fd_translator(domain, instance):
         exit(process.returncode)
 
 def run_symosp_translator(domain, instance):
-    binary_path = fix_path("third-party/downward-projects/symbolic-osp/src/translate/translate.py")
+    binary_path = fix_path("third-party/sym-osp/src/translate/translate.py")
     command = [
         sys.executable,
         binary_path,

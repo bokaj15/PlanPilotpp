@@ -28,6 +28,7 @@ Stage: run
     /tools/planpilot.py /tools/planpilot.py
     /tools/scripts/ /tools/scripts/
     /tools/translate/ /tools/translate/
+    /tools/third-party/sym-osp/src/translate/ /tools/third-party/sym-osp/src/translate/
 
 %post
     apt-get update

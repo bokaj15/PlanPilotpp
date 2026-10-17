@@ -52,6 +52,7 @@ ATTRIBUTES = [
     "total_time",
     "plan_length",
     "plan_utility",
+    "solved",
 ]
 
 REMOTE = ArrheniusEnvironment.is_present()

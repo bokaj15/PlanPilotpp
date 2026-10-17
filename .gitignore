@@ -9,7 +9,6 @@ planpilot/output.sas
 planpilot/third-party/downward-projects/benchmarks
 planpilot/third-party/downward-projects/downward
 planpilot/third-party/downward-projects/VAL
-planpilot/Apptainer.planpilot
 planpilot/benchmarks/katz-et-al-benchmarks/
 planpilot/__pycache__/
 plasp/lib/cxxopts/ 
