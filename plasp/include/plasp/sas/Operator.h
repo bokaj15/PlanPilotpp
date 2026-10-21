@@ -46,6 +46,8 @@ class Operator
 		const Effects &effects() const;
 		size_t costs() const;
 
+		void appendToName(const std::string &suffix);
+
 	private:
 		Operator() = default;
 

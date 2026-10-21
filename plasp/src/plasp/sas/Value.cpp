@@ -1,5 +1,6 @@
 #include <plasp/sas/Value.h>
 
+#include <algorithm>
 #include <iostream>
 
 #include <tokenize/TokenizerException.h>
@@ -82,6 +83,7 @@ Value Value::fromSAS(tokenize::Tokenizer<> &tokenizer)
 	{
 		tokenizer.skipWhiteSpace();
 		value.m_name = tokenizer.getLine();
+		value.m_name.erase(std::remove(value.m_name.begin(), value.m_name.end(), ' '), value.m_name.end());
 
 		// Remove trailing ()
 		if (value.m_name.find("()") != std::string::npos)

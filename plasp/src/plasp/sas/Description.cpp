@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 #include <tokenize/TokenizerException.h>
 
@@ -292,6 +293,22 @@ void Description::parseOperatorSection(tokenize::Tokenizer<> &tokenizer)
 
 	for (size_t i = 0; i < numberOfOperators; i++)
 		m_operators.emplace_back(Operator::fromSAS(tokenizer, m_variables));
+
+	std::map<std::string, size_t> copies;
+
+	for (auto &operator_ : m_operators)
+	{
+		std::stringstream key;
+		key << operator_.predicate().name();
+
+		for (const auto &argument : operator_.predicate().arguments())
+			key << " " << argument;
+
+		const auto copy = ++copies[key.str()];
+
+		if (copy > 1)
+			operator_.appendToName("#" + std::to_string(copy));
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

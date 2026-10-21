@@ -34,6 +34,8 @@ class Predicate
 		const std::string &name() const;
 		const Arguments &arguments() const;
 
+		void appendToName(const std::string &suffix);
+
 	private:
 		std::string m_name;
 		std::vector<std::string> m_arguments;
