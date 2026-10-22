@@ -7,7 +7,7 @@ import utils
 import clingo
 
 from subprocess import Popen, PIPE
-
+from mugs import compute_mugs
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -340,6 +340,13 @@ def remove_lp_files():
             except Exception as e:
                 logger.error(f"Error removing {file_path}: {e}")
 
+def run_mugs(lp):
+    clingo_args = ["0"]
+    with open(lp) as f:
+        mugs = compute_mugs(f.read(), clingo_args)
+    for m in mugs:
+        logger.info(f"MUGS: {sorted(m)}")
+    logger.info(f"Found {len(mugs)} MUGS")
 
 def translate_partial_plan_into_constraints(file_path: str) -> str | None:
     # TODO: give the name of specific format
@@ -421,6 +428,10 @@ if __name__ == "__main__":
         args.osp,
         pddl_instance,
     )
+
+    if args.mugs and args.osp:
+        logger.info("Computing MUGS...")
+        run_mugs(args.lp_name)
 
     if args.osp == "max":
         logger.info("Running clingo...")

@@ -110,6 +110,13 @@ def parse_arguments():
         help="The path to the fasb script; for non-interactive mode (requires fasb built in"
         "interpreter configuration.",
     )
+
+    parser.add_argument(
+        "--mugs",
+        action="store_true",
+        help="Compute the minimal unsolvable goal subsets (MUGS) of an OSP task.",
+    )
+
     parser.add_argument(
         "--dump-output",
         action="store_true",

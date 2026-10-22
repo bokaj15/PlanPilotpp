@@ -26,6 +26,8 @@ Stage: run
     /tools/bin/fasb-x86_64-unknown-linux-gnu/ /tools/bin/fasb-x86_64-unknown-linux-gnu/
     /tools/utils.py /tools/utils.py
     /tools/planpilot.py /tools/planpilot.py
+    /tools/mugs.py /tools/mugs.py
+    /tools/third-party/fasb/target/wheels/ /tools/wheels/
     /tools/scripts/ /tools/scripts/
     /tools/translate/ /tools/translate/
     /tools/third-party/sym-osp/src/translate/ /tools/third-party/sym-osp/src/translate/
@@ -34,6 +36,7 @@ Stage: run
     apt-get update
     apt-get -y install --no-install-recommends python3.12 python3-pip libc6
     pip3 install --no-cache-dir --break-system-packages clingo
+    pip3 install --no-cache-dir --break-system-packages /tools/wheels/fasb-*.whl
     rm -rf /var/lib/apt/lists/*
 
 %environment
