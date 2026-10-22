@@ -113,7 +113,10 @@ def parse_arguments():
 
     parser.add_argument(
         "--mugs",
-        action="store_true",
+        nargs="?",
+        const="interactive",
+        default=None,
+        choices=["interactive", "exp"],
         help="Compute the minimal unsolvable goal subsets (MUGS) of an OSP task.",
     )
 

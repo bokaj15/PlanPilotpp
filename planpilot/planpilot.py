@@ -432,13 +432,14 @@ if __name__ == "__main__":
     if args.mugs and args.osp:
         logger.info("Computing MUGS...")
         run_mugs(args.lp_name)
-
+    
     if args.osp == "max":
         logger.info("Running clingo...")
         run_clingo(args.lp_name, args.horizon)
     else:
-        logger.info("Running fasb...")
-        run_fasb(args.lp_name, args.horizon, args.script)
+        if not args.mugs == "exp":
+            logger.info("Running fasb...")
+            run_fasb(args.lp_name, args.horizon, args.script)
 
     if args.cleanup:
         remove_lp_files()

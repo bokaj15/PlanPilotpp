@@ -31,6 +31,7 @@ pub mod wrappers_bindings {
         pub program_version: u64,
         pub cache_enabled: bool,
         pub optimized_enabled: bool,
+        pub verbose: bool,
     }
 
     impl PyNavigator {
@@ -61,6 +62,7 @@ pub mod wrappers_bindings {
                 program_version: 0,
                 cache_enabled: false,
                 optimized_enabled: false,
+                verbose: true,
             })
         }
 
@@ -90,6 +92,10 @@ pub mod wrappers_bindings {
 
         pub fn set_optimized_enabled(&mut self, enabled: bool) {
             self.optimized_enabled = enabled;
+        }
+
+        pub fn set_verbose(&mut self, enabled: bool) {
+            self.verbose = enabled;
         }
 
         pub fn is_optimized_enabled(&self) -> bool {

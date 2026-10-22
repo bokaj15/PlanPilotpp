@@ -99,7 +99,9 @@ pub mod interpreter_bindings {
         } else {
             all_facets
         };
-        println!("time elapsed: {:?}", start.elapsed());
+        if nav.verbose {
+            println!("time elapsed: {:?}", start.elapsed());
+        }
         Ok(facets)
     }
 
@@ -109,9 +111,10 @@ pub mod interpreter_bindings {
         atoms: Vec<String>,
         route: Vec<String>,
         args: Vec<String>,
-    ) -> PyResult<()> {
+    ) -> PyResult<Vec<String>> {
         let start = Instant::now();
 
+        let mut result = Vec::new();
         let fst = args.first().map(|s| s.as_str());
 
         match fst {
@@ -124,13 +127,19 @@ pub mod interpreter_bindings {
                     if let Some(re) = args.get(1).and_then(|s| Regex::new(r#s).ok()) {
                         for f in atoms.iter() {
                             if re.is_match(f) && xs.contains(f) {
-                                println!("{f}");
+                                if nav.verbose {
+                                    println!("{f}");
+                                }
+                                result.push(f.clone());
                             }
                         }
                     } else {
                         for f in atoms.iter() {
                             if xs.contains(f) {
-                                println!("{f}");
+                                if nav.verbose {
+                                    println!("{f}");
+                                }
+                                result.push(f.clone());
                             }
                         }
                     }
@@ -146,13 +155,19 @@ pub mod interpreter_bindings {
                     if let Some(re) = args.get(1).and_then(|s| Regex::new(r#s).ok()) {
                         for f in atoms.iter() {
                             if re.is_match(f) && !xs.contains(f) {
-                                println!("{f}");
+                                if nav.verbose {
+                                    println!("{f}");
+                                }
+                                result.push(f.clone());
                             }
                         }
                     } else {
                         for f in atoms.iter() {
                             if !xs.contains(f) {
-                                println!("{f}")
+                                if nav.verbose {
+                                    println!("{f}");
+                                }
+                                result.push(f.clone());
                             }
                         }
                     }
@@ -215,9 +230,10 @@ pub mod interpreter_bindings {
                 }
             }
         }
-
-        println!("ent time elapsed: {:?}", start.elapsed());
-        Ok(())
+        if nav.verbose{
+            println!("ent time elapsed: {:?}", start.elapsed());
+        }
+        Ok(result)
     }
 
     #[pyfunction]
@@ -918,6 +934,11 @@ pub mod interpreter_bindings {
         }
 
         Ok(())
+    }
+
+    #[pyfunction]
+    pub fn atoms(nav: &mut PyNavigator) -> PyResult<Vec<String>> {
+        Ok(nav.nav.atoms().collect())
     }
 
     #[pyfunction]

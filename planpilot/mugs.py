@@ -33,6 +33,7 @@ def dfs(nav, enforce_soft_goal, candidate_goal, activated_goals, list_MUGS):
 
 def compute_mugs(lp, clingo_args):
   nav = wb.PyNavigator(lp, clingo_args)
+  nav.set_verbose(False)
   soft_goal_facets = ib.compute_facets(nav, [],  [r'^softGoal\('])
   all_MUGS = []
 
