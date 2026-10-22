@@ -1,14 +1,16 @@
 planpilot/experiments/osp_26_09_21/data/
-planpilot/experiments/osp_26_09_21/results/
 planpilot/experiments/osp_26_09_21/results_scripts/
 planpilot/experiments/osp_26_09_21/__pycache__/
 planpilot/experiments/lm-cut-lama-bounds/data/
+planpilot/experiments/osp_26_09_21/old_results/
+planpilot/experiments/osp_26_09_21/paper_writing
 planpilot/instance.lp
 planpilot/planpilot.sif
 planpilot/output.sas
 planpilot/third-party/downward-projects/benchmarks
 planpilot/third-party/downward-projects/downward
 planpilot/third-party/downward-projects/VAL
+planpilot/third-party/extra/
 planpilot/benchmarks/katz-et-al-benchmarks/
 planpilot/__pycache__/
 plasp/lib/cxxopts/ 
