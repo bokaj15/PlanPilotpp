@@ -34,8 +34,13 @@ def dfs(nav, enforce_soft_goal, candidate_goal, activated_goals, list_MUGS):
 def compute_mugs(lp, clingo_args):
   nav = wb.PyNavigator(lp, clingo_args)
   soft_goal_facets = ib.compute_facets(nav, [],  [r'^softGoal\('])
-
   all_MUGS = []
+
+  impossible_soft_goals = ib.entailment(nav, ib.atoms(nav), [], ['%%', r'^softGoal\('])
+
+  for g in impossible_soft_goals:
+    all_MUGS.append({g})
+
   for i, soft_goal in enumerate(soft_goal_facets):
     candidate_goals = soft_goal_facets[i+1:]
     if candidate_goals:
