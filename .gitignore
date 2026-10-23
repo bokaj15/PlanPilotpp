@@ -1,9 +1,14 @@
 planpilot/experiments/osp_26_09_21/data/
 planpilot/experiments/osp_26_09_21/results_scripts/
 planpilot/experiments/osp_26_09_21/__pycache__/
-planpilot/experiments/lm-cut-lama-bounds/data/
 planpilot/experiments/osp_26_09_21/old_results/
 planpilot/experiments/osp_26_09_21/paper_writing
+planpilot/experiments/mugs_26_10_23/data/
+planpilot/experiments/mugs_26_10_23/results_scripts/
+planpilot/experiments/mugs_26_10_23/__pycache__/
+planpilot/experiments/mugs_26_10_23/old_results/
+planpilot/experiments/mugs_26_10_23/paper_writing
+planpilot/experiments/lm-cut-lama-bounds/data/
 planpilot/instance.lp
 planpilot/planpilot.sif
 planpilot/output.sas
