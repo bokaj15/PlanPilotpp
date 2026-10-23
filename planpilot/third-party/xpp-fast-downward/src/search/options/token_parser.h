@@ -2,7 +2,7 @@
 #define OPTIONS_TOKEN_PARSER_H
 
 #include "predefinitions.h"
-
+#include <limits>
 #include <sstream>
 
 namespace options {

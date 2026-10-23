@@ -2,6 +2,7 @@
 #define MUGS_UTILS_H
 
 #include <cassert>
+#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <iterator>
