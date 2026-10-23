@@ -12,6 +12,7 @@ planpilot/third-party/downward-projects/downward
 planpilot/third-party/downward-projects/VAL
 planpilot/third-party/extra/
 planpilot/benchmarks/katz-et-al-benchmarks/
+planpilot/benchmarks/katz-et-al-benchmarks-OSP-OG-goals/
 planpilot/__pycache__/
 plasp/lib/cxxopts/ 
 __pycache__/
