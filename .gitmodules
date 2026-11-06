@@ -3,4 +3,4 @@
 	url = https://github.com/aibasel/downward.git
 [submodule "backend/lib/planpilot"]
 	path = backend/lib/planpilot
-	url = https://github.com/abcorrea/planpilot.git
+	url = https://github.com/dgnad/planpilot
