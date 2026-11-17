@@ -4,3 +4,6 @@
 [submodule "backend/lib/planpilot"]
 	path = backend/lib/planpilot
 	url = https://github.com/dgnad/planpilot
+[submodule "backend/lib/fasb"]
+	path = backend/lib/fasb
+	url = https://github.com/dgnad/fasb.git
