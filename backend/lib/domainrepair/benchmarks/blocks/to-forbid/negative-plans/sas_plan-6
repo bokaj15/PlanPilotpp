@@ -1,0 +1,4 @@
+(unstack b5 b1)
+(put-down b5)
+(unstack b1 b4)
+(pick-up b5)

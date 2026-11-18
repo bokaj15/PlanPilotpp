@@ -1,0 +1,2 @@
+(drive-truck truck1 city-1 city-2)
+(load-truck package1 truck1 city-2)

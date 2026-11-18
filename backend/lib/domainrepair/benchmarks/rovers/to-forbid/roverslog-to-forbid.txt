@@ -1,0 +1,31 @@
+-----MAX-REPAIRS 1
+
+Problem 1
+add_prec: take_image(calibrated ?i ?r)
+
+Problem 2
+add_prec: communicate_rock_data(have_rock_analysis ?r ?p)
+
+Problem 3
+add_prec: communicate_soil_data(have_soil_analysis ?r ?p)
+
+Problem 4
+add_prec: communicate_image_data(have_image ?r ?o ?m)
+
+Problem 5
+add_prec: sample_soil(at ?x ?p)
+
+Problem 6
+add_prec: sample_rock(at ?x ?p)
+
+Problem 7
+add_prec: sample_rock(at ?x ?p)
+
+Problem 8
+add_prec: take_image(visible_from ?o ?p)
+
+Problem 9
+add_prec: take_image(visible_from ?o ?p)
+
+Problem 10
+add_prec: calibrate(visible_from ?t ?w)

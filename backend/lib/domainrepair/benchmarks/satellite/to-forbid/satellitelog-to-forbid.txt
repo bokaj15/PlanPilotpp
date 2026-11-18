@@ -1,0 +1,32 @@
+
+-----MAX-REPAIRS 1
+
+Problem 1
+add_prec: take_image(calibrated ?i)
+
+Problem 2
+add_prec: take_image(calibrated ?i)
+
+Problem 3
+add_prec: calibrate(calibration_target ?i ?d)
+
+Problem 4
+add_prec: calibrate(pointing ?s ?d)
+
+Problem 5
+add_prec: turn_to(pointing ?s ?d_prev)
+
+Problem 6
+add_prec: take_image(pointing ?s ?d)
+
+Problem 7
+add_prec: take_image(supports ?i ?m)
+
+Problem 8
+add_prec: take_image(calibrated ?i)
+
+Problem 9
+add_prec: take_image(calibrated ?i)
+
+Problem 10
+add_prec: take_image(calibrated ?i)
